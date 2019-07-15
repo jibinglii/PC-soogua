@@ -7,7 +7,6 @@
           <router-link :to="{name: 'auth.login'}" tag="a">免费注册</router-link>
         </div>
         <div class="right">
-          <router-link :to="{name: 'person'}" tag="a">个人中心</router-link>
           <router-link :to="{name: 'help'}" tag="a">帮助中心</router-link>
           <router-link :to="{name: 'collection'}" tag="a">我的收藏</router-link>
           <a href="javascript:">客服中心</a>
@@ -17,7 +16,7 @@
     <div class="center">
       <div class="container">
         <div class="left">
-          <img class="head" src="~$assets/images/headicon.png" alt />
+          <img class="head" src="~$assets/images/headicon.png" alt>
           <div class="desc">
             <div class="group-1">
               <span>网络游戏专业品牌</span>
@@ -26,13 +25,13 @@
             <p>店铺介绍：全区最全最牛B最无敌装备，有卖就有送。</p>
             <div class="group-2">
               <a href="javascript:">
-                <img src="~$assets/images/kefu-white.png" alt />
+                <img src="~$assets/images/kefu-white.png" alt>
                 <span>联系商家</span>
               </a>
               <!-- <a href>
                 <img src="~$assets/images/shoucang-6@2x.png" alt />
                 <span>收藏</span>
-              </a> -->
+              </a>-->
             </div>
           </div>
         </div>
@@ -55,14 +54,24 @@
     <div class="bottom">
       <div class="container">
         <div class="left">
-          <router-link :to="{name: 'home'}" tag="a">首页</router-link>
-          <router-link :to="{name: 'gamecenter'}" tag="a">游戏</router-link>
-          <a href="javascript:">流量</a>
-          <a href="javascript:">账号</a>
-          <a href="javascript:">服务</a>
+          <el-menu
+            router
+            :default-active="$route.path"
+            class="el-menu-demo logo-nav-l"
+            mode="horizontal"
+            text-color="#999999"
+            active-text-color="#ffffff"
+          >
+            <el-menu-item index="/">首页</el-menu-item>
+            <el-menu-item index="/gamecenter">游戏</el-menu-item>
+            <el-menu-item index="3">流量</el-menu-item>
+            <el-menu-item index="4">账号</el-menu-item>
+            <el-menu-item index="5">服务</el-menu-item>
+          </el-menu>
         </div>
         <div class="right">
-          <v-search />
+          <router-link :to="{name: 'person'}" tag="a">个人中心</router-link>
+          <router-link :to="{name: 'person'}" tag="a">下载APP</router-link>
         </div>
       </div>
     </div>
@@ -70,12 +79,7 @@
 </template>
 
 <script>
-import VSearch from "$components/VSearch";
-export default {
-  components: {
-    VSearch
-  }
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -204,20 +208,33 @@ export default {
   color: #999;
   .left {
     float: left;
-    a {
-      margin-left: 43px;
-      margin-right: 43px;
-      color: #999;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 50px;
-      &:hover {
-        color: #fff;
+    .logo-nav-l {
+      background-color: transparent;
+      border: none;
+      li.is-active {
+        background-color: #555555;
+      }
+      li {
+        float: left;
+        padding: 0 30px;
+        height: 49px;
+        line-height: 49px;
+        border: none;
+      }
+      li:hover {
+        background-color: #555555;
       }
     }
   }
   .right {
     float: right;
+    a{
+      color:#fff;
+      font-size: 14px;
+      font-weight: 100;
+      line-height: 50px;
+      padding-left: 45px;
+    }
   }
 }
 </style>

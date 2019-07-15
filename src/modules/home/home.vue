@@ -32,15 +32,15 @@
             </el-dropdown>
           </div>
           <div class="clearfix">
-            <goods-item v-for="i in 10" :key="i"></goods-item>
+            <goods-item v-for="(item, index) in goods" :key="index" :goods="item"></goods-item>
           </div>
-
-          <pagination :total="50" :pageSize="12" @currentChange="currentChange" />
+          <pagination :total="total" :current-page="current" @pagechange="getGoods"></pagination>
+          <!-- <pagination :total="50" :pageSize="12" @currentChange="currentChange"/> -->
         </el-main>
         <el-aside width="300px">
           <div class="aside-head">本店销售排行</div>
           <div class="aside-item" v-for="(item,key) in aside" :key="key">
-            <img class="icon" src="~$assets/images/goods1.png" alt />
+            <img class="icon" src="~$assets/images/goods1.png" alt>
             <div class="desc">
               <h4>{{item.title}}</h4>
               <h5>{{item.price}}</h5>
@@ -51,7 +51,7 @@
       </el-container>
     </div>
 
-    <v-footer />
+    <v-footer/>
   </div>
 </template>
 
@@ -60,10 +60,19 @@ import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
 import GoodsItem from "./components/GoodsItem";
 import Pagination from "$components/Pagination";
+
+import * as services from "./services";
+
 export default {
   data() {
     return {
-      currentPage: 1,
+      goods: [],
+      page: 1,
+      infiniteId: +new Date(),
+      type2: 0,
+      total: 0, // 记录总条数
+      display: 10, // 每页显示条数
+      current: 1, // 当前的页数
       aside: [
         {
           title: "王者荣耀【苹果QQ】外婆缘 一大元素使武装战姬摄魂海克妮...",
@@ -83,9 +92,64 @@ export default {
       ]
     };
   },
-  methods: {
-    currentChange() {}
+  watch: {
+    type2(val) {
+      this.goods = [];
+      this.infiniteId += 1;
+    }
   },
+  methods: {
+    getGood(index, item) {
+      this.page = 1;
+      this.items = [];
+      this.infiniteId += 1;
+      this.type2 = item.id;
+      this.getGoods(this.page);
+    },
+    getGoods(currentPage) {
+      this.goods = [];
+      let param = {
+        params: {
+          "fields[store_goods]":
+            "id,title,amount,game_id,sale_nums,images,game_name,server_name",
+          page: currentPage,
+          display: this.display
+        }
+      };
+      if (this.type2 != 0) {
+        param["params"]["filter[type2]"] = this.type2;
+      }
+      this.$http.get("/api/v2/store/goods", param).then(({ data }) => {
+        if (data.goods.data.length > 0) {
+          this.page = currentPage;
+          this.total = data.goods.total;
+          this.goods.push(...data.goods.data);
+        }
+      });
+    }
+  },
+  mounted() {
+    this.getGoods(this.page);
+  },
+  // mounted() {
+  //   this.getGoods();
+  // },
+  // methods: {
+  //   async getGoods(currentPage) {
+  //     this.goods = [];
+  //     services.goods().then(data => {
+  //       if (data.data.goods.data.length > 0) {
+  //         this.goods = data.data.goods.data;
+  //         this.page += 1;
+  //         this.total = data.data.goods.data.total;
+  //         console.log(this.page);
+  //       }
+  //     });
+  //   }
+  // },
+  // mounted() {
+  //   this.getGoods(this.page);
+  // },
   components: {
     VHeader,
     VFooter,

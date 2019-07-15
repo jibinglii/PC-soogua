@@ -1,16 +1,16 @@
 <template>
   <div class="goods" @click="onGoods">
-    <img class="img" src="~$assets/images/goods2.png" alt />
+    <img class="img" :src="goods.logo" alt>
     <div class="info">
       <div class="group">
-        <span class="title">{{ goods.title }}</span>
-        <i class="tag">{{ goods.tag }}</i>
+        <span class="title">{{ goods.game_name }}</span>
+        <i class="tag"></i>
       </div>
-      <p class="content">{{ goods.content }}</p>
-      <p class="desc">{{ goods.desc }}</p>
+      <p class="content">{{ goods.title }}</p>
+      <p class="desc">{{ goods.server_name }}</p>
       <div class="group">
-        <span class="price">{{ goods.price }}</span>
-        <i class="stock">{{ goods.stock }}</i>
+        <span class="price">￥{{ goods.amount }}</span>
+        <i class="stock">库存{{ goods.store_nums }}件</i>
       </div>
     </div>
   </div>
@@ -21,25 +21,18 @@ import Image from "vant/lib/image";
 import "vant/lib/image/style";
 export default {
   name: "goods-item",
+  props: {
+    goods: Object
+  },
   data() {
-    return {
-      goods: {
-        title: "王者荣耀",
-        tag: "装备",
-        content: "王者荣耀【苹果QQ】外婆缘一大元素使武装...",
-        desc: "王者荣耀（安卓）-QQ（安卓）全区全服",
-        img: "",
-        price: "¥300.00",
-        stock: "库存1件"
-      }
-    };
+    return {};
   },
   components: {
     [Image.name]: Image
   },
   methods: {
     onGoods() {
-      this.$router.push({ name: "goods", params: { goods: "123" } });
+      // this.$router.push({ name: "goods", params: { goods: "123" } });
     }
   }
 };
@@ -83,6 +76,10 @@ export default {
       font-weight: 400;
       color: #000;
       line-height: 12px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
     }
     .desc {
       margin-top: 8px;
