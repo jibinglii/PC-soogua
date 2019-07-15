@@ -14,5 +14,35 @@ export const postLogin = ({ username, password }) => {
   })
 }
 
+
+export const getCode = ({ ticket, randstr, username }) => {
+  // try {
+  return http.post('api/v1/tcatpcha', {
+    client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
+    client_secret: process.env.VUE_APP_AUTH_CLIENT_SECRET,
+    ticket: ticket,
+    randstr: randstr,
+    mobile: username,
+  });
+  // } catch (e) {
+  //   console.log(e)
+  // }
+
+};
+
+export const postLoginByCode = ({ username, code }) => {
+
+  return http.post('api/v1/user/login-by-code', {
+    grant_type: 'code',
+    client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
+    client_secret: process.env.VUE_APP_AUTH_CLIENT_SECRET,
+    mobile: username,
+    code: code,
+    scope: ''
+  })
+}
+
+
+
 // get current user's data
-export const loadUserData = () => http.get('api/v1/auth/me').catch(() => {})
+export const loadUserData = () => http.get('api/v1/auth/me').catch(() => { })
