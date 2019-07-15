@@ -46,7 +46,6 @@ module.exports = {
         $assets: path.resolve(__dirname, 'src/assets'),
         $utils: path.resolve(__dirname, 'src/utils'),
         $components: path.resolve(__dirname, 'src/components'),
-        $sass: path.resolve(__dirname, 'src/assets/sass'),
         $icons: path.resolve(__dirname, 'node_modules/vue-material-design-icons'),
         $config: path.resolve(__dirname, 'src/config')
       },
@@ -66,9 +65,6 @@ module.exports = {
     // pass custom options to pre-processor loaders. e.g. to pass options to
     // sass-loader, use { sass: { ... } }
     loaderOptions: {
-      sass: {
-        data: fs.readFileSync('src/assets/sass/_variables.scss', 'utf-8')
-      }
     }
 
     // Enable CSS modules for all css / pre-processor files.

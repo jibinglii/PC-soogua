@@ -1,0 +1,284 @@
+body,
+div,
+span,
+header,
+footer,
+nav,
+section,
+aside,
+article,
+ul,
+dl,
+dt,
+dd,
+li,
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+i,
+b,
+textarea,
+button,
+input,
+select,
+figure,
+figcaption {
+  padding                    : 0;
+  margin                     : 0;
+  list-style                 : none;
+  font-style                 : normal;
+  text-decoration            : none;
+  border                     : none;
+  font-weight                : normal;
+  font-family                : "Microsoft Yahei";
+  box-sizing                 : border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing     : antialiased;
+
+  &:hover {
+    outline: none;
+  }
+}
+
+.clearfix:after {
+  content   : "";
+  display   : block;
+  height    : 0;
+  clear     : both;
+  visibility: hidden
+}
+
+.clearfix {
+  *height: 1%;
+}
+
+.container {
+  width : 1200px;
+  margin: 0 auto;
+}
+
+html,
+body {
+  height          : 100%;
+  width           : 100%;
+  background-color: #F5F5F5;
+}
+
+
+.clear:after {
+  content: '';
+  display: block;
+  clear  : both;
+}
+
+.clear {
+  zoom: 1;
+}
+
+.back_img {
+  background-repeat: no-repeat;
+  background-size  : 100% 100%;
+}
+
+.margin {
+  margin: 0 auto;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.ellipsis {
+  overflow     : hidden;
+  text-overflow: ellipsis;
+  white-space  : nowrap;
+}
+
+.paddingTop {
+  padding-top: 1.95rem;
+}
+
+@keyframes backOpacity {
+  0% {
+    opacity: 1
+  }
+
+  25% {
+    opacity: .5
+  }
+
+  50% {
+    opacity: 1
+  }
+
+  75% {
+    opacity: .5
+  }
+
+  100% {
+    opacity: 1
+  }
+}
+
+.animation_opactiy {
+  animation: backOpacity 2s ease-in-out infinite;
+}
+
+
+.el-message-box {
+  position      : relative;
+  width         : 500px;
+  min-height    : 250px;
+  padding-bottom: 0;
+  border-radius : 0;
+  border        : 1px solid #EBEEF5;
+  font-size     : 18px;
+}
+
+.el-message-box__header {
+  padding: 18px 15px;
+}
+
+.el-message-box__headerbtn {
+  top: 24px;
+}
+
+.el-message-box__content {
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+  min-height     : 130px;
+  color          : #000;
+}
+
+.el-message-box__btns {
+  position  : absolute;
+  left      : 0;
+  bottom    : 0;
+  width     : 100%;
+  padding   : 5px 0 0 0;
+  display   : flex;
+  text-align: center;
+
+  .el-button {
+    flex         : 1;
+    background   : #FFF;
+    border       : 0;
+    border-top   : 1px solid #ededed;
+    color        : #000;
+    text-align   : center;
+    padding      : 17px 20px;
+    font-size    : 14px;
+    border-radius: 0;
+  }
+
+  button:nth-child(2) {
+    margin-left: 0;
+    border-left: 1px solid #ededed;
+  }
+}
+
+.el-input__inner {
+  border-radius: 0;
+  border       : 1px solid #ededed;
+  color        : #000;
+
+  &:focus {
+    border-color: #000;
+  }
+}
+
+.el-textarea__inner {
+  color        : #000;
+  border       : 1px solid #ededed;
+  border-radius: 0;
+
+  &:focus {
+    border-color: #000;
+  }
+}
+
+.el-button {
+  border-radius: 0;
+}
+
+.el-select {
+  .el-input {
+    .el-input__inner {
+      &:focus {
+        border-color: #000;
+      }
+    }
+
+    &.is-focus {
+      .el-input__inner {
+        border-color: #000;
+      }
+    }
+  }
+}
+.el-dialog{
+  height:auto;
+}
+
+.el-dialog__header {
+  padding: 10px;
+}
+
+.el-dialog__headerbtn {
+  top: 10px;
+}
+
+.el-dialog__body {
+  padding        :  15px 0 70px 0;
+  min-height     : 130px;
+  color          : #000;
+}
+
+.el-dialog__footer {
+  position: absolute;
+  left    : 0;
+  bottom  : 0;
+  width   : 100%;
+  padding : 5px 0 0 0;
+
+  .dialog-footer {
+    display   : flex;
+    text-align: center;
+
+    .el-button {
+      flex         : 1;
+      background   : #FFF;
+      border       : 0;
+      border-top   : 1px solid #ededed;
+      color        : #000;
+      text-align   : center;
+      padding      : 17px 20px;
+      font-size    : 14px;
+      border-radius: 0;
+    }
+
+    button:nth-child(2) {
+      margin-left: 0;
+      border-left: 1px solid #ededed;
+    }
+  }
+
+}
