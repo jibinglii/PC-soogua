@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <v-header />
+    <v-header/>
     <div class="container">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
@@ -8,20 +8,20 @@
         <el-breadcrumb-item>商品详情</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="content clearfix">
-        <img class="logo" src="~$assets/images/shangpinlogo@2x.png" alt />
+        <img class="logo" :src="goods.logo" alt>
         <div class="text">
-          <h4>+12钻石装备强化券，无货赔付</h4>
+          <h4>{{goods.game_name}}</h4>
           <p>
             游戏区服：
-            <span>王者荣耀（安卓）>QQ（安卓）>全区全服</span>
+            <span>{{goods.server_name}}}</span>
           </p>
           <p>
             商品价格：
-            <span class="price">￥118.00</span>
+            <span class="price">￥{{goods.amount}}</span>
           </p>
           <p>
             发布数量：
-            <span>1件</span>
+            <span>{{goods.store_nums}}件</span>
           </p>
           <p>
             购买数量：
@@ -30,17 +30,18 @@
           <div class="btn-group">
             <button type="button" @click="onBuy" class="buy">立即购买</button>
             <a href="javascript:" class="graphic">
-              <img src="~$assets/images/kefu@2x.png" alt />
+              <img src="~$assets/images/kefu@2x.png" alt>
               <span>联系商家</span>
             </a>
-            <a href="javascript:" class="graphic">
-              <img src="~$assets/images/shoucang@2x.png" alt />
-              <span>收藏商品</span>
+            <a class="graphic" @click="collect(goods)">
+              <img src="~$assets/images/shoucang@2x.png" alt v-show="isshow1">
+              <img src="~$assets/images/collect.png" alt v-show="isshow2">
+              <span>{{ goods.is_collect ? '已收藏' : '收藏商品'}}</span>
             </a>
           </div>
         </div>
         <div class="qrcode">
-          <img src="~$assets/images/saomaxiadan@2x.png" alt />
+          <img src="~$assets/images/saomaxiadan@2x.png" alt>
         </div>
       </div>
       <el-container>
@@ -49,7 +50,7 @@
           <ul>
             <li>
               所属游戏：
-              <span>王者荣耀</span>
+              <span>{{goods.game_name}}</span>
             </li>
             <li>
               服务器：
@@ -90,18 +91,18 @@
           </ul>
           <p class="introduce">
             商品介绍：
-            <span>上班没时间，诚心出有意私我自己看图，资源多多，后期基本不用投资了，接受就能玩，3无微信游戏号</span>
+            <span>{{goods.content}}</span>
           </p>
           <div class="main-img">
-            <img src="~$assets/images/shangpinmain.png" alt />
+            <img :src="goods.logo" alt>
             <p>如果图片或描述中带有联系方式均为骗子，请勿上当</p>
           </div>
 
           <el-carousel height="110px" indicator-position="none">
-            <el-carousel-item>
-              <img src="~$assets/images/shangpinfutu.png" alt />
-              <img src="~$assets/images/shangpinfutu.png" alt />
-              <img src="~$assets/images/shangpinfutu.png" alt />
+            <el-carousel-item >
+              <img :src="goods.logo" alt  v-for="item in images" :key="item">
+              <!-- <img src="~$assets/images/shangpinfutu.png" alt>
+              <img src="~$assets/images/shangpinfutu.png" alt> -->
             </el-carousel-item>
           </el-carousel>
           <div class="statement">
@@ -122,23 +123,26 @@
               </div>
             </div>
           </div>
-
-          <div class="aside-head">商品精选</div>
-          <goods-item v-for="k in 2" :key="k" :styles="{marginBottom:'16px'}" />
         </el-aside>
       </el-container>
     </div>
-    <v-footer />
+    <v-footer/>
   </div>
 </template>
 
 <script>
 import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
-import GoodsItem from "$components/GoodsItem";
+
+import * as service from "$modules/goods/services";
 export default {
   data() {
     return {
+      goodsId: "",
+      goods: [],
+      isshow1: true,
+      isshow2: false,
+      images:[],
       aside: [
         {
           title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
@@ -155,14 +159,54 @@ export default {
   },
   components: {
     VHeader,
-    VFooter,
-    GoodsItem
+    VFooter
+  },
+  created() {
+    this.goodsId = this.$route.params.goods;
+    this.getDetail();
+
   },
   methods: {
+    async getDetail() {
+      this.$toast.loading({ mask: true });
+      service
+        .goodsView(this.goodsId, {
+          params: {
+            include: "specs.option,game,server",
+            "fields[game]": "id,name",
+            append: "is_collect"
+          }
+        })
+        .then(({ data }) => {
+          this.goods = data.goods;
+          console.log(this.goods);
+          this.images = this.goods.images;
+          window.document.title = this.goods.title;
+          this.$toast.clear();
+        })
+        .catch(({ response }) => {
+          this.$router.back();
+        });
+    },
+    collect(goods) {
+      if (!goods.is_collect) {
+        this.$http
+          .put("api/v1/collect/goods/" + this.goodsId)
+          .then(({ data }) => {
+            this.$toast.success("收藏成功");
+            this.isshow1 = false;
+            this.isshow2 = true;
+            this.$set(goods, "is_collect", true);
+          })
+          .catch(error => {
+            this.$toast.fail(error.data.message);
+          });
+      }
+    },
     onBuy() {
-      this.$router.push({name:'goods.refer'})
+      this.$router.push({ name: "goods.refer" });
     }
-  },
+  }
 };
 </script>
 
@@ -191,6 +235,8 @@ export default {
   margin-bottom: 16px;
   .logo {
     float: left;
+    width: 188px;
+    height: 188px;
     margin-top: 25px;
     vertical-align: middle;
     margin-right: 43px;
@@ -208,7 +254,7 @@ export default {
       font-weight: bold;
       line-height: 13px;
       color: #999;
-
+      font-weight: 400;
       span {
         &.price {
           font-size: 16px;
@@ -236,7 +282,7 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-left: 10px;
+        margin-left: 30px;
         img {
           width: 20px;
           height: 20px;
@@ -245,6 +291,7 @@ export default {
           font-size: 12px;
           font-weight: bold;
           color: #999;
+          padding-top: 4px;
         }
       }
     }
