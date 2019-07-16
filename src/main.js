@@ -11,14 +11,18 @@ sync(store, router)
 Vue.use(Element)
 Vue.prototype.$http = http
 Vue.prototype.$user = () => {
-  return store.getters.currentUser
+    return store.getters.currentUser
+}
+Vue.prototype.$currentStore = () => {
+    return store.getters.currentStore
 }
 
 Vue.config.productionTip = false
+store.dispatch('storeInfo')
 setTimeout(() => {
-  new Vue({
-    store,
-    router,
-    render: h => h(Root)
-  }).$mount('#app')
+    new Vue({
+        store,
+        router,
+        render: h => h(Root)
+    }).$mount('#app')
 }, 200)

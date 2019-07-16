@@ -1,9 +1,10 @@
 import { routes as home } from '$modules/home'
 import { routes as auth } from '$modules/auth'
+import { routes as person } from '$modules/person'
+import { routes as buyerorder } from '$modules/buyerorder'
+import { routes as goods } from '$modules/goods'
 // import { routes as store } from '$modules/store'
 // import { routes as collection } from '$modules/collection'
-// import { routes as me } from '$modules/me'
-// import { routes as goods } from '$modules/goods'
 // import { routes as bank } from '$modules/bank'
 // import { routes as order } from '$modules/order'
 // import { routes as result } from '$modules/result'
@@ -18,52 +19,52 @@ import beforeEach from './beforeEach'
 Vue.use(Router)
 
 const AppRoute = {
-  path: '/:store/',
-  component: () =>
-    import('../app'),
-  children: [...home,
-  ...auth,
-    //...store, ...collection, ...me, ...goods, ...distribution, ...bank, ...order,
-    // ...result, ...seller, ...withdraw, ...im, ...ad
-  ]
+    path: '/:store/',
+    component: () =>
+        import ('../app'),
+    children: [...home, ...auth, ...person, ...buyerorder, ...goods
+        //...store,
+        //...collection, ...me, ...goods, ...distribution, ...bank, ...order,
+        // ...result, ...seller, ...withdraw, ...im, ...ad
+    ]
 }
 
 const routes = [{
-  path: '/404',
-  component: () =>
-    import('../not-found')
+    path: '/404',
+    component: () =>
+        import ('../not-found')
 }, AppRoute, {
-  path: '*',
-  component: () =>
-    import('../not-found')
+    path: '*',
+    component: () =>
+        import ('../not-found')
 }]
 
-const scrollBehavior = function (to, from, savedPosition) {
-  if (savedPosition) {
-    return savedPosition
-  } else {
-    if (to.hash) {
-      if (document.querySelector(to.hash)) {
-        return {
-          selector: to.hash
+const scrollBehavior = function(to, from, savedPosition) {
+    if (savedPosition) {
+        return savedPosition
+    } else {
+        if (to.hash) {
+            if (document.querySelector(to.hash)) {
+                return {
+                    selector: to.hash
+                }
+            }
+            return false
         }
-      }
-      return false
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({ x: 0, y: 0 });
+            }, 0);
+        })
     }
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ x: 0, y: 0 });
-      }, 0);
-    })
-  }
 }
 
 const router = new Router({
-  routes,
-  linkActiveClass: 'active',
-  linkExactActiveClass: 'active',
-  mode: 'history',
-  scrollBehavior
+    routes,
+    linkActiveClass: 'active',
+    linkExactActiveClass: 'active',
+    mode: 'history',
+    scrollBehavior
 })
 
 router.beforeEach(beforeEach)

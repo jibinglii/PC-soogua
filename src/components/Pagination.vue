@@ -142,6 +142,12 @@ export default {
       color: #000;
     }
   }
+  li.active {
+    background: #000;
+    a {
+      color: #fff;
+    }
+  }
   & :hover {
     background: #000;
 
