@@ -1,9 +1,1 @@
-const routes = [
-    {
-        path: '/',
-        name: 'home',
-        component: () => import('./home')
-    }
-]
-
-export {routes}
+export { default as routes } from './routes'
