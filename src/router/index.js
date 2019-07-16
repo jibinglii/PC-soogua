@@ -2,7 +2,7 @@ import { routes as home } from '$modules/home'
 import { routes as auth } from '$modules/auth'
 // import { routes as store } from '$modules/store'
 // import { routes as collection } from '$modules/collection'
-// import { routes as me } from '$modules/me'
+import { routes as person } from '$modules/person'
 // import { routes as goods } from '$modules/goods'
 // import { routes as bank } from '$modules/bank'
 // import { routes as order } from '$modules/order'
@@ -21,8 +21,7 @@ const AppRoute = {
   path: '/:store/',
   component: () =>
     import('../app'),
-  children: [...home,
-  ...auth,
+  children: [...home, ...auth, ...person
     //...store, ...collection, ...me, ...goods, ...distribution, ...bank, ...order,
     // ...result, ...seller, ...withdraw, ...im, ...ad
   ]

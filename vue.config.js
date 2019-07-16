@@ -37,7 +37,7 @@ module.exports = {
 
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-  chainWebpack: () => {},
+  chainWebpack: () => { },
   configureWebpack: {
     resolve: {
       alias: {
@@ -47,7 +47,8 @@ module.exports = {
         $utils: path.resolve(__dirname, 'src/utils'),
         $components: path.resolve(__dirname, 'src/components'),
         $icons: path.resolve(__dirname, 'node_modules/vue-material-design-icons'),
-        $config: path.resolve(__dirname, 'src/config')
+        $config: path.resolve(__dirname, 'src/config'),
+        $api: path.resolve(__dirname, 'src/api')
       },
       extensions: ['.vue']
     }

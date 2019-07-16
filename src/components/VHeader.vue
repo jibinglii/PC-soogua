@@ -84,7 +84,7 @@
 					</el-menu>
 				</div>
 				<div class="right">
-					<router-link :to="{name: 'person'}"
+					<router-link :to="{name: 'person.person'}"
 											 tag="a">个人中心</router-link>
 					<router-link :to="{name: 'person'}"
 											 tag="a">下载APP</router-link>
@@ -254,95 +254,7 @@
 		}
 	}
 </style>
-<template>
-	<div class="header">
-		<div class="top">
-			<div class="container">
-				<div class="left">
-					<router-link v-if="isLogged"
-											 :to="{ name: 'me.membercenter' }">
-						<a href="javascript:void(0)">{{currentUser.nickname}}</a>
-					</router-link>
 
-					<a @click="logout()"
-						 v-if="isLogged">退出</a>
-					<router-link v-if="!isLogged"
-											 :to="{name: 'auth.login'}"
-											 tag="a">请登录</router-link>
-					<router-link v-if="!isLogged"
-											 :to="{name: 'auth.login'}"
-											 tag="a">免费注册</router-link>
-				</div>
-				<div class="right">
-					<router-link :to="{name: 'person'}"
-											 tag="a">个人中心</router-link>
-					<router-link :to="{name: 'help'}"
-											 tag="a">帮助中心</router-link>
-					<router-link :to="{name: 'collection'}"
-											 tag="a">我的收藏</router-link>
-					<a href="javascript:">客服中心</a>
-				</div>
-			</div>
-		</div>
-		<div class="center">
-			<div class="container">
-				<div class="left">
-					<img class="head"
-							 src="~$assets/images/headicon.png"
-							 alt />
-					<div class="desc">
-						<div class="group-1">
-							<span>网络游戏专业品牌</span>
-							<i>实名认证</i>
-						</div>
-						<p>店铺介绍：全区最全最牛B最无敌装备，有卖就有送。</p>
-						<div class="group-2">
-							<a href="javascript:">
-								<img src="~$assets/images/kefu-white.png"
-										 alt />
-								<span>联系商家</span>
-							</a>
-							<!-- <a href>
-                <img src="~$assets/images/shoucang-6@2x.png" alt />
-                <span>收藏</span>
-              </a> -->
-						</div>
-					</div>
-				</div>
-				<div class="right">
-					<p>
-						在售商品：
-						<span>100件</span>
-					</p>
-					<p>
-						成交单量：
-						<span>1032笔</span>
-					</p>
-					<p>
-						订单成交率：
-						<span>98%</span>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="bottom">
-			<div class="container">
-				<div class="left">
-					<router-link :to="{name: 'home'}"
-											 tag="a">首页</router-link>
-					<router-link :to="{name: 'gamecenter'}"
-											 tag="a">游戏</router-link>
-					<a href="javascript:">流量</a>
-					<a href="javascript:">账号</a>
-					<a href="javascript:">服务</a>
-				</div>
-				<div class="right">
-					<v-search />
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
 
 <script>
 	import VSearch from "$components/VSearch";
