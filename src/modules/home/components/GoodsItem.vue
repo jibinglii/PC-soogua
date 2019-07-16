@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     onGoods() {
-      // this.$router.push({ name: "goods", params: { goods: "123" } });
+      this.$router.push({ name: "goods", params: { goods: this.goods.uuid } });
     }
   }
 };

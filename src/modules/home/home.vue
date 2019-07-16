@@ -139,25 +139,6 @@
 		mounted () {
 			this.getGoods(this.page);
 		},
-		// mounted() {
-		//   this.getGoods();
-		// },
-		// methods: {
-		//   async getGoods(currentPage) {
-		//     this.goods = [];
-		//     services.goods().then(data => {
-		//       if (data.data.goods.data.length > 0) {
-		//         this.goods = data.data.goods.data;
-		//         this.page += 1;
-		//         this.total = data.data.goods.data.total;
-		//         console.log(this.page);
-		//       }
-		//     });
-		//   }
-		// },
-		// mounted() {
-		//   this.getGoods(this.page);
-		// },
 		components: {
 			VHeader,
 			VFooter,

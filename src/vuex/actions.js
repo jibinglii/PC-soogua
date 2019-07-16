@@ -14,10 +14,6 @@ export const storeInfo = ({ commit }) => {
                 }
                 commit('storeInfo', store)
                 return Promise.resolve()
-            }).catch(error => {
-                if (error.status == 404) {
-                    location.replace('/404?code=404&reason=店铺不存在')
-                }
             })
     }
 }

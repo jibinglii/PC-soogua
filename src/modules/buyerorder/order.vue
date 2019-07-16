@@ -15,24 +15,6 @@
         <div slot="main">
           <div class="title">查看我的订单</div>
           <v-tabs :tabs="tabs" activeTab="all" @changeTab="changeTab" />
-          <div class="search">
-            <div class="left">
-              <span>创建时间</span>
-              <el-input class="time-input" v-model="start" placeholder="请选择起始时间"></el-input>
-              <i>-</i>
-              <el-input class="time-input" v-model="end" placeholder="请选择结束时间"></el-input>
-            </div>
-            <div class="right">
-              <el-form :inline="true" :model="searchForm" class="form-inline">
-                <el-form-item>
-                  <el-input v-model="searchForm.order" placeholder="请输入商品标题或订单编号"></el-input>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click.prevent.native="onSearch">搜索</el-button>
-                </el-form-item>
-              </el-form>
-            </div>
-          </div>
           <div class="goodslist">
             <el-table :data="orderData" style="width: 100%; text-align:center;">
               <el-table-column align="center" prop="id" label="订单编号"></el-table-column>
@@ -156,30 +138,7 @@ export default {
   border-bottom: 1px solid #ededed;
   background: #fff;
 }
-.search {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: 22px;
-  padding-right: 22px;
-  background: #fff;
-  .left {
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    span {
-      margin-right: 20px;
-    }
-    i {
-      margin-left: 12px;
-      margin-right: 12px;
-    }
-    .time-input {
-      font-size: 12px;
-      width: 130px;
-    }
-  }
-}
+
 
 .form-inline {
   margin-top: 17px;
