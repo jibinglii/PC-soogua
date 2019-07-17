@@ -13,7 +13,7 @@
           <h4>{{goods.game_name}}</h4>
           <p>
             游戏区服：
-            <span>{{goods.server_name}}}</span>
+            <span>{{goods.server_name}}</span>
           </p>
           <p>
             商品价格：
@@ -28,14 +28,19 @@
             <span>1件</span>
           </p>
           <div class="btn-group">
-            <button type="button" @click="onBuy" class="buy">立即购买</button>
-            <a href="javascript:" class="graphic">
+            <button
+              type="button"
+              @click="onBuy(goodsId)"
+              class="buy"
+              :class="{disabled: !canBuy, 'can-not-contact': !canContact}"
+            >{{canBuy?'立即购买':'暂时无货'}}</button>
+            <router-link class="graphic" v-show="canContact" :to="{name: 'contact'}">
               <img src="~$assets/images/kefu@2x.png" alt>
               <span>联系商家</span>
-            </a>
+            </router-link>
             <a class="graphic" @click="collect(goods)">
-              <img src="~$assets/images/shoucang@2x.png" alt v-show="isshow1">
-              <img src="~$assets/images/collect.png" alt v-show="isshow2">
+              <img src="~$assets/images/collect.png" alt v-if="goods.is_collect">
+              <img src="~$assets/images/shoucang@2x.png" alt v-else>
               <span>{{ goods.is_collect ? '已收藏' : '收藏商品'}}</span>
             </a>
           </div>
@@ -54,39 +59,39 @@
             </li>
             <li>
               服务器：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
             <li>
               账号绑定：
-              <span>无绑定</span>
+              <span></span>
             </li>
             <li>
               守护平台绑定：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
             <li>
               英雄个数：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
             <li>
               皮肤个数：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
             <li>
               防沉迷设置：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
             <li>
               至尊宝绑定：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
             <li>
               交易方式：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
             <li>
               发货时效：
-              <span>王者荣耀</span>
+              <span></span>
             </li>
           </ul>
           <p class="introduce">
@@ -94,17 +99,13 @@
             <span>{{goods.content}}</span>
           </p>
           <div class="main-img">
-            <img :src="goods.logo" alt>
+            <el-carousel indicator-position="outside" :autoplay="false">
+              <el-carousel-item v-for="(item,index) in goods.images" :key="index">
+                <img :src="item" alt>
+              </el-carousel-item>
+            </el-carousel>
             <p>如果图片或描述中带有联系方式均为骗子，请勿上当</p>
           </div>
-
-          <el-carousel height="110px" indicator-position="none">
-            <el-carousel-item >
-              <img :src="goods.logo" alt  v-for="item in images" :key="item">
-              <!-- <img src="~$assets/images/shangpinfutu.png" alt>
-              <img src="~$assets/images/shangpinfutu.png" alt> -->
-            </el-carousel-item>
-          </el-carousel>
           <div class="statement">
             <p>免责声明：1.所展示的商品供求信息由买卖双方自行提供，其真实性、准确性和合法性由信息发布人负责。</p>
             <p>2.账号真实情况以客服截图为准。</p>
@@ -139,10 +140,7 @@ export default {
   data() {
     return {
       goodsId: "",
-      goods: [],
-      isshow1: true,
-      isshow2: false,
-      images:[],
+      goods: { images: [], game: [], server: [], specs: [] },
       aside: [
         {
           title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
@@ -161,12 +159,48 @@ export default {
     VHeader,
     VFooter
   },
+  computed: {
+    canBuy() {
+      if (this.goods.status != 4) {
+        return false;
+      }
+      return this.goods.store_nums > 0;
+    },
+    canContact() {
+      return this.$user().id != this.$currentStore().user_id;
+    }
+  },
   created() {
     this.goodsId = this.$route.params.goods;
     this.getDetail();
-
+  },
+  beforeRouteUpdate(to, from, next) {
+    // 在当前路由改变，但是该组件被复用时调用
+    // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+    // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+    // 可以访问组件实例 `this`
+    this.goodsId = to.params.goods;
+    this.getDetail();
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
   },
   methods: {
+    onBuy(goodsId) {
+      if (this.$route.query["spread_id"] != undefined) {
+        this.$cookies.set("goods-spread", this.$route.query["spread_id"], 1800);
+      }
+
+      if (this.canBuy) {
+        this.$router.push({
+          name: "goods.refer",
+          params: { goods: goodsId },
+          query: { spread_id: this.$route.query["spread_id"] }
+        });
+      }
+    },
     async getDetail() {
       this.$toast.loading({ mask: true });
       service
@@ -179,8 +213,7 @@ export default {
         })
         .then(({ data }) => {
           this.goods = data.goods;
-          console.log(this.goods);
-          this.images = this.goods.images;
+          console.log(this.goods)
           window.document.title = this.goods.title;
           this.$toast.clear();
         })
@@ -189,22 +222,18 @@ export default {
         });
     },
     collect(goods) {
+      console.log(goods.is_collect)
       if (!goods.is_collect) {
         this.$http
           .put("api/v1/collect/goods/" + this.goodsId)
           .then(({ data }) => {
             this.$toast.success("收藏成功");
-            this.isshow1 = false;
-            this.isshow2 = true;
             this.$set(goods, "is_collect", true);
           })
           .catch(error => {
             this.$toast.fail(error.data.message);
           });
       }
-    },
-    onBuy() {
-      this.$router.push({ name: "goods.refer" });
     }
   }
 };
@@ -245,7 +274,7 @@ export default {
     float: left;
     margin-top: 21px;
     h4 {
-      font-size: 14px;
+      font-size: 18px;
       font-weight: bold;
     }
     p {
@@ -271,7 +300,7 @@ export default {
         font-size: 12px;
         font-weight: bold;
         text-align: center;
-        line-height: 36px;
+        line-height: 38px;
         color: #fff;
         background: #000;
         margin-right: 20px;
@@ -334,6 +363,9 @@ export default {
       font-weight: bold;
       line-height: 42px;
       color: #999;
+      span {
+        color: #000;
+      }
     }
   }
   .introduce {
@@ -344,19 +376,29 @@ export default {
     line-height: 42px;
     padding-bottom: 19px;
     background: #fff;
+    span {
+      color: #000;
+    }
   }
   .main-img {
     position: relative;
-    padding-left: 44px;
-    padding-right: 44px;
     background: #fff;
-    img {
-      width: 100%;
-      height: auto;
+    border-bottom: solid 1px #f2f2f2;
+    .el-carousel {
+      padding: 30px 0;
+      /deep/.el-carousel__container {
+        width: 796px;
+        height: 360px;
+        margin: auto;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
     p {
       position: absolute;
-      bottom: 3px;
+      bottom: 59px;
       left: 44px;
       height: 48px;
       width: 796px;
@@ -367,6 +409,13 @@ export default {
       color: #fff;
       background-color: #000;
       opacity: 0.5;
+      z-index: 99;
+      display: none;
+    }
+  }
+  .main-img:hover {
+    p {
+      display: block;
     }
   }
   .statement {
@@ -383,31 +432,6 @@ export default {
       }
     }
   }
-}
-.el-carousel {
-  background: #fff;
-  padding: 30px 44px;
-  border-bottom: 1px solid #ededed;
-  .el-carousel__item {
-    padding: 0 20px;
-    img {
-      width: 224px;
-      height: 110px;
-      margin-left: 13px;
-      margin-right: 13px;
-    }
-  }
-}
-/deep/.el-carousel__arrow--left {
-  left: 0px;
-}
-/deep/.el-carousel__arrow--right {
-  right: 0px;
-}
-/deep/.el-carousel__arrow {
-  height: 20px;
-  width: 20px;
-  border-radius: 0;
 }
 
 .el-aside {
