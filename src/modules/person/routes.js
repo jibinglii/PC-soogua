@@ -10,12 +10,26 @@ export default [
     {
         path: 'person/resetpwd',
         name: 'person.resetpwd',
+        meta: {
+            requiresAuth: true
+        },
         component: () => import('./resetpwd')
     },
     {
         path: 'person/resetpaypwd',
         name: 'person.resetpaypwd',
+        meta: {
+            requiresAuth: true
+        },
         component: () => import('./resetpaypwd')
+    },
+    {
+        path: 'person/setpaypwd',
+        name: 'person.setpaypwd',
+        meta: {
+            requiresAuth: true
+        },
+        component: () => import('./setpaypwd')
     },
     {
         path: 'person/profile',

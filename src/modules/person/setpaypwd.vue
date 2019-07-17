@@ -6,7 +6,7 @@
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
 				<el-breadcrumb-item>个人中心</el-breadcrumb-item>
-				<el-breadcrumb-item>修改支付密码</el-breadcrumb-item>
+				<el-breadcrumb-item>设置支付密码</el-breadcrumb-item>
 			</el-breadcrumb>
 			<v-content>
 				<div slot="aside">
@@ -14,19 +14,13 @@
 				</div>
 				<div slot="main">
 					<div class="setpaypwd">
-						<div class="title">修改支付密码</div>
+						<div class="title">设置支付密码</div>
 						<el-form :model="pwd"
 										 status-icon
 										 :rules="rules"
 										 ref="pwd"
 										 label-width="0"
 										 class="pwd-form">
-							<el-form-item prop="oldpassword">
-								<el-input type="password"
-													v-model="pwd.oldpassword"
-													placeholder="旧支付密码"
-													auto-complete="off"></el-input>
-							</el-form-item>
 							<el-form-item prop="password">
 								<el-input type="password"
 													v-model="pwd.password"
@@ -60,25 +54,19 @@
 	import user from '$api/user'
 	export default {
 		data () {
-			var validateOldPass = (rule, value, callback) => {
-				if (value === "") {
-					callback(new Error("旧密码不能为空"));
-				}
-				callback();
-			};
 			var validatePass = (rule, value, callback) => {
 				if (value === "") {
 					callback(new Error("请输入6位数字支付密码"));
 				} else {
 					if (this.pwd.confirmPasswd !== "") {
-						this.$refs.pwd.validateField("confirmPasswd");
+						this.$refs.pwd.validateField("checkPass");
 					}
 					callback();
 				}
 			};
 			var validatePass2 = (rule, value, callback) => {
 				if (value === "") {
-					callback(new Error("请再次输入6位支付密码"));
+					callback(new Error("请再次输入6位数字支付密码"));
 				} else if (value !== this.pwd.password) {
 					callback(new Error("两次输入密码不一致!"));
 				} else {
@@ -87,16 +75,26 @@
 			};
 			return {
 				pwd: {
-					oldpassword: '',
 					password: '',
-					confirmPasswd: ''
+					confirmPasswd: '',
+					confirming: false
+
 				},
 				rules: {
-					oldpassword: [{ validator: validateOldPass, trigger: "blur" }],
 					password: [{ validator: validatePass, trigger: "blur" }],
 					confirmPasswd: [{ validator: validatePass2, trigger: "blur" }]
 				}
 			};
+		},
+		created () {
+			// 先验证是否设置了支付密码
+			user.getUserInfo(true).then(({ data }) => {
+				if (data.user.is_set_paypasswd) {
+					this.$router.back()
+				}
+			}).catch(error => {
+				this.$router.back()
+			})
 		},
 		components: {
 			VHeader,
@@ -106,18 +104,15 @@
 		},
 		methods: {
 			submitForm () {
-
 				let reg = new RegExp("^[0-9]{6}$");
 				if (!reg.test(this.pwd.password)) {
 					this.$message.error("支付密码格式为6位纯数字");
-					this.pwd.oldpassword = '';
 					this.pwd.password = '';
 					this.pwd.confirmPasswd = '';
 					return false;
 				}
 				if (this.pwd.password != this.pwd.confirmPasswd) {
 					this.$message.error("两次输入的密码不一致");
-					this.pwd.oldpassword = '';
 					this.pwd.password = '';
 					this.pwd.confirmPasswd = '';
 					return false;
@@ -126,50 +121,27 @@
 					lock: true,
 					text: "请稍等",
 				});
-				user.veryPPwd(this.pwd.oldpassword, true).then(({ data }) => {
-					// 旧密码输入正确，继续修改密码
-
-					user.modifyPPwd(this.pwd.oldpassword, this.pwd.password, true).then(({ res }) => {
-						loading.close();
-						this.$message.success("支付密码设置成功，请使用新密码");
-						this.$router.push({ name: "person.person" });
-					}).catch(error => {
-						loading.close();
-
-						this.$message.error("设置失败，请重试111");
-						this.password = '';
-						this.confirmPasswd = '';
-					})
-
-				}).catch(error => {
+				user.setPayPasswd(this.pwd.password, true).then(({ data }) => {
 					loading.close();
-					console.log(error);
-					this.pwd.oldpassword = '';
+					this.$message.success("支付密码设置成功");
+					this.$router.push({ name: "person.person" });
+
+
+					// let redirect = this.$route.query['redirect']
+					// if (redirect != '' && redirect != undefined) {
+					// 	redirect = decodeURIComponent(redirect)
+					// 	location.replace(redirect);
+					// } else {
+					// 	this.$router.push({ name: 'me.accountsetting' })
+					// }
+				}).catch(error => {
+					this.$message.error("设置失败，请重试");
 					this.pwd.password = '';
 					this.pwd.confirmPasswd = '';
+					this.pwd.confirming = false
 				})
 
-
-			},
-
-		},
-		created () {
-			// 先验证是否设置了支付密码
-			const loading = this.$loading();
-			user.getUserInfo(true).then(({ data }) => {
-				loading.close();
-				if (!data.user.is_set_paypasswd) {
-					this.$alert('您还没有设置支付密码，请前往设置', {
-						title: "温馨提示",
-						btn: {
-							text: '去设置',
-							style: { overflow: "inherit" },
-						}
-					}).then(() => {
-						this.$router.push({ name: 'person.setpaypwd' })
-					});
-				}
-			})
+			}
 		}
 	};
 </script>
