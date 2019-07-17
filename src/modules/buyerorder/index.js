@@ -1,9 +1,1 @@
-const routes = [
-    {
-        path: 'buyer/order',
-        name: 'buyer.order',
-        component: () => import('./order')
-    }
-]
-
-export {routes}
+export { default as routes } from './routes'
