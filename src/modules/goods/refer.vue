@@ -6,24 +6,25 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>填写订单</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="goods-info">
         <div class="title">商品信息</div>
         <div class="content">
-          <img src="~$assets/images/shangpinlogo@2x.png" alt />
+          <img :src="goods.logo" alt>
           <div class="text">
-            <h4>+12钻石装备强化券，无货赔付</h4>
+            <h4>{{goods.title}}</h4>
             <p>
               游戏区服：
-              <span>王者荣耀（安卓）>QQ（安卓）>全区全服</span>
+              <span>{{goods.server_name}}</span>
             </p>
             <p>
               商品价格：
-              <s>￥118.00</s>
+              <s>￥{{goods.amount}}</s>
             </p>
             <p>
               发布数量：
-              <i>1件</i>
+              <i>{{goods.store_nums}}件</i>
             </p>
           </div>
         </div>
@@ -34,12 +35,12 @@
           <i>请您认真核对填写的联系方式，以便客服及时能够联系到您</i>
         </div>
         <div class="content">
-          <el-form ref="form" :model="form" label-position="left" label-width="110px">
+          <el-form label-position="left" label-width="110px">
             <el-form-item label="收货人手机号">
-              <el-input v-model="form.phone"></el-input>
+              <el-input v-model="receiver_mobile"></el-input>
             </el-form-item>
             <el-form-item label="联系QQ">
-              <el-input v-model="form.qq"></el-input>
+              <el-input v-model="receiver_qq"></el-input>
               <span class="tips">客服将以此QQ号确定买家身份</span>
             </el-form-item>
           </el-form>
@@ -49,25 +50,26 @@
         <div class="title">确认提交订单</div>
         <div class="content">
           <van-cell-group>
-            <van-cell title="购买数" value="1件" />
-            <van-cell title="商品价格" value="￥118.00" />
+            <van-cell title="购买数" value="1件"/>
+            <van-cell title="商品价格">￥{{goods.amount}}</van-cell>
           </van-cell-group>
           <el-checkbox class="cehckbox" v-model="checked">
             点击提交订单表示已阅读并同意
-            <a href>《搜瓜用户服务协议及规则》</a>
-            <a href>《担保服务购买须知》</a>
-            <a href>《交易安全险》</a>
+            <!-- <a href>《搜瓜用户服务协议及规则》</a> -->
+            <a @click="showAgree">《担保服务购买须知》</a>
+            <!-- <a href>《交易安全险》</a> -->
           </el-checkbox>
+          <agree title="担保服务协议" ref="agree" :content="insureContent"/>
           <div class="confirm">
             <i>实际付款</i>
-            <span>118.00</span>
-            <el-button>提交订单</el-button>
+            <span>{{goods.amount}}</span>
+            <el-button @click="next()" :class="{disabled: !canSubmit}">提交订单</el-button>
           </div>
         </div>
       </div>
     </div>
 
-    <v-footer />
+    <v-footer/>
   </div>
 </template>
 
@@ -75,25 +77,131 @@
 import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
 import Pagination from "$components/Pagination";
+import Agree from "$components/Agree";
 import Cell from "vant/lib/cell";
 import CellGroup from "vant/lib/cell-group";
 import "vant/lib/cell/style";
 import "vant/lib/cell-group/style";
+import protocol from "$api/protocol";
+import localforage from "localforage";
+
+import * as service from "$modules/goods/services";
 export default {
   data() {
     return {
       currentPage: 1,
       checked: false,
-      form: { phone: "", qq: "" }
+      receiver_mobile: "",
+      receiver_qq: "",
+      goods: {},
+      insureContent: '',
+      creating: false
     };
   },
+  watch: {
+    receiver_mobile(val) {
+      localforage.setItem("receiver_mobile", val);
+    },
+    receiver_qq(val) {
+      localforage.setItem("receiver_qq", val);
+    }
+  },
+  computed: {
+    canSubmit() {
+      if (this.receiver_mobile != "" && this.receiver_qq != "") {
+        return true;
+      }
+      return false;
+    }
+  },
+  created() {
+    this.goodsId = this.$route.params.goods;
+    this.getDetail();
+    this.getSaleProtocol();
+    this.getToken();
+    localforage.getItem("receiver_mobile").then(val => {
+      val == "" || (this.receiver_mobile = val);
+    });
+    localforage.getItem("receiver_qq").then(val => {
+      val == "" || (this.receiver_qq = val);
+    });
+    if (
+      this.$cookies.get("goods-spread") != undefined &&
+      this.$cookies.get("goods-spread") != "undefined"
+    ) {
+      this.spread_id = this.$cookies.get("goods-spread");
+    }
+    if (this.$route.query["spread_id"] != undefined) {
+      this.spread_id = this.$route.query["spread_id"];
+    }
+  },
   methods: {
-    currentChange() {}
+    next() {
+      if (this.canSubmit) {
+        if (this.checked == false) {
+          this.$toast({ message: "您必须同意《担保服务协议》才能继续" });
+          return;
+        }
+        if (!this.creating) {
+          this.creating = true;
+          // 创建订单
+          let param = {
+            num: 1,
+            receiver_mobile: this.receiver_mobile,
+            receiver_qq: this.receiver_qq,
+            express_type: 0,
+            spread_id: this.spread_id,
+            _token: this.token
+          };
+          this.$toast.loading({ mask: true });
+          this.$http
+            .post("api/v1/order/" + this.goodsId, param)
+            .then(({ data }) => {
+              this.$toast.clear();
+              this.creating = false;
+              let orderId = data.id;
+              this.$router.push({
+                name: "pay.type",
+                params: { order: orderId }
+              });
+            })
+            .catch(({ data }) => {
+              this.$toast.clear();
+              this.creating = false;
+              this.$toast(data.message);
+            });
+        }
+      } else {
+        this.$toast.fail("请先输入收货信息");
+      }
+    },
+    async getDetail() {
+      this.$toast.loading({ mask: true });
+      service.goodsView(this.goodsId).then(({ data }) => {
+        this.goods = data.goods;
+        window.document.title = this.goods.title;
+        this.$toast.clear();
+      });
+    },
+    showAgree() {
+      this.$refs.agree.show();
+    },
+    getSaleProtocol() {
+      protocol.getProtocol("insure").then(data => {
+        this.insureContent = data.data.content;
+      });
+    },
+    getToken() {
+      this.$http.get("api/request-token").then(data => {
+        this.token = data.data;
+      });
+    }
   },
   components: {
     VHeader,
     VFooter,
     Pagination,
+    Agree,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup
   }

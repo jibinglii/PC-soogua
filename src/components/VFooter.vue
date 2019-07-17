@@ -11,15 +11,15 @@
       <span>|</span>
       <a href="javascript:;">诚聘英才</a>
     </div>
-    <div class="device">
+    <!-- <div class="device">
       <a href="javascript:;">触屏版</a>
       <span>|</span>
       <a href="javascript:;">电脑版</a>
-    </div>
-    <p class="license">【网络文化经营许可证】：陕网文许字[xxxx]xxxx-xxx号|【增值电信业务经营许可证】：陕xx-xxxxxxxx【工信部</p>
+    </div> -->
+    <!-- <p class="license">【网络文化经营许可证】：陕网文许字[xxxx]xxxx-xxx号|【增值电信业务经营许可证】：陕xx-xxxxxxxx【工信部</p> -->
     <p class="copyright">西安学学信息技术有限公司 © xxxx-xxxx soogua.cn 版权所有</p>
     <p class="address">公司地址：陕西省西安市雁塔区高新三路蓝溪国际酒店 1号写字楼18F 联系电话：400-000-0000</p>
-    <div class="safe">
+    <!-- <div class="safe">
       <img src="~$assets/images/copyright1.png" alt />
       <a href="javascript:;">反盗号绿色联盟</a>
       <span class="line">|</span>
@@ -34,7 +34,7 @@
       <span class="line">|</span>
       <img src="~$assets/images/copyright5.png" alt />
       <a href="javascript:;">诚信安全可靠</a>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -49,7 +49,8 @@ export default {};
   line-height: 13px;
   background-color: #000;
   padding-top: 40px;
-  padding-bottom: 90px;
+  padding-bottom: 30px;
+  margin-top: 30px;
   .nav {
     font-size: 12px;
     font-weight: 500;
