@@ -69,7 +69,7 @@
             active-text-color="#ffffff"
           >
             <el-menu-item index="/">首页</el-menu-item>
-            <el-menu-item index="">游戏</el-menu-item>
+            <el-menu-item index="gamecenter">游戏</el-menu-item>
             <el-menu-item index="3">流量</el-menu-item>
             <el-menu-item index="4">账号</el-menu-item>
             <el-menu-item index="5">服务</el-menu-item>
