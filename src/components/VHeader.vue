@@ -76,8 +76,8 @@
           </el-menu>
         </div>
         <div class="right">
-          <router-link :to="{name: 'person'}" tag="a">个人中心</router-link>
-          <router-link :to="{name: 'person'}" tag="a">下载APP</router-link>
+          <router-link :to="{name: 'person.person'}" tag="a">个人中心</router-link>
+          <router-link :to="{name: 'person.person'}" tag="a">下载APP</router-link>
         </div>
       </div>
     </div>
