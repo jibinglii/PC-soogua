@@ -1,16 +1,9 @@
 
 import http from '$utils/http'
 
-export const getOrderCount = () => {
-    return http.get('api/v1/user/pc-me')
+export const orderConfirm = (id) => {
+    return http.post('api/v1/order/confirm/' + id)
 }
-
-export const getAccountTotal = () => {
-    return http.post('api/v1/account-total')
-}
-
-export const editPasswd = ({ pass }) => {
-    return http.post('api/v1/user/update-user', {
-        password: pass
-    })
+export const orderDelete = (id) => {
+    return http.delete('api/v1/order/' + id)
 }
