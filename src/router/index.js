@@ -4,6 +4,7 @@ import { routes as person } from '$modules/person'
 import { routes as buyerorder } from '$modules/buyerorder'
 import { routes as goods } from '$modules/goods'
 import { routes as shop } from '$modules/shop'
+import { routes as commodity } from '$modules/commodity'
 // import { routes as store } from '$modules/store'
 // import { routes as collection } from '$modules/collection'
 // import { routes as bank } from '$modules/bank'
@@ -23,7 +24,7 @@ const AppRoute = {
     path: '/:store/',
     component: () =>
         import('../app'),
-    children: [...home, ...auth, ...person, ...buyerorder, ...goods, ...shop
+    children: [...home, ...auth, ...person, ...buyerorder, ...goods, ...shop, ...commodity
         //...store,
         //...collection, ...me, ...goods, ...distribution, ...bank, ...order,
         // ...result, ...seller, ...withdraw, ...im, ...ad
