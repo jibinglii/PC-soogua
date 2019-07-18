@@ -109,9 +109,9 @@
 			onDetails () { },
 			changeTab (tab, event) {
 				this.page = 1;
-				console.log(this.page)
 				this.status = tab.name;
 				this.getOrder(this.page);
+				console.log(this.status)
 			},
 			onSearch () { },
 			currentChange () { },
@@ -129,7 +129,7 @@
 				}
 				this.$http.get('/api/v1/user/orders', param).then(({ data }) => {
 
-					console.log(data);
+					// console.log(data);
 					if (data.orders.data.length > 0) {
 						this.orderData.push(...data.orders.data);
 						this.page = currentPage;

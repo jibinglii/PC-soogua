@@ -15,6 +15,24 @@ const routes = [{
         name: 'goods.refer',
         component: () =>
             import ('./refer')
+    },
+    {
+        path: 'goods/flow',
+        name: 'goods.flow',
+        component: () =>
+            import ('./flow')
+    },
+    {
+        path: 'goods/account',
+        name: 'goods.account',
+        component: () =>
+            import ('./account')
+    },
+    {
+        path: 'goods/service',
+        name: 'goods.service',
+        component: () =>
+            import ('./service')
     }
 ]
 

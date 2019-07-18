@@ -6,7 +6,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>游戏专区</el-breadcrumb-item>
+        <el-breadcrumb-item>账号</el-breadcrumb-item>
       </el-breadcrumb>
       <v-tabs :tabs="tabs" activeTab @changeTab="changeTab"/>
       <el-container>
@@ -24,14 +24,23 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="amount" label="价格" :formatter="amountFormat"></el-table-column>
-              <el-table-column align="center" prop="sale_nums" label="库存" :formatter="saleNumsFormat"></el-table-column>
+              <el-table-column
+                align="center"
+                prop="sale_nums"
+                label="库存"
+                :formatter="saleNumsFormat"
+              ></el-table-column>
               <el-table-column align="center" prop label="保障">
                 <i></i>
                 实名认证
               </el-table-column>
               <el-table-column align="center" label="操作">
                 <template slot-scope="scope">
-                  <el-button  @click.native.prevent="onbuy(scope.row.id, scope.$index)" type="button" size="small">立即购买</el-button>
+                  <el-button
+                    @click.native.prevent="onbuy(scope.row.id, scope.$index)"
+                    type="button"
+                    size="small"
+                  >立即购买</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -71,12 +80,13 @@ export default {
       page: 1, // 当前的页数
       tabs: [
         { name: "0", label: "全部" },
-        { name: "101", label: "游戏帐号" },
-        { name: "102", label: "游戏装备" },
-        { name: "104", label: "游戏点卡" },
-        { name: "100", label: "游戏币" }
+        { name: "401", label: "自媒体账号" },
+        { name: "400", label: "网店账号" },
+        { name: "402", label: "社交账号" },
+        { name: "403", label: "视频账号" }
       ],
-      type: "0,1",
+
+      type: 3,
       type2: 0
     };
   },
@@ -84,11 +94,11 @@ export default {
     this.getList(this.page);
   },
   methods: {
-    saleNumsFormat (row, column) {
-      return row.sale_nums+'件'
+    saleNumsFormat(row, column) {
+      return row.sale_nums + "件";
     },
-    amountFormat (row, column) {
-      return '￥'+row.amount
+    amountFormat(row, column) {
+      return "￥" + row.amount;
     },
     changeTab(tab, event) {
       this.page = 1;
@@ -121,7 +131,7 @@ export default {
         .then(({ data }) => {
           this.goods = [];
           this.goods = data.goods.data;
-          console.log(this.goods)
+          console.log(this.goods);
           this.page = currentPage;
           this.total = data.goods.total;
           loading.close();
