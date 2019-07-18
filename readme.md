@@ -54,12 +54,12 @@ VUE_APP_CAPTCHA_ID_PUBLISH=
 
 
 
-## License
+## 
 
 MIT
 
 
 - [x]  已完成
    - [x] 1.
-- []  待完成
-   [] 1.
+- [ ]  待完成
+   [ ] 1.
