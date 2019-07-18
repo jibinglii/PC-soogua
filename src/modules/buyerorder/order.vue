@@ -4,7 +4,7 @@
 		<div class="container">
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
-				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
 				<el-breadcrumb-item>个人中心</el-breadcrumb-item>
 				<el-breadcrumb-item>订单管理</el-breadcrumb-item>
 			</el-breadcrumb>
@@ -49,13 +49,19 @@
 															 label="总支付"></el-table-column>
 							<el-table-column align="center"
 															 prop="status_label"
+															 :formatter="statusFormat"
 															 label="订单状态"></el-table-column>
 							<el-table-column align="center"
 															 label="操作">
 								<template slot-scope="scope">
-									<el-button @click.native.prevent="onDetails(scope.$index)"
+									<el-button v-if="scope.row.status==2"
+														 @click.native.prevent="confirm(scope.row.id,scope.$index)"
 														 type="button"
 														 size="small">确认收货</el-button>
+									<el-button v-if="scope.row.status==0"
+														 @click.native.prevent="destroy(scope.row.id,scope.$index)"
+														 type="button"
+														 size="small">删除</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
@@ -78,6 +84,8 @@
 	import VAside from "$components/VAside";
 	import VTabs from "$components/tabs";
 	import Pagination from "$components/Pagination";
+	import * as services from "$modules/buyerorder/services";
+
 	export default {
 		data () {
 			return {
@@ -106,7 +114,65 @@
 			Pagination
 		},
 		methods: {
-			onDetails () { },
+			statusFormat (row, column) {
+				if (row.closed) {
+					return "订单已关闭"
+				} else {
+					return row.status_label
+				}
+			},
+			confirm (id, index) {
+				let message = "您确定要[确认收货]该订单吗？";
+				let that = this;
+				this.$confirm(message, '提示', {
+					confirmButtonText: '确认收货',
+					cancelButtonText: '取消',
+				}).then(function () {
+					const loading = that.$loading({
+						lock: true,
+						text: "请稍等",
+					});
+					services.orderConfirm(id).then(data => {
+						loading.close();
+						that.$message.success(data);
+						that.orderData[index].status_label = '已完成';
+						that.orderData[index].status = '3';
+					}).catch(fail => {
+						loading.close();
+						//that.$message.error(fail.data.message);
+					});
+				})
+					.catch(() => {
+						loading.close();
+						console.log('“cancel”');
+					});
+			},
+			destroy (id, index) {
+				let message = "您确定要[删除]该订单吗？";
+				let that = this;
+				this.$confirm(message, '提示', {
+					confirmButtonText: '删除',
+					cancelButtonText: '取消',
+				}).then(function () {
+					const loading = that.$loading({
+						lock: true,
+						text: "请稍等",
+					});
+					services.orderDelete(id).then(({ message }) => {
+						loading.close();
+						that.$message.success(message);
+						//删除orderData中的这一行数据
+						that.$delete(that.orderData, index)
+					}).catch(fail => {
+						loading.close();
+						//that.$message.error(fail.data.message);
+					});
+				})
+					.catch(() => {
+						loading.close();
+						console.log('“cancel”');
+					});
+			},
 			changeTab (tab, event) {
 				this.page = 1;
 				this.status = tab.name;
@@ -129,12 +195,10 @@
 				}
 				this.$http.get('/api/v1/user/orders', param).then(({ data }) => {
 
-					// console.log(data);
-					if (data.orders.data.length > 0) {
-						this.orderData.push(...data.orders.data);
-						this.page = currentPage;
-						this.total = data.orders.total;
-					}
+					this.orderData = data.orders.data;
+					this.page = data.currentPage;
+					this.total = data.orders.total;
+
 				})			}
 		},
 		created () {
