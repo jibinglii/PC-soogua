@@ -193,11 +193,11 @@
 					param['params']['status'] = this.status
 				}
 				this.$http.get('/api/v1/user/orders', param).then(({ data }) => {
-					if (data.orders.data.length > 0) {
-						this.orderData.push(...data.orders.data);
-						this.page = currentPage;
-						this.total = data.orders.total;
-					}
+
+					this.orderData = data.orders.data;
+					this.page = data.currentPage;
+					this.total = data.orders.total;
+
 				})			}
 		},
 		created () {
