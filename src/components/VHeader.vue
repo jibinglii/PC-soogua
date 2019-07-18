@@ -18,7 +18,7 @@
 											 tag="a">免费注册</router-link>
 				</div>
 				<div class="right">
-					<router-link :to="{name: 'person'}"
+					<router-link :to="{name: 'person.person'}"
 											 tag="a">个人中心</router-link>
 					<router-link :to="{name: 'help'}"
 											 tag="a">帮助中心</router-link>

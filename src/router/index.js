@@ -3,6 +3,7 @@ import { routes as auth } from '$modules/auth'
 import { routes as person } from '$modules/person'
 import { routes as buyerorder } from '$modules/buyerorder'
 import { routes as goods } from '$modules/goods'
+import { routes as shop } from '$modules/shop'
 // import { routes as store } from '$modules/store'
 // import { routes as collection } from '$modules/collection'
 // import { routes as bank } from '$modules/bank'
@@ -21,8 +22,8 @@ Vue.use(Router)
 const AppRoute = {
     path: '/:store/',
     component: () =>
-        import ('../app'),
-    children: [...home, ...auth, ...person, ...buyerorder, ...goods
+        import('../app'),
+    children: [...home, ...auth, ...person, ...buyerorder, ...goods, ...shop
         //...store,
         //...collection, ...me, ...goods, ...distribution, ...bank, ...order,
         // ...result, ...seller, ...withdraw, ...im, ...ad
@@ -32,14 +33,14 @@ const AppRoute = {
 const routes = [{
     path: '/404',
     component: () =>
-        import ('../not-found')
+        import('../not-found')
 }, AppRoute, {
     path: '*',
     component: () =>
-        import ('../not-found')
+        import('../not-found')
 }]
 
-const scrollBehavior = function(to, from, savedPosition) {
+const scrollBehavior = function (to, from, savedPosition) {
     if (savedPosition) {
         return savedPosition
     } else {
