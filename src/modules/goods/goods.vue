@@ -53,47 +53,16 @@
         <el-main>
           <h3>商品介绍</h3>
           <ul>
-            <li>
-              所属游戏：
-              <span>{{goods.game_name}}</span>
-            </li>
-            <li>
-              服务器：
-              <span></span>
-            </li>
-            <li>
-              账号绑定：
-              <span></span>
-            </li>
-            <li>
-              守护平台绑定：
-              <span></span>
-            </li>
-            <li>
-              英雄个数：
-              <span></span>
-            </li>
-            <li>
-              皮肤个数：
-              <span></span>
-            </li>
-            <li>
-              防沉迷设置：
-              <span></span>
-            </li>
-            <li>
-              至尊宝绑定：
-              <span></span>
-            </li>
-            <li>
-              交易方式：
-              <span></span>
-            </li>
-            <li>
-              发货时效：
-              <span></span>
+            <li v-for="(item, index) in goods.specs" :key="index" class="item">
+              <label>{{item.option.title}}</label>
+              <div>
+                <span v-if="Array.isArray(item.value)">{{item.value.join(', ')}}</span>
+                <span v-else-if="item.type == 'radio'">{{item.option.options[item.value]}}</span>
+                <span v-else>{{item.value}}</span>
+              </div>
             </li>
           </ul>
+
           <p class="introduce">
             商品介绍：
             <span>{{goods.content}}</span>
@@ -213,7 +182,6 @@ export default {
         })
         .then(({ data }) => {
           this.goods = data.goods;
-          console.log(this.goods)
           window.document.title = this.goods.title;
           this.$toast.clear();
         })
@@ -222,7 +190,7 @@ export default {
         });
     },
     collect(goods) {
-      console.log(goods.is_collect)
+      console.log(goods.is_collect);
       if (!goods.is_collect) {
         this.$http
           .put("api/v1/collect/goods/" + this.goodsId)
@@ -353,28 +321,28 @@ export default {
     overflow: hidden;
     background: #fff;
     li {
-      &:nth-child(4n-3) {
-        padding-left: 43px;
-      }
       float: left;
-      width: 25%;
-      padding-left: 25px;
+      width: 50%;
+      padding-left: 44px;
       font-size: 14px;
       font-weight: bold;
       line-height: 42px;
       color: #999;
+      display: flex;
       span {
         color: #000;
+      }
+      label {
+        width: 120px;
       }
     }
   }
   .introduce {
-    padding-left: 43px;
     font-size: 14px;
     font-weight: bold;
     color: #999;
-    line-height: 42px;
-    padding-bottom: 19px;
+    line-height: 28px;
+    padding: 0 19px 19px 43px;
     background: #fff;
     span {
       color: #000;

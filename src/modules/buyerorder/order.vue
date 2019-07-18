@@ -177,6 +177,7 @@
 				this.page = 1;
 				this.status = tab.name;
 				this.getOrder(this.page);
+				console.log(this.status)
 			},
 			onSearch () { },
 			currentChange () { },

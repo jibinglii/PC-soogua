@@ -11,7 +11,7 @@
         </a>
       </li>
       <li class="edge-cell">
-        <router-link :to="{name:'person'}" tag="a">
+        <router-link :to="{name:'person.person'}" tag="a">
           <img class="center-block" src="~$assets/images/ren.png" alt />
           <span class="hover-msg">个人中心</span>
         </router-link>
