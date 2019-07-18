@@ -2,7 +2,7 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
       <el-breadcrumb-item v-for="item in levelList" :key="item.path">
         <span v-if="item.path" class="no-redirect">{{ item.title }}</span>
         <a v-else @click.prevent="handleLink(item)">{{ item.title }}</a>

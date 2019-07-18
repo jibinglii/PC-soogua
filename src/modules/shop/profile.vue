@@ -4,7 +4,7 @@
     <div class="container">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
         <el-breadcrumb-item>个人中心</el-breadcrumb-item>
         <el-breadcrumb-item>店铺管理</el-breadcrumb-item>
       </el-breadcrumb>
