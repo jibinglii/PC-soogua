@@ -5,8 +5,8 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人中心</el-breadcrumb-item>
-        <el-breadcrumb-item>银行卡管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'person.card'}">银行卡管理</el-breadcrumb-item>
         <el-breadcrumb-item>填写银行卡信息</el-breadcrumb-item>
       </el-breadcrumb>
       <v-content>
@@ -18,36 +18,20 @@
             <div class="title">银行卡管理</div>
             <div class="content">
               <van-cell-group>
-                <van-field clearable center label="卡类型">
-                  <el-select slot="input" v-model="cardType" placeholder="选择所属银行">
-                    <el-option
-                      v-for="item in bankOptions"
-                      :key="item.cardType"
-                      :label="item.label"
-                      :value="item.cardType"
-                    ></el-option>
-                  </el-select>
-                </van-field>
-
-                <van-field v-model="cardNum" label="银行卡号" placeholder="请输入银行卡号" />
-                <van-field v-model="phone" label="预留手机号" placeholder="请输入银行卡预留电话" />
-                <van-field
-                  v-model="sms"
-                  center
-                  clearable
-                  label="短信验证码"
-                  placeholder="请输入短信验证码"
-                  style="position:relative"
-                >
-                  <a class="sendsms" @click.prevent slot="button" size="small" type="primary">发送验证码</a>
-                </van-field>
+                <van-field v-model="bankinfo.realname" label="姓名" placeholder="请输入您的姓名"/>
+                <van-field v-model="bankinfo.id_card" label="身份证号" placeholder="请输入您的身份证号"/>
+                <van-field v-model="bankinfo.bankno" label="银行卡号" placeholder="请输入银行卡号"/>
+                <van-field v-model="bankinfo.mobile" label="预留手机号" placeholder="请输入银行卡预留电话"/>
               </van-cell-group>
               <van-checkbox v-model="checked">
                 同意
-                <span>《用户协议》</span>
+                <span @click="showAgree">《绑卡服务协议》</span>
               </van-checkbox>
-              <el-button @click.native.prevent type="button" size="primary">确认</el-button>
-              <div v-if="smsTips" class="smstip">验证码已发送至手机，请注意查收</div>
+              <agree title="绑卡服务协议" ref="agree" :content="protocol"/>
+              <div class="btn">
+                <el-button @click.native.prevent="next()" type="button" size="primary">确认</el-button>
+                <el-button @click.native.prevent="back()" type="button" size="primary" class="back">返回</el-button>
+              </div>
             </div>
           </div>
         </div>
@@ -72,20 +56,23 @@ import Field from "vant/lib/field";
 import "vant/lib/field/style";
 import Checkbox from "vant/lib/checkbox";
 import "vant/lib/checkbox/style";
+import Agree from "$components/Agree";
+import protocol from "$api/protocol";
 export default {
   data() {
     return {
-      smsTips: true,
+      saving: false,
       checked: false,
-      cardType: "",
-      bankOptions: [
-        { label: "中国银行", cardType: 0 },
-        { label: "浦发银行", cardType: 1 },
-        { label: "光大银行", cardType: 2 }
-      ],
-      cardNum: "",
-      phone: "",
-      sms: ""
+      bankinfo: {
+        bankno: "",
+        realname: "",
+        mobile: "",
+        id_card: "",
+        bank: "bank",
+        is_default: 1
+      },
+      protocol: "",
+      cardtype: { index: 0, value: "bank" }
     };
   },
   components: {
@@ -93,14 +80,74 @@ export default {
     VFooter,
     VContent,
     VAside,
+    Agree,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
     [CellGroup.name]: CellGroup,
     [Field.name]: Field,
     [Checkbox.name]: Checkbox
   },
+  created() {
+    this.getProtocol();
+  },
   methods: {
-    submitForm() {}
+    next() {
+      if (!this.checked) {
+        this.$message.error("请勾选《用户协议》");
+      } else {
+        if (!this.saving) {
+          this.saving = true;
+          const loading = this.$loading({
+            lock: true,
+            text: "信息保存中"
+          });
+          this.$http
+            .post(
+              "api/v1/bankcard",
+              _.assign(this.bankinfo, { bank: this.cardtype.value })
+            )
+            .then(({ data }) => {
+              console.log(data);
+              this.saving = false;
+
+              let redirect = this.$route.query["redirect"];
+              if (data.need_confirm) {
+                // todo fuyou
+                let url =
+                  "/shop/bankcardsms.html?id=" +
+                  data.card.id +
+                  "&m=" +
+                  data.card.mobile +
+                  "&tssn=" +
+                  data.tssn +
+                  "&redirect=" +
+                  redirect;
+                location.href = url;
+              } else if (redirect != "" && redirect != undefined) {
+                redirect = decodeURIComponent(redirect);
+                location.replace(redirect);
+              } else {
+                this.$router.replace({ name: "person.card" });
+              }
+            })
+            .catch(() => {
+              loading.close();
+              this.saving = false;
+            });
+        }
+      }
+    },
+    back () {
+      this.$router.push({name:'person.card'})
+    },
+    showAgree() {
+      this.$refs.agree.show();
+    },
+    getProtocol() {
+      protocol.getProtocol("store_add_band").then(({ data }) => {
+        this.protocol = data.content;
+      });
+    }
   }
 };
 </script>
@@ -114,6 +161,9 @@ export default {
   border: 1px solid #a0a0a0;
   margin-top: 30px;
   width: 340px;
+}
+/deep/.van-popup {
+  height: 100%;
 }
 .van-checkbox {
   margin-top: 11px;
@@ -166,16 +216,26 @@ export default {
   line-height: 24px;
 }
 
-.el-button--primary {
-  color: #fff;
-  background-color: #000;
-  border-color: #000;
+.btn {
+  width: 340px;
+  display: flex;
+  justify-content: space-evenly;
+  .el-button--primary {
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+  }
+  .el-button {
+    margin-top: 40px;
+    width: 110px;
+  }
+  .back{
+    background: transparent;
+    border-color: #000;
+    color: #000;
+  }
 }
 
-.el-button {
-  margin-top: 40px;
-  width: 340px;
-}
 .el-breadcrumb {
   margin-top: 18px;
   margin-bottom: 18px;

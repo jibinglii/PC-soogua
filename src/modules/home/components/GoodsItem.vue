@@ -41,7 +41,7 @@ export default {
 <style lang="scss" scoped>
 .goods {
   width: 284px;
-  height: 305px;
+  height: 310px;
   padding: 9px 8px;
   float: left;
   margin-bottom: 16px;
@@ -75,7 +75,6 @@ export default {
       font-size: 12px;
       font-weight: 400;
       color: #000;
-      line-height: 12px;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
@@ -86,7 +85,6 @@ export default {
       font-size: 12px;
       font-weight: 400;
       color: #999;
-      line-height: 12px;
     }
     .price {
       font-size: 16px;
