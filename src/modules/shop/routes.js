@@ -16,6 +16,9 @@ export default [
     {
         path: 'shop/profile',
         name: 'shop.profile',
+        meta: {
+            requiresAuth: true
+        },
         component: () => import('./profile')
     },
     {

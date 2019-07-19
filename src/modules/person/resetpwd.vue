@@ -105,23 +105,25 @@
 				let reg = new RegExp(/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/);
 				if (!reg.test(pass)) {
 					this.$message({ message: "密码必须有数字和字母", type: "warning" });
+					return false;
 				}
 				const loading = this.$loading({
 					lock: true,
 					text: "密码修改中"
 				});
-				try {
-					services.editPasswd({ pass }).then(data => {
-						loading.close();
-						this.$message.success("恭喜，密码修改成功");
-						this.$router.push({ name: "person.person" });
-					});
-				} catch (e) {
+
+				services.editPasswd({ pass }).then(data => {
 					loading.close();
-					console.log(e)
-					//this.$message.error("密码修改失败，请稍后再试");
-					//	this.$router.push({ name: "person.person" });
-				}
+					this.$message.success("恭喜，密码修改成功");
+					this.$router.push({ name: "person.person" });
+				})
+
+					.catch(error => {
+						loading.close();
+						this.pwd.pass = '';
+						this.pwd.checkPass = '';
+					})
+
 			}
 		}
 	};

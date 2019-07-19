@@ -136,7 +136,7 @@
 					}).catch(error => {
 						loading.close();
 
-						this.$message.error("设置失败，请重试111");
+						this.$message.error("设置失败，请重试");
 						this.password = '';
 						this.confirmPasswd = '';
 					})
