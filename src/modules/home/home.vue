@@ -10,7 +10,8 @@
 			<el-container>
 				<el-main>
 					<div class="screen">
-						<el-dropdown>
+            最新商品
+						<!-- <el-dropdown>
 							<span class="el-dropdown-link">
 								价格
 								<i class="el-icon-arrow-down el-icon--right"></i>
@@ -29,7 +30,7 @@
 								<el-dropdown-item>升序</el-dropdown-item>
 								<el-dropdown-item>降序</el-dropdown-item>
 							</el-dropdown-menu>
-						</el-dropdown>
+						</el-dropdown> -->
 					</div>
 					<div class="clearfix">
 						<goods-item v-for="(item, index) in goods"
@@ -219,7 +220,7 @@
 	}
 
 	.screen {
-		padding: 20px 40px;
+		padding: 20px 15px;
 		background-color: #fff;
 		margin-bottom: 15px;
 		span {

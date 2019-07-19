@@ -24,3 +24,14 @@ const AppRoute = {
         import ('../app'),
     children: [...home, ...auth, ...person, ...goods, ...buyerorder, ...sellerorder, ...shop, ...distribution, ...help, ...feedback, ...message, ...collection, ...commodity, ...flow, ...settle]
 }
+
+const routes = [AppRoute]
+
+const router = new Router({
+    routes,
+    mode: 'history'
+})
+
+router.beforeEach(beforeEach)
+
+export default router
