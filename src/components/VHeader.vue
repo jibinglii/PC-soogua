@@ -60,11 +60,6 @@
     <div class="bottom">
       <div class="container">
         <div class="left">
-          <!-- <router-link :to="{name: 'home'}" tag="a" class="router-link-active">首页</router-link>
-          <router-link :to="{name: 'gamecenter'}" tag="a">游戏</router-link>
-          <router-link :to="{name: 'goods.flow'}" tag="a">流量</router-link>
-          <router-link :to="{name: 'goods.account'}" tag="a">账号</router-link>
-          <router-link :to="{name: 'goods.service'}" tag="a">服务</router-link>-->
           <router-link v-for="(item, index) in tabs" :to="{name:item.id}" :key="index">
             <div
               class="itembox"
@@ -293,7 +288,7 @@ export default {
         font-size: 16px;
         font-weight: 400;
         line-height: 50px;
-        padding: 0 20px;
+        padding: 0 35px;
         &:hover {
           color: #fff;
         }

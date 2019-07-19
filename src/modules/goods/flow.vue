@@ -129,7 +129,6 @@ export default {
         .then(({ data }) => {
           this.goods = [];
           this.goods = data.goods.data;
-          console.log(this.goods);
           this.page = currentPage;
           this.total = data.goods.total;
           loading.close();
