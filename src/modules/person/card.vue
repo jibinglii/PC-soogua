@@ -5,7 +5,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人中心</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
         <el-breadcrumb-item>银行卡管理</el-breadcrumb-item>
       </el-breadcrumb>
       <v-content>
@@ -26,28 +26,28 @@
               >
                 <div class="top">
                   <div class="left">
-                    <img src="~$assets/images/gs.png" alt />
-                    <span>{{item.name}}</span>
+                    <i class="iconfont" :class="'icon-' + item.bank" :style="{'color':item.bank_info.color}"></i>
+                    <span>{{item.bank_info.bankName}}</span>
                   </div>
                   <div class="right">
-                    <i>尾号{{item.weihao}}</i>
-                    <span>储蓄卡</span>
+                    <i>尾号{{item.bankno_last4}}</i>
+                    <span>{{item.bank_info.cardTypeName}}</span>
                   </div>
                 </div>
                 <div class="bottom">
-                  <h4 v-text="item.default?'默认收款银行卡' : ''"></h4>
+                  <h4 v-show="item.is_default">默认收款银行卡</h4>
                   <p>
-                    <i>持卡人姓名：{{item.user}}</i>
-                    <a v-if="isActive ==index">设置</a>
+                    <i>持卡人姓名：{{item.realname}}</i>
+                    <a v-if="isActive ==index" @click="bind(item.id, index)">设置</a>
                   </p>
                   <p>
-                    <i>手机号： {{item.mobile}}}</i>
-                    <a class v-if="isActive ==index" @click="deleteCard">删除</a>
+                    <i>手机号： {{item.mobile}}</i>
+                    <a class v-if="isActive ==index" @click="deleteCard(item.id, index)">删除</a>
                   </p>
                 </div>
               </div>
               <router-link class="addcard" :to="{name:'person.addcard'}" tag="a">
-                <img class="addimg" :src="addCard.img" alt />
+                <img class="addimg" :src="addCard.img" alt>
                 <span class="addlabel">{{addCard.label}}</span>
               </router-link>
             </div>
@@ -56,7 +56,7 @@
       </v-content>
     </div>
     <v-footer></v-footer>
-    <delete-card :show.sync="showDelete" />
+    <!-- <delete-card :show.sync="showDelete"/> -->
   </div>
 </template>
 
@@ -65,56 +65,103 @@ import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
 import VContent from "$components/VContent";
 import VAside from "$components/VAside";
-import DeleteCard from "./deletecard";
+// import DeleteCard from "./deletecard";
 export default {
   data() {
     return {
       isActive: -1,
-      showDelete: false,
+      // showDelete: false,
       addCard: {
         img: require("../../assets/images/tianjia.png"),
         label: "添加银行卡"
       },
-      cardList: [
-        {
-          img: require("../../assets/images/tianjia.png"),
-          name: "光大银行",
-          weihao: "3245",
-          default: true,
-          user: "jj***l",
-          mobile: "139*****12354"
-        },
-        {
-          img: require("../../assets/images/tianjia.png"),
-          name: "光大银行",
-          weihao: "3245",
-          default: false,
-          user: "jj***l",
-          mobile: "139*****12354"
-        }
-      ]
+      cardList: []
     };
   },
   components: {
     VHeader,
     VFooter,
     VContent,
-    VAside,
-    DeleteCard
+    VAside
+    // DeleteCard
+  },
+  mounted() {
+    this.getBankCards();
   },
   methods: {
-    submitForm() {},
     checkCard(index) {
       this.isActive = index;
     },
-    mouseOver(index){
+    mouseOver(index) {
       this.isActive = index;
     },
-    mouseLeave(index){
+    mouseLeave(index) {
       this.isActive = -1;
     },
-    deleteCard() {
-      this.showDelete = true;
+    getBankCards() {
+      const loading = this.$loading({
+        lock: true,
+        text: "请稍等"
+      });
+      this.$http.get("/api/v1/bankcard", { loading: true }).then(({ data }) => {
+        console.log(data)
+        loading.close();
+        this.cardList = data.bank_cards;
+      });
+    },
+    bind(id, index) {
+      let message = "您确定将此卡设置成默认吗？";
+      let that = this;
+      this.$confirm(message, "提示", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消"
+      })
+        .then(function() {
+          const loading = that.$loading({
+            lock: true,
+            text: "请稍等"
+          });
+          that.$http
+            .put("/api/v1/bankcard/set-default/" + id)
+            .then(({ data }) => {
+              loading.close();
+              that.cardList.is_default = 1;
+              that.$message.success('设为默认银行卡成功');
+              that.getBankCards()
+            })
+            .catch(fail => {
+              loading.close();
+            });
+        })
+        .catch(() => {
+          console.log("“cancel”");
+        });
+    },
+    deleteCard(id, index) {
+      let message = "您确定要删除此银行卡吗？";
+      let that = this;
+      this.$confirm(message, "提示", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消"
+      })
+        .then(function() {
+          const loading = that.$loading({
+            lock: true,
+            text: "请稍等"
+          });
+          that.$http
+            .delete("/api/v1/bankcard/" + id, { loading: true })
+            .then(({ data }) => {
+              loading.close();
+              that.$delete(that.cardList, index);
+            })
+            .catch(fail => {
+              loading.close();
+            });
+        })
+        .catch(() => {
+          console.log("“cancel”");
+        });
     }
   }
 };
@@ -160,12 +207,13 @@ export default {
     }
     .item {
       margin-right: 18px;
+      margin-bottom: 20px;
       width: 294px;
       height: 140px;
       border: 1px solid #c1c1c1;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       flex-direction: column;
       cursor: pointer;
       &.active {
@@ -188,10 +236,12 @@ export default {
     font-weight: 400;
     color: #000;
     line-height: 50px;
-    img {
-      width: 30px;
-      height: auto;
-      vertical-align: middle;
+    i.iconfont {
+      float: left;
+      font-size: 27px;
+    }
+    span {
+      float: left;
     }
   }
   .right {
@@ -201,7 +251,9 @@ export default {
     line-height: 50px;
     span {
       background: #f4c93a;
-      padding: 9px;
+      padding: 4px 6px;
+      font-size: 12px;
+      margin-left: 5px;
     }
   }
 }
