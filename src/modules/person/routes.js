@@ -1,11 +1,11 @@
-export default [
-    {
+export default [{
         path: 'person',
         name: 'person.person',
         meta: {
             requiresAuth: true
         },
-        component: () => import('./person')
+        component: () =>
+            import ('./person')
     },
     {
         path: 'person/resetpwd',
@@ -13,7 +13,8 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./resetpwd')
+        component: () =>
+            import ('./resetpwd')
     },
     {
         path: 'person/resetpaypwd',
@@ -21,7 +22,8 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./resetpaypwd')
+        component: () =>
+            import ('./resetpaypwd')
     },
     {
         path: 'person/setpaypwd',
@@ -29,27 +31,31 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./setpaypwd')
+        component: () =>
+            import ('./setpaypwd')
     },
     {
         path: 'person/profile',
         name: 'person.profile',
-        component: () => import('./profile')
+        component: () =>
+            import ('./profile')
     },
     {
         path: 'person/approve',
         name: 'person.approve',
-        component: () => import('./approve')
+        component: () =>
+            import ('./approve')
     },
     {
         path: 'person/card',
         name: 'person.card',
-        component: () => import('./card')
+        component: () =>
+            import ('./card')
     },
     {
         path: 'person/addcard',
         name: 'person.addcard',
-        component: () => import('./addcard')
+        component: () =>
+            import ('./addcard')
     }
 ]
-

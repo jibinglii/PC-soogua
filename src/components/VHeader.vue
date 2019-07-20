@@ -210,7 +210,7 @@ export default {
     display: flex;
     .head {
       display: block;
-      margin-right: 10px;
+      margin-right: 20px;
       width: 80px;
       height: 80px;
     }

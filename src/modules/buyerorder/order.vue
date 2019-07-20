@@ -15,7 +15,7 @@
 				<div slot="main">
 					<div class="title">查看我的订单</div>
 					<v-tabs :tabs="tabs"
-									activeTab="all"
+									activeTab="-1"
 									@changeTab="changeTab" />
 					<div class="goodslist">
 						<el-table :data="orderData"

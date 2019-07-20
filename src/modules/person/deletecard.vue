@@ -6,9 +6,7 @@
     @close="$emit('update:show', false)"
     width="760px"
   >
-    <p class="tips">
-      您是否确认删除此银行卡【尾号1234】？
-    </p>
+    <p class="tips">您是否确认删除此银行卡【尾号{{item.bank_info.bankno_last4}}】？</p>
     <div class="pwd">
       <span>支付密码：</span>
       <div class="inputs" v-for="(item,index) in inputList" :key="index">
@@ -18,7 +16,7 @@
           class="border-input"
           @keyup="nextFocus($event,index)"
           @keydown="changeValue(index)"
-        />
+        >
       </div>
     </div>
     <router-link tag="a" :to="{name:'person.resetpaypwd'}" class="forget">忘记支付密码？</router-link>
@@ -36,6 +34,10 @@ import "vant/lib/password-input/style";
 export default {
   data() {
     return {
+      id: "",
+      item: {
+        bank_info: {}
+      },
       value: "",
       visible: this.show,
       inputList: [
@@ -54,12 +56,30 @@ export default {
       default: false
     }
   },
+  created() {
+    this.id = this.$route.params.id;
+  },
   watch: {
     show() {
       this.visible = this.show;
     }
   },
+  mounted() {
+    this.getBankCard();
+  },
   methods: {
+    getBankCard() {
+      this.$toast.loading();
+      this.$http
+        .get("/api/v1/bankcard/" + this.id, { loading: true })
+        .then(({ data }) => {
+          this.item = data;
+          console.log(data);
+        })
+        // .catch(error => {
+        //   console.log(error);
+        // });
+    },
     nextFocus(el, index) {
       var dom = document.getElementsByClassName("border-input"),
         currInput = dom[index],
@@ -103,7 +123,7 @@ export default {
     width: 56px;
     font-size: 56px;
     height: 56px;
-    line-height:56px;
+    line-height: 56px;
     margin-left: 8px;
     margin-right: 8px;
     text-align: center;
