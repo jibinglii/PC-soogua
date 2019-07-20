@@ -16,6 +16,9 @@ export default [
     {
         path: 'shop/profile',
         name: 'shop.profile',
+        meta: {
+            requiresAuth: true
+        },
         component: () => import('./profile')
     },
     {
@@ -24,13 +27,16 @@ export default [
         component: () => import('./selectgame')
     },
     {
-        path: 'shop/types',
+        path: 'shop/types/:id.html',
         name: 'shop.types',
         component: () => import('./types')
     },
     {
-        path: 'shop/fill',
+        path: 'shop/fill/:id.html',
         name: 'shop.fill',
+        meta: {
+            requiresAuth: true
+        },
         component: () => import('./fill')
     },
     {
