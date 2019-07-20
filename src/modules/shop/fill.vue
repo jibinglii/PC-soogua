@@ -54,7 +54,7 @@
 				<div class="content">
 					<el-form ref="form-desc"
 									 :model="formDesc"
-									 label-width="90px">
+									 label-width="100px">
 						<el-form-item label="账号亮点："
 													prop="desc">
 							<el-input type="textarea"
@@ -63,16 +63,42 @@
 							<span class="size">{{size}}/300</span>
 						</el-form-item>
 						<el-form-item label="上传图片：">
-							<div class="up">
-								<el-upload class="up-img"
-													 action="/"
-													 :on-preview="handlePreview"
-													 :on-exceed="handleExceed"
-													 :limit="5">
-									<el-button size="small"
-														 type="primary">点击上传</el-button>
-									<p class="desc-tips">单张最多可选5张，可以上传你认为有卖点的商品图片，请勿添加联系方式和其他平台信息，将导致商品下架。</p>
+							<div style="width:650px;">
+								<!--  -->
+								<el-upload action="#"
+													 list-type="picture-card"
+													 :auto-upload="false">
+									<i slot="default"
+										 class="el-icon-plus"></i>
+									<div slot="file"
+											 slot-scope="{file}">
+										<img class="el-upload-list__item-thumbnail"
+												 :src="file.url"
+												 alt="">
+										<span class="el-upload-list__item-actions">
+											<span class="el-upload-list__item-preview"
+														@click="handlePictureCardPreview(file)">
+												<i class="el-icon-zoom-in"></i>
+											</span>
+											<span v-if="!disabled"
+														class="el-upload-list__item-delete"
+														@click="handleDownload(file)">
+												<i class="el-icon-download"></i>
+											</span>
+											<span v-if="!disabled"
+														class="el-upload-list__item-delete"
+														@click="handleRemove(file)">
+												<i class="el-icon-delete"></i>
+											</span>
+										</span>
+									</div>
 								</el-upload>
+								<el-dialog :visible.sync="dialogVisible">
+									<img width="100%"
+											 :src="dialogImageUrl"
+											 alt="">
+								</el-dialog>
+								<!--  -->
 							</div>
 						</el-form-item>
 					</el-form>
@@ -231,12 +257,12 @@
 			padding: 25px 43px;
 			/deep/.el-textarea__inner {
 				height: 200px;
-				width: 650px;
+				width: 620px;
 			}
 			.size {
 				position: absolute;
 				bottom: 0;
-				right: -340px;
+				right: -320px;
 				width: 38px;
 				font-size: 14px;
 				font-weight: 400;
