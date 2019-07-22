@@ -13,7 +13,7 @@
         </div>
         <div class="right">
           <router-link :to="{name: 'person.person'}" tag="a">个人中心</router-link>
-          <router-link :to="{name: 'help'}" tag="a">帮助中心</router-link>
+          <router-link :to="{name: 'help.help'}" tag="a">帮助中心</router-link>
           <router-link :to="{name: 'collection'}" tag="a">我的收藏</router-link>
           <a href="javascript:">客服中心</a>
         </div>
