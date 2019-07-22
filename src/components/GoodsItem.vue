@@ -6,11 +6,11 @@
     @mouseleave="mouseLeave"
     @click="onGoods"
   >
-    <img class="img" src="~$assets/images/goods2.png" alt />
+    <img class="img" :src="goods.logo" alt />
     <p class="title">{{ goods.title }}</p>
     <div class="group">
-      <span class="price">{{ goods.price }}</span>
-      <i class="stock">{{ goods.stock }}</i>
+      <span class="price">￥{{ goods.amount }}</span>
+      <i class="stock">{{ goods.game_name }}</i>
     </div>
     <div v-if="del" class="del" @click.stop="delItem">
       <img src="~$assets/images/del.png" alt />
@@ -22,25 +22,20 @@
 export default {
   props: {
     styles: Object,
+    goods: Object,
     showDel: { type: Boolean, default: false }
   },
   data() {
     return {
       del: false,
-      goods: {
-        id: 123,
-        title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
-        img: require("$assets/images/goods2.png"),
-        price: "¥300.00",
-        stock: "库存1件"
-      }
     };
   },
   methods: {
     onGoods() {
-      this.$router.push({ name: "goods", params: { goods: "123" } });
+      this.$router.push({ name: "goods", params: { goods: this.goods.uuid }});
     },
     mouseOver() {
+
       if (!this.showDel) {
         return;
       }
@@ -69,7 +64,7 @@ export default {
   .img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 190px;
     max-width: 100%;
     overflow: hidden;
     margin: 0 auto;

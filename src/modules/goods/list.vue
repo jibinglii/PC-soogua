@@ -126,7 +126,7 @@ export default {
           loading.close();
         })
         .catch(({ response }) => {
-          this.$router.back();
+          // this.$router.back();
         });
     }
   },
