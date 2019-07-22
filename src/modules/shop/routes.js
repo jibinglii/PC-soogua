@@ -40,6 +40,14 @@ export default [
         component: () => import('./fill')
     },
     {
+        path: 'shop/spec/:id.html',
+        name: 'shop.spec',
+        meta: {
+            requiresAuth: true
+        },
+        component: () => import('./spec')
+    },
+    {
         path: 'shop/success',
         name: 'shop.success',
         component: () => import('./success')
