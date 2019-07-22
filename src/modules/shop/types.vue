@@ -85,7 +85,7 @@
 			<div class="nextstep">
 				<el-button @click.native.prevent="onNext"
 									 type="button"
-									 size="medium">下一步， 请选择商品类型</el-button>
+									 size="medium">下一步</el-button>
 			</div>
 		</div>
 		<v-footer />
