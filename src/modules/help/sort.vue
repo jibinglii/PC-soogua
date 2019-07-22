@@ -13,11 +13,11 @@
           <v-aside></v-aside>
         </div>
         <div slot="main">
-          <v-tabs :tabs="tabs" activeTab="help" @changeTab="changeTab"/>
+          <v-tabs :tabs="tabs" activeTab="sort" @changeTab="changeTab"/>
           <el-card class="box-card">
-            <a v-for="(item,key) in faqs" :key="key" @click="onDetails(item.id, key)" class="item">
+            <a v-for="(item,key) in faqGroups" :key="key" @click="onDetails(item.id, key)" class="item" >
               <i class="circle"></i>
-              <span>{{item.title}}</span>
+              <span>{{item.title}}<p>{{ item.desc }}</p></span>
             </a>
           </el-card>
         </div>
@@ -37,11 +37,32 @@ import article from "$api/article";
 export default {
   data() {
     return {
-      curTab: "help",
-      faqs: [],
+      curTab: "sort",
       tabs: [
         { label: "常见问题", name: "help" },
         { label: "问题分类", name: "sort" }
+      ],
+      faqGroups: [
+        {
+          id: 19,
+          title: "支付",
+          desc: "如何支付，支付安全保证"
+        },
+        {
+          id: 20,
+          title: "退换货",
+          desc: "如何申请退款，修改订单"
+        },
+        {
+          id: 21,
+          title: "账户设置",
+          desc: "修改密码，修改账户信息"
+        },
+        {
+          id: 22,
+          title: "优惠 & 积分",
+          desc: "积分如何使用，优惠券，邀请好友"
+        }
       ],
       loading: true
     };
@@ -69,8 +90,8 @@ export default {
     },
     onDetails(id, index) {
       this.$router.push({
-        name: "help.details",
-        params: { id: this.faqs[index].id }
+        name: "help.sortlist",
+        params: { id: this.faqGroups[index].id}
       });
     }
   }
@@ -95,6 +116,11 @@ export default {
     cursor: pointer;
     span {
       color: #666;
+      line-height: 20px;
+      p{
+        font-size: 12px;
+        color: #999;
+      }
       &.active {
         color: #000;
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header />
+    <v-header/>
     <div class="container">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
@@ -12,28 +12,38 @@
       <div class="details">
         <div class="title">
           <i class="circle"></i>
-          <span>{{item.title}}</span>
+          <span>{{article.title}}</span>
         </div>
-        <p>{{item.content}}</p>
+        <p  v-html="article.content"></p>
       </div>
     </div>
-    <v-footer />
+    <v-footer/>
   </div>
 </template>
 
 <script>
 import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
-import helpData from "./help-data.js";
+import article from '$api/article'
 export default {
   data() {
     return {
-      item: ""
+      article: {}
     };
   },
   created() {
-    this.item =
-      helpData[`${this.$route.params.tab}`][`${this.$route.params.index}`];
+    setTimeout(() => {
+      this.getData();
+    }, 300);
+  },
+  methods: {
+    getData() {
+      let id = this.$route.params.id;
+      article.view(id).then(({ data }) => {
+        this.loading = false;
+        this.article = data;
+      });
+    }
   },
   components: {
     VHeader,
@@ -47,7 +57,7 @@ export default {
   min-height: 500px;
   background: #fff;
   padding: 0 23px;
-  margin-bottom:80px;
+  margin-bottom: 80px;
   .title {
     display: flex;
     align-items: center;

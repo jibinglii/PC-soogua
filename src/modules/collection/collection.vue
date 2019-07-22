@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header />
+    <v-header/>
     <div class="container">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
@@ -15,20 +15,19 @@
         <div slot="main">
           <div class="collection clearfix">
             <goods-item
-              v-for="k in 10"
-              :key="k"
+              v-for="(item, index) in goods"
+              :key="index"
               :showDel="true"
-              @mouseOver="mouseOver"
-              @mouseLeave="mouseLeave"
-              @delItem="delItem"
+              :goods="item"
+              @delItem="delItem(item.uuid, index)"
               :styles="{width:'284px', float:'left', marginLeft:'25px',marginBottom:'20px',background:'#F2F2F2'}"
             />
           </div>
-          <pagination :total="50" :pageSize="12" @currentChange="currentChange" />
+          <pagination :total="total" :current-page="page" @pagechange="getCollection"></pagination>
         </div>
       </v-content>
     </div>
-    <v-footer />
+    <v-footer/>
   </div>
 </template>
 
@@ -39,16 +38,15 @@ import VContent from "$components/VContent";
 import VAside from "$components/VAside";
 import Pagination from "$components/Pagination";
 import GoodsItem from "$components/GoodsItem";
+
+import * as service from "$modules/collection/services";
 export default {
   data() {
     return {
-      collection: [
-        {
-          title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
-          price: "￥300.00",
-          stock: "库存1件"
-        }
-      ]
+      goods: [],
+      total: 0, // 记录总条数
+      display: 10, // 每页显示条数
+      page: 1 // 当前的页数
     };
   },
   components: {
@@ -59,23 +57,58 @@ export default {
     Pagination,
     GoodsItem
   },
+  mounted() {
+    this.getCollection();
+  },
   methods: {
-    changeTab(tab, event) {
-      console.log("TCL: handleClick -> data", tab.name);
-      this.$router.push({ name: `distribution.${tab.name}` });
+    async getCollection(currentPage) {
+      this.goods = [];
+      const loading = this.$loading({
+        lock: true,
+        text: "请稍等"
+      });
+      let param = {
+        params: {
+          page: currentPage
+        }
+      };
+      service
+        .getCollectionGoods(param)
+        .then(({ data }) => {
+          this.goods = data.data.data;
+          this.page = currentPage;
+          this.total = data.data.data.total;
+          loading.close();
+        })
+        .catch(({ response }) => {
+          console.log("“cancel”");
+        });
     },
-    onCopyLink() {},
-    currentChange() {},
-    mouseOver(ref) {
-      console.log("dfdfdfdf", ref);
-    },
-    mouseLeave(ref) {
-      console.log("dfdfdfdf", ref);
-    },
-    delItem() {
-      this.$confirm("是否要删除该商品", "系统提示", { center: true,showClose:false })
-        .then(() => {})
-        .catch(() => {});
+
+    delItem(uuid, index) {
+      let that = this;
+      this.$confirm("是否要删除该商品", "系统提示", {
+        center: true,
+        showClose: false
+      })
+        .then(function() {
+          const loading = that.$loading({
+            lock: true,
+            text: "请稍等"
+          });
+          that.$http
+            .delete("/api/v1/collect/goods/" + uuid, { loading: true })
+            .then(({ data }) => {
+              loading.close();
+              that.$delete(that.goods, index);
+            })
+            .catch(fail => {
+              loading.close();
+            });
+        })
+        .catch(() => {
+          console.log("“cancel”");
+        });
     }
   }
 };

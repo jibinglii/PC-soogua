@@ -1,6 +1,6 @@
 <template>
   <div class="person">
-    <v-header />
+    <v-header/>
     <div class="container">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
@@ -15,19 +15,12 @@
         <div slot="main">
           <div class="feedback">
             <div class="title">意见反馈</div>
-            <el-form
-              :model="feedBack"
-              status-icon
-              :rules="rules"
-              ref="fb"
-              label-width="0"
-              class="feedback-form"
-            >
+            <el-form :model="param" status-icon label-width="0" class="feedback-form">
               <el-form-item prop="desc">
                 <el-input
                   type="textarea"
                   resize="none"
-                  v-model="feedBack.desc"
+                  v-model="param.content"
                   placeholder="我们需要您的意见"
                 ></el-input>
                 <span class="size">{{size}}/200</span>
@@ -40,7 +33,7 @@
         </div>
       </v-content>
     </div>
-    <v-footer />
+    <v-footer/>
   </div>
 </template>
 
@@ -52,33 +45,50 @@ import VAside from "$components/VAside";
 export default {
   data() {
     return {
-      feedBack: {
-        desc: ""
-      },
-      rules: {
-        desc: [
-          { required: true, message: "请填写反馈内容", trigger: "blur" },
-          { max: 200, message: "长度不得超过200个字符", trigger: "blur" }
-        ]
+      param: {
+        content: ""
       }
     };
   },
+  //监听属性 类似于data概念
   computed: {
     size() {
-      return this.feedBack.desc.length || 0;
+      return this.param.content.length || 0;
     }
   },
+  //监控data中的数据变化
   watch: {
-    feedBack(newValue, oldValue) {}
+    "param.content"(val) {
+      if (val.length > 200) {
+        this.$message.error("最多输入200个字符");
+        this.param.content = val.substr(0, 200);
+      }
+    }
+  },
+  //方法集合
+  methods: {
+    submitForm() {
+      if (this.param.content == "") {
+        this.$alert("请填写反馈内容");
+        return false;
+      }
+      if (this.param.content.length < 20) {
+        this.$alert("反馈内容不少于20个字");
+        return false;
+      }
+      this.$http
+        .post("api/v1/feedback", { content: this.param.content })
+        .then(({ data }) => {
+          this.$message.success("你的反馈已提交, 感谢您的帮助");
+          this.$router.back();
+        });
+    }
   },
   components: {
     VHeader,
     VFooter,
     VContent,
     VAside
-  },
-  methods: {
-    submitForm() {}
   }
 };
 </script>

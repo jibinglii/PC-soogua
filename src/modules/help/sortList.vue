@@ -1,78 +1,60 @@
 <template>
-  <div class="person">
-    <v-header></v-header>
+  <div>
+    <v-header/>
     <div class="container">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
         <el-breadcrumb-item>个人中心</el-breadcrumb-item>
         <el-breadcrumb-item>使用帮助</el-breadcrumb-item>
+        <el-breadcrumb-item>帮助详情</el-breadcrumb-item>
       </el-breadcrumb>
-      <v-content>
-        <div slot="aside">
-          <v-aside></v-aside>
-        </div>
-        <div slot="main">
-          <v-tabs :tabs="tabs" activeTab="help" @changeTab="changeTab"/>
-          <el-card class="box-card">
-            <a v-for="(item,key) in faqs" :key="key" @click="onDetails(item.id, key)" class="item">
-              <i class="circle"></i>
-              <span>{{item.title}}</span>
-            </a>
-          </el-card>
-        </div>
-      </v-content>
+      <el-card class="box-card" shadow="never">
+        <a v-for="(item,key) in items" :key="key" class="item" :href="'/'+ $route.params.store + '/help/details/'+ item.id+'.html'">
+          <i class="circle"></i>
+          <span>{{item.title}}</span>
+        </a>
+        <infinite-loading @infinite="infiniteHandler" spinner="spiral">
+          <div slot="no-more">没有更多数据啦...</div>
+          <div slot="no-results">没有数据</div>
+        </infinite-loading>
+      </el-card>
     </div>
-    <v-footer></v-footer>
+    <v-footer/>
   </div>
 </template>
 
 <script>
 import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
-import VContent from "$components/VContent";
-import VAside from "$components/VAside";
-import VTabs from "$components/tabs";
 import article from "$api/article";
+import InfiniteLoading from "vue-infinite-loading";
 export default {
   data() {
     return {
-      curTab: "help",
-      faqs: [],
-      tabs: [
-        { label: "常见问题", name: "help" },
-        { label: "问题分类", name: "sort" }
-      ],
-      loading: true
+      items: [],
+      page: 1,
     };
+  },
+  methods: {
+    infiniteHandler($state) {
+      let id = this.$route.params.id;
+      article.list(id, this.page).then(({ data }) => {
+        if (data.contents.data.length > 0) {
+          this.loading = false;
+          this.items = data.contents.data;
+          $state.loaded();
+        }
+        if (data.contents.per_page > data.contents.data.length) {
+          $state.complete();
+        }
+      });
+    },
   },
   components: {
     VHeader,
     VFooter,
-    VContent,
-    VAside,
-    VTabs
-  },
-  created() {
-    this.getHot();
-  },
-  methods: {
-    getHot() {
-      article.hot().then(({ data }) => {
-        this.loading = false;
-        this.faqs = data.contents;
-      });
-    },
-    changeTab(tab) {
-      this.curTab = tab.name;
-      this.$router.push({ name: `help.${tab.name}` });
-    },
-    onDetails(id, index) {
-      this.$router.push({
-        name: "help.details",
-        params: { id: this.faqs[index].id }
-      });
-    }
+    InfiniteLoading
   }
 };
 </script>
@@ -95,6 +77,11 @@ export default {
     cursor: pointer;
     span {
       color: #666;
+      line-height: 20px;
+      p {
+        font-size: 12px;
+        color: #999;
+      }
       &.active {
         color: #000;
       }
@@ -108,7 +95,9 @@ export default {
     }
   }
 }
-
+/deep/.infinite-status-prompt{
+  padding-top: 30px;
+}
 .el-breadcrumb {
   margin-top: 18px;
   margin-bottom: 18px;
