@@ -24,14 +24,23 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="amount" label="价格" :formatter="amountFormat"></el-table-column>
-              <el-table-column align="center" prop="sale_nums" label="库存" :formatter="saleNumsFormat"></el-table-column>
+              <el-table-column
+                align="center"
+                prop="sale_nums"
+                label="库存"
+                :formatter="saleNumsFormat"
+              ></el-table-column>
               <el-table-column align="center" prop label="保障">
                 <i></i>
                 实名认证
               </el-table-column>
               <el-table-column align="center" label="操作">
                 <template slot-scope="scope">
-                  <el-button  @click.native.prevent="onbuy(scope.row.id, scope.$index)" type="button" size="small">立即购买</el-button>
+                  <el-button
+                    @click.native.prevent="onbuy(scope.row.id, scope.$index)"
+                    type="button"
+                    size="small"
+                  >立即购买</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -41,8 +50,9 @@
         <el-aside width="300px">
           <div class="aside-head">商品精选</div>
           <goods-item
-            v-for="k in 4"
-            :key="k"
+            v-for="(item, index) in recommend"
+            :key="index"
+            :recommend="item"
             :styles="{width:'300px', marginBottom:'16px',background:'#fff'}"
           />
         </el-aside>
@@ -56,15 +66,17 @@
 <script>
 import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
-import GoodsItem from "$components/GoodsItem";
+import GoodsItem from "./components/GoodsItem";
 import VTabs from "$components/tabs";
 import Pagination from "$components/Pagination";
 
 import * as service from "$modules/home/services";
+import * as services from "$modules/goods/services";
 export default {
   data() {
     return {
       goods: [],
+      recommend: [],
       infiniteId: +new Date(),
       total: 0, // 记录总条数
       display: 10, // 每页显示条数
@@ -83,12 +95,13 @@ export default {
   created() {
     this.getList(this.page);
   },
+
   methods: {
-    saleNumsFormat (row, column) {
-      return row.sale_nums+'件'
+    saleNumsFormat(row, column) {
+      return row.sale_nums + "件";
     },
-    amountFormat (row, column) {
-      return '￥'+row.amount
+    amountFormat(row, column) {
+      return "￥" + row.amount;
     },
     changeTab(tab, event) {
       this.page = 1;
@@ -128,7 +141,16 @@ export default {
         .catch(({ response }) => {
           // this.$router.back();
         });
-    }
+    },
+    async getRecommend() {
+      services.getRecommend().then(data => {
+        this.recommend = data.data.goods.data;
+      });
+    },
+
+  },
+  mounted() {
+    this.getRecommend();
   },
   components: {
     VHeader,

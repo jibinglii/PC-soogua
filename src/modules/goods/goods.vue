@@ -68,7 +68,7 @@
             <span>{{goods.content}}</span>
           </p>
           <div class="main-img">
-            <el-carousel indicator-position="outside" :autoplay="false">
+            <el-carousel indicator-position="outside" :autoplay="true">
               <el-carousel-item v-for="(item,index) in goods.images" :key="index">
                 <img :src="item" alt>
               </el-carousel-item>
@@ -171,7 +171,11 @@ export default {
       }
     },
     async getDetail() {
-      this.$toast.loading({ mask: true });
+      // this.$toast.loading({ mask: true });
+      const loading = this.$loading({
+        lock: true,
+        text: "请稍等"
+      });
       service
         .goodsView(this.goodsId, {
           params: {
@@ -183,7 +187,7 @@ export default {
         .then(({ data }) => {
           this.goods = data.goods;
           window.document.title = this.goods.title;
-          this.$toast.clear();
+          loading.close();
         })
         .catch(({ response }) => {
           this.$router.back();

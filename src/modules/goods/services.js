@@ -6,3 +6,7 @@ import http from '$utils/http'
 export const goodsView = (goodsId, params) => {
     return http.get('/api/v1/goods/' + goodsId, params)
 }
+
+export const getRecommend = (goodsId, params) => {
+    return http.get('/api/v1/goods/recommend', params)
+}

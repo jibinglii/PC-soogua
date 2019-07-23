@@ -3,10 +3,10 @@
     <img class="img" :src="goods.logo" alt>
     <div class="info">
       <div class="group">
-        <span class="title">{{ goods.game_name }}</span>
+        <span class="title">{{ goods.title }}</span>
         <i class="tag"></i>
       </div>
-      <p class="content">{{ goods.title }}</p>
+      <p class="content"> {{ goods.game_name }}</p>
       <p class="desc">{{ goods.server_name }}</p>
       <div class="group">
         <span class="price">￥{{ goods.amount }}</span>

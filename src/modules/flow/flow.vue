@@ -62,7 +62,7 @@ export default {
     width: 680px;
     height: auto;
     max-width: 100%;
-    padding: 50px 60px;
+    padding: 50px 152px;
   }
 }
 
