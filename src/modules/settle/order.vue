@@ -180,15 +180,17 @@ export default {
 <style lang="scss" scoped>
 .preview-bd {
   padding: 16px 52px;
+  background: #fff;
 }
 .preview {
   width: 100%;
-  background: url("/images/settlebg.png") center center no-repeat;
-  background-size: cover;
+  // background: url("/images/settlebg.png") center center no-repeat;
+  // background-size: cover;
+  background: #ededed;
   .one {
     display: flex;
     min-height: 140px;
-    border-bottom: 1px solid #666;
+    border-bottom: 1px solid #e6e6e6;
     .left {
       flex: 1;
       display: flex;
@@ -198,13 +200,13 @@ export default {
       i {
         font-size: 16px;
         font-weight: 400;
-        color: #fff;
+        color: #999;
       }
       span {
         margin-top: 15px;
         font-size: 36px;
         font-weight: 400;
-        color: #fff;
+        color: #000;
       }
     }
     .right {
@@ -234,20 +236,20 @@ export default {
       margin-top: 10px;
       font-size: 30px;
       font-weight: 400;
-      color: #999;
+      color: #000;
     }
   }
   .center {
     flex: 1;
     max-width: 1px;
-    background: #666;
+    background: #e0e0e0;
     height: 60px;
     margin-top:20px;
   }
 }
 /deep/.el-table {
   th {
-    background: #ededed;
+    background: #e0e0e0;
   }
 }
 /deep/.el-popover {

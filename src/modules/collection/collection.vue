@@ -44,8 +44,8 @@ export default {
   data() {
     return {
       goods: [],
+      infiniteId: +new Date(),
       total: 0, // 记录总条数
-      display: 10, // 每页显示条数
       page: 1 // 当前的页数
     };
   },
@@ -58,11 +58,10 @@ export default {
     GoodsItem
   },
   mounted() {
-    this.getCollection();
+    this.getCollection(this.page);
   },
   methods: {
     async getCollection(currentPage) {
-      this.goods = [];
       const loading = this.$loading({
         lock: true,
         text: "请稍等"
@@ -75,6 +74,7 @@ export default {
       service
         .getCollectionGoods(param)
         .then(({ data }) => {
+          this.goods = [];
           this.goods = data.data.data;
           this.page = currentPage;
           this.total = data.data.data.total;
@@ -101,6 +101,7 @@ export default {
             .then(({ data }) => {
               loading.close();
               that.$delete(that.goods, index);
+              that.$message.success("删除成功");
             })
             .catch(fail => {
               loading.close();

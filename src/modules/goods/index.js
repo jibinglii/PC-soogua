@@ -1,5 +1,5 @@
 const routes = [{
-        path: 'goods:goods.html',
+        path: 'goods/:goods.html',
         name: 'goods',
         meta: {
             requiresAuth: true
