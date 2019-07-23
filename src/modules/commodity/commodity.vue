@@ -29,27 +29,27 @@
 											style="width: 100%; text-align:center;">
 							<el-table-column align="center"
 															 width="300px"
-															 prop="name"
+															 prop="title"
 															 label="商品名称">
 								<template slot-scope="scope">
 									<div class="commodityname">
-										<img src="~$assets/images/shangpinlogo@2x.png"
+										<img :src="scope.row.logo"
 												 alt />
 										<div class="text">
-											<span>{{scope.row.name}}</span>
-											<i>{{scope.row.desc}}</i>
+											<span>{{scope.row.title}}</span>
+											<i>{{scope.row.content}}</i>
 										</div>
 									</div>
 								</template>
 							</el-table-column>
 							<el-table-column align="center"
-															 prop="price"
+															 prop="amount"
 															 label="单价"></el-table-column>
 							<el-table-column align="center"
-															 prop="num"
+															 prop="store_nums"
 															 label="数量"></el-table-column>
 							<el-table-column align="center"
-															 prop="state"
+															 prop="status_label"
 															 label="商品状态"></el-table-column>
 							<el-table-column align="center"
 															 label="操作"

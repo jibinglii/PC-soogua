@@ -14,7 +14,7 @@
 						 alt />
 				<span>发布成功</span>
 				<p>您的商品已提交审核，请注意查收消息或通知</p>
-				<el-button @click.native.prevent="onHome()">返回首页</el-button>
+				<el-button @click.native.prevent="onHome()">返回店铺</el-button>
 			</div>
 			<div class="title">
 				热门推荐
@@ -58,7 +58,7 @@
 		},
 		methods: {
 			onHome () {
-				this.$router.push({ name: "home" });
+				this.$router.push({ name: "shop" });
 			}
 		}
 	};
