@@ -75,10 +75,10 @@
 					});
 				} else {
 					this.$router.push({
-						name: "goods.add",
+						name: "shop.add",
 						query: {
 							id: item.id,
-							desc: item.title
+							desc: item.desc
 						}
 					});
 				}

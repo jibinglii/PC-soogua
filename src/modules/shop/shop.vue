@@ -105,7 +105,7 @@
 			toPublish () {
 				this.$router.push({ name: "shop.release" });
 			},
-			toPreview () { },
+			toPreview () { this.$router.push({ name: "home" }); },
 			async getInfo () {
 				await this.$http.get('api/v1/seller/total').then(({ data }) => {
 					this.info = data

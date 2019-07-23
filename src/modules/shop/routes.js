@@ -24,7 +24,18 @@ export default [
     {
         path: 'shop/selectgame',
         name: 'shop.selectgame',
+        meta: {
+            requiresAuth: true
+        },
         component: () => import('./selectgame')
+    },
+    {
+        path: 'shop/add',
+        name: 'shop.add',
+        meta: {
+            requiresAuth: true
+        },
+        component: () => import('./add')
     },
     {
         path: 'shop/types/:id.html',
