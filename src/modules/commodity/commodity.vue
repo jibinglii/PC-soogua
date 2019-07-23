@@ -34,6 +34,7 @@
 								<template slot-scope="scope">
 									<div class="commodityname">
 										<img :src="scope.row.logo"
+												 @click="goodsInfo(scope.row.uuid)"
 												 alt />
 										<div class="text">
 											<span>{{scope.row.title}}</span>
@@ -53,15 +54,55 @@
 															 label="商品状态"></el-table-column>
 							<el-table-column align="center"
 															 label="操作"
-															 width="200px">
-								<template slot-scope="scope">
+															 width="300px">
+								<template slot-scope="scope"
+													v-if="!isSeller">
+									<el-button @click.native.prevent="handleDistribution(scope.$index)"
+														 type="button"
+														 v-if="scope.row.status == 3"
+														 @click="updateStatus(scope.row.uuid, 'delete')"
+														 size="small">删除</el-button>
 									<el-button style="background:#fff;color:#000"
 														 @click.native.prevent="handleOff(scope.$index)"
 														 type="button"
-														 size="small">下架商品</el-button>
+														 v-if="scope.row.status == 5"
+														 @click="updateStatus(scope.row.uuid, 'up')"
+														 size="small">上架</el-button>
 									<el-button @click.native.prevent="handleDistribution(scope.$index)"
 														 type="button"
-														 size="small">分销商品</el-button>
+														 v-if="scope.row.status == 4"
+														 @click="copy(scope.row)"
+														 size="small">复制链接</el-button>
+									<el-button style="background:#fff;color:#000"
+														 type="button"
+														 v-if="scope.row.status == 4"
+														 @click="updateStatus(scope.row.uuid, 'down')"
+														 size="small">下架</el-button>
+									<el-button @click.native.prevent="handleDistribution(scope.$index)"
+														 type="button"
+														 v-if="scope.row.status == 4"
+														 @click="assign"
+														 size="small">分销</el-button>
+
+									<el-button @click.native.prevent="handleDistribution(scope.$index)"
+														 type="button"
+														 v-if="scope.row.status == 0 && $user().id == scope.row.user_id"
+														 size="small">修改</el-button>
+								</template>
+								<template slot-scope="scope"
+													v-else>
+									<el-button @click.native.prevent="handleDistribution(scope.$index)"
+														 type="button"
+														 v-if="goods.status == 4"
+														 @click="copySeller(goods)"
+														 size="small">复制链接</el-button>
+
+									<el-button @click.native.prevent="handleDistribution(scope.$index)"
+														 type="button"
+														 v-if="goods.status == 4 && isSellerStore"
+														 @click="assign"
+														 size="small">分销</el-button>
+
 								</template>
 							</el-table-column>
 						</el-table>
@@ -84,7 +125,19 @@
 	import VTabs from "$components/tabs";
 	import Pagination from "$components/Pagination";
 	import * as services from "$modules/commodity/services";
+	import Vue from 'vue';
+	import VueClipboard from 'vue-clipboard2';
+	VueClipboard.config.autoSetContainer = true
+	Vue.use(VueClipboard);
 	export default {
+		computed: {
+			isSeller () {
+				return _.indexOf(this.$user().roles, '分销员') != -1
+			},
+			isSellerStore () {
+				return _.indexOf(this.$currentStore().roles, '推广店铺') != -1 && _.indexOf(this.$user().roles, '分销员') == -1
+			}
+		},
 		data () {
 			return {
 				searchForm: { commodity: "" },
@@ -99,7 +152,7 @@
 				goodsData: [],
 				page: 1,
 				status: -1,
-				infiniteId: new Date(),
+				total: 0
 			};
 		},
 		components: {
@@ -112,26 +165,25 @@
 		},
 		methods: {
 			changeTab (tab, event) {
-				console.log("TCL: handleClick -> data", tab.name);
+				this.page = 1;
+				this.status = tab.name;
+				this.getGoods(this.page);
+			},
+			goodsInfo (row) {
+
+				this.$router.push({ name: "goods", params: { goods: row } });
 			},
 			onCopyLink () { },
 			currentChange () { },
 			onSearch () { },
 			handleOff () {
-				this.$confirm("是否要下架该商品", "系统提示", {
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					center: true,
-					showClose: false
-				})
-					.then(() => { })
-					.catch(() => { });
+
 			},
-			getGoods () {
+			getGoods (currentPage) {
 				this.goodsData = [];
 				let param = {
 					params: {
-						page: this.page
+						page: currentPage
 					}
 				};
 
@@ -142,16 +194,61 @@
 					this.goodsData = data.goods.data;
 					this.page = data.currentPage;
 					this.total = data.goods.total;
-					console.log(data);
-					//if (data.goods.data.length > 0) {
-					//	this.page += 1;
-					//	this.items.push(...data.goods.data);
-					//	$state.loaded();
-					//}
-
 				})
 			},
-			handleDistribution () { }
+			handleDistribution () { },
+
+			//
+			updateStatus (uuid, action) {
+				let message = "您确定要[删除]该商品吗？";
+				if (action == 'up') {
+					message = "您确定要[上架]该商品吗？";
+				} else if (action == 'down') {
+					message = "您确定要[下架]该商品吗？";
+				}
+
+				this.$confirm(message, {
+					confirmButtonText: "确定",
+					cancelButtonText: "取消",
+					center: true,
+					showClose: false
+				})
+					.then(() => {
+						const loading = this.$loading({
+							lock: true,
+							text: "请稍等",
+						});
+						this.$http.post('api/v1/goods/' + uuid + '/' + action, {}, { loading: true }).then(({ message }) => {
+							loading.close()
+							this.$message.success(message);
+							this.getGoods(this.page)
+						})
+					})
+					.catch(() => {
+						console.log('“cancel”');
+					});
+			},
+			copy (goods) {
+				if (undefined != goods.uuid) {
+					let url = location.origin + '/' + window.STORE_ID + '/goods/' + goods.uuid + '.html?spread_id=' + this.$user().id
+					this.$copyText(url).then((e) => {
+						this.$message.success('复制成功，赶快去微信、QQ粘贴分享给你的好友吧');
+					}, function (e) {
+					})
+				}
+			},
+			copySeller (goods) {
+				if (undefined != goods.uuid) {
+					let url = location.origin + '/' + goods.store_uuid + '/goods/' + goods.uuid + '.html?spread_id=' + this.$user().id
+					this.$copyText(url).then((e) => {
+						this.$message.success('复制成功，赶快去微信、QQ粘贴分享给你的好友吧');
+					}, function (e) {
+					})
+				}
+			},
+			assign () {
+				this.$emit('assign', this.goods)
+			}
 		}, created () {
 			this.getGoods(this.page)
 		}
