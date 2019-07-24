@@ -19,8 +19,7 @@
 							<span>店铺管理</span>
 							<router-link tab="a"
 													 :to="{name:'shop.profile'}">
-								<img src="~$assets/images/kefu@2x.png"
-										 alt />
+								<i class="el-icon-setting"></i>&nbsp;
 								<i>店铺设置</i>
 							</router-link>
 						</div>
@@ -71,28 +70,6 @@
 		data () {
 			return {
 				info: {}
-				// recommend: [
-				//   {
-				//     title: "一大元素使武装战姬摄海克斯哥特安妮勇敢的心...",
-				//     price: "￥300.00",
-				//     stock: "库存1件"
-				//   },
-				//   {
-				//     title: "一大元素使武装战姬摄海克斯哥特安妮勇敢的心...",
-				//     price: "￥300.00",
-				//     stock: "库存1件"
-				//   },
-				//   {
-				//     title: "一大元素使武装战姬摄海克斯哥特安妮勇敢的心...",
-				//     price: "￥300.00",
-				//     stock: "库存1件"
-				//   },
-				//   {
-				//     title: "一大元素使武装战姬摄海克斯哥特安妮勇敢的心...",
-				//     price: "￥300.00",
-				//     stock: "库存1件"
-				//   }
-				// ]
 			};
 		},
 		components: {
@@ -153,8 +130,7 @@
 			margin-bottom: 20px;
 			.sale {
 				height: 212px;
-				background: url("/images/shopbg2.png") center center no-repeat;
-				background-size: cover;
+        background: #e8e8e8;
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -174,7 +150,7 @@
 						margin-top: 20px;
 						font-size: 29px;
 						font-weight: bold;
-						color: #fff;
+						color: #000;
 						&::before {
 							content: "￥";
 							font-size: 14px;
@@ -188,7 +164,7 @@
 					align-items: center;
 					justify-content: center;
 					max-width: 1px;
-					background: #e6e6e6;
+					background: #dadada;
 					height: 100px;
 				}
 				.right {
@@ -200,13 +176,13 @@
 					i {
 						font-size: 14px;
 						font-weight: 400;
-						color: #999;
+						color: #666;
 					}
 					b {
 						margin-top: 20px;
 						font-size: 29px;
 						font-weight: bold;
-						color: #fff;
+						color: #000;
 						&::before {
 							content: "￥";
 							font-size: 14px;
@@ -218,8 +194,7 @@
 			.operation {
 				margin-top: 16px;
 				height: 162px;
-				background: url("/images/shopbg2.png") center center no-repeat;
-				background-size: cover;
+        background: #e8e8e8;
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -233,10 +208,10 @@
 						margin-top: 5px;
 						font-size: 14px;
 						font-weight: 400;
-						color: #999;
+						color: #666;
 					}
 					img {
-						width: 60;
+						width: 60px;
 						height: 60px;
 					}
 				}
@@ -246,7 +221,7 @@
 					align-items: center;
 					justify-content: center;
 					max-width: 1px;
-					background: #e6e6e6;
+					background: #dadada;
 					height: 100px;
 				}
 			}

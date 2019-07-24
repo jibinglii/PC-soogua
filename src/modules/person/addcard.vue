@@ -17,10 +17,44 @@
           <div class="addcard">
             <div class="title">银行卡管理</div>
             <div class="content">
-              <van-cell-group>
-                <van-field v-model="bankinfo.realname" label="姓名" placeholder="请输入您的姓名"/>
+              <van-radio-group  v-model="cardtype" class="bankType">
+                选择账号类型：
+                <van-radio name="bank">银行卡</van-radio>
+                <van-radio name="alipay">支付宝</van-radio>
+                <van-radio name="wechat">微信</van-radio>
+              </van-radio-group>
+              <van-cell-group v-if="cardtype=='bank'">
+                <van-cell v-if="hasRealname" title="姓名">{{bankinfo.realname}}</van-cell>
+                <van-field
+                  v-if="!hasRealname"
+                  v-model="bankinfo.realname"
+                  label="姓名"
+                  placeholder="请输入您的姓名"
+                />
                 <van-field v-model="bankinfo.id_card" label="身份证号" placeholder="请输入您的身份证号"/>
                 <van-field v-model="bankinfo.bankno" label="银行卡号" placeholder="请输入银行卡号"/>
+                <van-field v-model="bankinfo.mobile" label="预留手机号" placeholder="请输入银行卡预留电话"/>
+              </van-cell-group>
+              <van-cell-group v-if="cardtype=='alipay'">
+                <van-cell v-if="hasRealname" title="姓名">{{bankinfo.realname}}</van-cell>
+                <van-field
+                  v-if="!hasRealname"
+                  v-model="bankinfo.realname"
+                  label="姓名"
+                  placeholder="请输入您的姓名"
+                />
+                <van-field v-model="bankinfo.bankno" label="支付宝账号" placeholder="请输入您的账号"/>
+                <van-field v-model="bankinfo.mobile" label="预留手机号" placeholder="请输入银行卡预留电话"/>
+              </van-cell-group>
+              <van-cell-group v-if="cardtype=='wechat'">
+                <van-cell v-if="hasRealname" title="姓名">{{bankinfo.realname}}</van-cell>
+                <van-field
+                  v-if="!hasRealname"
+                  v-model="bankinfo.realname"
+                  label="姓名"
+                  placeholder="请输入您的姓名"
+                />
+                <van-field v-model="bankinfo.bankno" label="微信" placeholder="请输入您的账号"/>
                 <van-field v-model="bankinfo.mobile" label="预留手机号" placeholder="请输入银行卡预留电话"/>
               </van-cell-group>
               <van-checkbox v-model="checked">
@@ -30,7 +64,12 @@
               <agree title="绑卡服务协议" ref="agree" :content="protocol"/>
               <div class="btn">
                 <el-button @click.native.prevent="next()" type="button" size="primary">确认</el-button>
-                <el-button @click.native.prevent="back()" type="button" size="primary" class="back">返回</el-button>
+                <el-button
+                  @click.native.prevent="back()"
+                  type="button"
+                  size="primary"
+                  class="back"
+                >返回</el-button>
               </div>
             </div>
           </div>
@@ -56,11 +95,16 @@ import Field from "vant/lib/field";
 import "vant/lib/field/style";
 import Checkbox from "vant/lib/checkbox";
 import "vant/lib/checkbox/style";
+import RadioGroup from "vant/lib/radio-group";
+import "vant/lib/radio-group/style";
+import Radio from "vant/lib/radio";
+import "vant/lib/radio/style";
 import Agree from "$components/Agree";
 import protocol from "$api/protocol";
 export default {
   data() {
     return {
+      hasRealname: false,
       saving: false,
       checked: false,
       bankinfo: {
@@ -71,8 +115,8 @@ export default {
         bank: "bank",
         is_default: 1
       },
-      protocol: "",
-      cardtype: { index: 0, value: "bank" }
+      cardtype: "bank",
+      protocol: ""
     };
   },
   components: {
@@ -85,7 +129,9 @@ export default {
     [DropdownItem.name]: DropdownItem,
     [CellGroup.name]: CellGroup,
     [Field.name]: Field,
-    [Checkbox.name]: Checkbox
+    [Checkbox.name]: Checkbox,
+    [RadioGroup.name]: RadioGroup,
+    [Radio.name]: Radio
   },
   created() {
     this.getProtocol();
@@ -104,7 +150,7 @@ export default {
           this.$http
             .post(
               "api/v1/bankcard",
-              _.assign(this.bankinfo, { bank: this.cardtype.value })
+              _.assign(this.bankinfo, { bank: this.cardtype })
             )
             .then(({ data }) => {
               console.log(data);
@@ -132,13 +178,12 @@ export default {
             })
             .catch(() => {
               loading.close();
-              this.saving = false;
             });
         }
       }
     },
-    back () {
-      this.$router.push({name:'person.card'})
+    back() {
+      this.$router.push({ name: "person.card" });
     },
     showAgree() {
       this.$refs.agree.show();
@@ -153,9 +198,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bankType {
+  display: flex;
+  padding: 10px 0px;
+  .van-radio {
+    padding-left: 20px;
+  }
+}
 /deep/.van-field__label {
   width: 105px;
-  padding-left: 20px;
 }
 .van-cell {
   border: 1px solid #a0a0a0;
@@ -174,6 +225,9 @@ export default {
     color: #f4c93a;
   }
 }
+/deep/.van-hairline--top-bottom::after {
+  border-width: 0;
+}
 .addcard {
   min-height: 728px;
   background: #fff;
@@ -188,7 +242,7 @@ export default {
   .content {
     position: relative;
     padding-top: 10px;
-    padding-left: 30px;
+    padding-left: 60px;
   }
 }
 .sendsms {
@@ -229,7 +283,7 @@ export default {
     margin-top: 40px;
     width: 110px;
   }
-  .back{
+  .back {
     background: transparent;
     border-color: #000;
     color: #000;
