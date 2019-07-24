@@ -184,13 +184,11 @@ export default {
 }
 .preview {
   width: 100%;
-  // background: url("/images/settlebg.png") center center no-repeat;
-  // background-size: cover;
-  background: #ededed;
+  background: #e8e8e8;
   .one {
     display: flex;
     min-height: 140px;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid #dadada;
     .left {
       flex: 1;
       display: flex;
@@ -200,7 +198,7 @@ export default {
       i {
         font-size: 16px;
         font-weight: 400;
-        color: #999;
+        color: #666;
       }
       span {
         margin-top: 15px;
@@ -230,7 +228,7 @@ export default {
     i {
       font-size: 12px;
       font-weight: 400;
-      color: #999;
+      color: #666;
     }
     span {
       margin-top: 10px;
@@ -242,7 +240,7 @@ export default {
   .center {
     flex: 1;
     max-width: 1px;
-    background: #e0e0e0;
+    background: #dadada;
     height: 60px;
     margin-top:20px;
   }
