@@ -1,291 +1,300 @@
 <template>
-  <div>
-    <v-header />
-    <div class="container">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>会员管理</el-breadcrumb-item>
-        <el-breadcrumb-item>结算管理</el-breadcrumb-item>
-      </el-breadcrumb>
-      <v-content>
-        <div slot="aside">
-          <v-aside></v-aside>
-        </div>
+	<div>
+		<v-header />
+		<div class="container">
+			<el-breadcrumb separator-class="el-icon-arrow-right">
+				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
+				<el-breadcrumb-item>会员管理</el-breadcrumb-item>
+				<el-breadcrumb-item>结算管理</el-breadcrumb-item>
+			</el-breadcrumb>
+			<v-content>
+				<div slot="aside">
+					<v-aside></v-aside>
+				</div>
 
-        <div slot="main">
-          <v-tabs :tabs="mainTabs" activeTab="order" @changeTab="changeTab" />
+				<div slot="main">
+					<v-tabs :tabs="mainTabs"
+									activeTab="order"
+									@changeTab="changeTab" />
 
-          <div class="preview-bd">
-            <div class="preview">
-              <div class="one">
-                <div class="left">
-                  <i>已结算</i>
-                  <span>5283.33</span>
-                </div>
-                <div class="right">
-                  <el-button @click.native.prevent type="button" size="primary">申请结算</el-button>
-                </div>
-              </div>
-              <div class="two">
-                <div class="left">
-                  <i>已结算</i>
-                  <span>5283.33</span>
-                </div>
-                <span class="center"></span>
-                <div class="right">
-                  <i>已结算</i>
-                  <span>5283.33</span>
-                </div>
-              </div>
-            </div>
-          </div>
+					<div class="preview-bd">
+						<div class="preview">
+							<div class="one">
+								<div class="left">
+									<i>可提现金额</i>
+									<span>￥ {{ currentUser.wallet.amount|formatMoney }}</span>
+								</div>
+								<div class="right">
+									<el-button @click.native.prevent
+														 type="button"
+														 size="primary">申请提现</el-button>
+								</div>
+							</div>
+							<div class="two">
+								<div class="left">
+									<i>结算总金额</i>
+									<span>￥{{ info.settled|formatMoney }}</span>
+								</div>
+								<span class="center"></span>
+								<div class="right">
+									<el-date-picker v-model="currentDate"
+																	placeholder="按月份查询"
+																	type="month"
+																	:editable="false"
+																	@change="changeMonth">
+									</el-date-picker>
+								</div>
+							</div>
+						</div>
+					</div>
 
-          <v-tabs :tabs="childTabs" activeTab="all" @changeTab="changeChildTab" />
-          <div class="settlelist">
-            <el-table :data="personData" style="width: 100%; text-align:center;">
-              <el-table-column align="center" prop="completeTime" label="交易完成时间"></el-table-column>
-              <el-table-column align="center" prop="name" label="商品名称"></el-table-column>
-              <el-table-column align="center" prop="type" label="游戏类型"></el-table-column>
-              <el-table-column align="center" prop="price" label="商品价格"></el-table-column>
-              <el-table-column align="center" prop="prop" label="佣金比例"></el-table-column>
-              <el-table-column align="center" prop="commission" label="佣金"></el-table-column>
-              <el-table-column align="center" prop="settleTime" label="结算时间"></el-table-column>
-              <el-table-column align="center" prop="state" label="结算状态"></el-table-column>
-            </el-table>
-          </div>
-          <pagination :total="50" :pageSize="12" @currentChange="currentChange" />
-        </div>
-      </v-content>
-    </div>
-    <v-footer />
-  </div>
+					<div class="
+																	settlelist">
+						<el-table :data="items"
+											style="width: 100%; text-align:center;">
+							<el-table-column align="center"
+															 prop="order_id"
+															 label="订单号"></el-table-column>
+							<el-table-column align="center"
+															 prop="order.goods_title"
+															 label="商品名称"></el-table-column>
+
+							<el-table-column align="center"
+															 prop="order.total_amount"
+															 label="成交价格"></el-table-column>
+							<el-table-column align="center"
+															 prop="settle_amount"
+															 label="结算金额"></el-table-column>
+							<el-table-column align="center"
+															 prop="created_at"
+															 label="结算时间"></el-table-column>
+						</el-table>
+					</div>
+					<pagination :total="total"
+											:current-page="page"
+											@pagechange="getData"></pagination>
+				</div>
+			</v-content>
+		</div>
+		<v-footer />
+	</div>
 </template>
 
 <script>
-import VHeader from "$components/VHeader";
-import VFooter from "$components/VFooter";
-import VContent from "$components/VContent";
-import VAside from "$components/VAside";
-import VTabs from "$components/tabs";
-import Pagination from "$components/Pagination";
-export default {
-  data() {
-    return {
-      mainTabs: [
-        { label: "本月订单", name: "order" },
-        { label: "提现记录", name: "record" }
-      ],
-      childTabs: [
-        { label: "全部", name: "all" },
-        { label: "已结算", name: "enable" },
-        { label: "未结算", name: "disable" }
-      ],
+	import VHeader from "$components/VHeader";
+	import VFooter from "$components/VFooter";
+	import VContent from "$components/VContent";
+	import VAside from "$components/VAside";
+	import VTabs from "$components/tabs";
+	import Pagination from "$components/Pagination";
+	import { mapGetters } from "vuex";
+	import Monent from "moment"
+	export default {
+		data () {
+			return {
+				month: '',
+				rangeSeparator: '',
+				defaultValue: '',
+				info: {},
+				page: 1,
+				total: 0,
+				currentDate: "",
+				mainTabs: [
+					{ label: "结算列表", name: "order" },
+					{ label: "提现记录", name: "record" }
+				],
+				items: []
+			};
+		},
+		components: {
+			VHeader,
+			VFooter,
+			VContent,
+			VAside,
+			VTabs,
+			Pagination,
+			Monent
+		},
+		computed: {
+			...mapGetters(["currentUser"])
 
-      personData: [
-        {
-          id: 928372,
-          completeTime: "2019-10-25 12:56:30",
-          name: "王者荣耀V8满英雄号 很多限定皮肤",
-          type: "游戏",
-          price: "$100",
-          prop: "10%",
-          commission: "4545",
-          settleTime: "2019-10-25 12:56:30",
-          state: "已结算"
-        },
-        {
-          id: 928372,
-          completeTime: "2019-10-25 12:56:30",
-          name: "王者荣耀V8满英雄号 很多限定皮肤",
-          type: "游戏",
-          price: "$100",
-          prop: "10%",
-          commission: "4545",
-          settleTime: "2019-10-25 12:56:30",
-          state: "已结算"
-        },
-        {
-          id: 928372,
-          completeTime: "2019-10-25 12:56:30",
-          name: "王者荣耀V8满英雄号 很多限定皮肤",
-          type: "游戏",
-          price: "$100",
-          prop: "10%",
-          commission: "4545",
-          settleTime: "2019-10-25 12:56:30",
-          state: "已结算"
-        },
-        {
-          id: 928372,
-          completeTime: "2019-10-25 12:56:30",
-          name: "王者荣耀V8满英雄号 很多限定皮肤",
-          type: "游戏",
-          price: "$100",
-          prop: "10%",
-          commission: "4545",
-          settleTime: "2019-10-25 12:56:30",
-          state: "已结算"
-        },
-        {
-          id: 928372,
-          completeTime: "2019-10-25 12:56:30",
-          name: "王者荣耀V8满英雄号 很多限定皮肤",
-          type: "游戏",
-          price: "$100",
-          prop: "10%",
-          commission: "4545",
-          settleTime: "2019-10-25 12:56:30",
-          state: "已结算"
-        }
-      ]
-    };
-  },
-  components: {
-    VHeader,
-    VFooter,
-    VContent,
-    VAside,
-    VTabs,
-    Pagination
-  },
-  methods: {
-    changeTab(tab, event) {
-      this.$router.push({ name: `settle.${tab.name}` });
-    },
-    changeChildTab(tab, event) {
-      console.log(`TCL: handleClick -> datatab.name,event${tab.name} ${event}`);
-    },
-    onState() {
-      this.$router.push({
-        name: `distribution.personnel.state`,
-        params: { id: "123" }
-      });
-    },
-    onManage(index) {
-      console.log("TCL: onManage -> index", index);
-      this.curPerson = this.personData[index];
-      this.showPopover = true;
-    },
+		},
+		methods: {
+			changeMonth (value) {
+				const loading = this.$loading({
+					lock: true,
+					text: "请稍等",
+				});
+				this.items = [];
+				this.page = 1;
+				this.month = Monent(value).format("YYYYMM")
+				this.getData(this.page)
+				loading.close()
+			},
+			async getInfo () {
+				await this.$http.get("api/v2/user/settles/total").then(({ data }) => {
+					this.info = data;
+				});
+			},
+			changeTab (tab, event) {
+				this.$router.push({ name: `settle.${tab.name}` });
+			},
+			changeChildTab (tab, event) {
+				console.log(`TCL: handleClick -> datatab.name,event${tab.name} ${event}`);
+			},
+			onState () {
+				this.$router.push({
+					name: `distribution.personnel.state`,
+					params: { id: "123" }
+				});
+			},
+			onManage (index) {
+				console.log("TCL: onManage -> index", index);
+				this.curPerson = this.personData[index];
+				this.showPopover = true;
+			},
 
-    onSubmit() {},
-    onCancel(index) {
-      this.$refs[`popover-` + index].doClose();
-    },
-    currentChange() {}
-  }
-};
+			onSubmit () { },
+			onCancel (index) {
+				this.$refs[`popover-` + index].doClose();
+			},
+			async getData (currentPage) {
+				let param = {
+					params: {
+						month: this.month,
+						page: currentPage,
+						include: "order"
+					},
+					headers: {
+						"X-Store-Id": ""
+					}
+				};
+
+				this.$http.get("api/v2/user/settles", param).then(({ data }) => {
+					this.items = [];
+					this.items.push(...data.settles.data);
+					this.page = data.settles.current_page;
+					this.total = data.settles.total;
+				});
+			}
+		}, created () {
+			this.getInfo();
+			this.getData(this.page)
+			this.$store.dispatch("loadUser");
+		}
+	};
 </script>
 
 <style lang="scss" scoped>
-.preview-bd {
-  padding: 16px 52px;
-  background: #fff;
-}
-.preview {
-  width: 100%;
-  background: #e8e8e8;
-  .one {
-    display: flex;
-    min-height: 140px;
-    border-bottom: 1px solid #dadada;
-    .left {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      i {
-        font-size: 16px;
-        font-weight: 400;
-        color: #666;
-      }
-      span {
-        margin-top: 15px;
-        font-size: 36px;
-        font-weight: 400;
-        color: #000;
-      }
-    }
-    .right {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-}
-.two {
-  display: flex;
-  min-height: 100px;
-  .left,
-  .right {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    i {
-      font-size: 12px;
-      font-weight: 400;
-      color: #666;
-    }
-    span {
-      margin-top: 10px;
-      font-size: 30px;
-      font-weight: 400;
-      color: #000;
-    }
-  }
-  .center {
-    flex: 1;
-    max-width: 1px;
-    background: #dadada;
-    height: 60px;
-    margin-top:20px;
-  }
-}
-/deep/.el-table {
-  th {
-    background: #e0e0e0;
-  }
-}
-/deep/.el-popover {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  padding: 35px;
-  font-size: 14px;
-}
+	.preview-bd {
+		padding: 16px 52px;
+		background: #fff;
+	}
+	.preview {
+		width: 100%;
+		background: #e8e8e8;
+		.one {
+			display: flex;
+			min-height: 140px;
+			border-bottom: 1px solid #dadada;
+			.left {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				i {
+					font-size: 16px;
+					font-weight: 400;
+					color: #666;
+				}
+				span {
+					margin-top: 15px;
+					font-size: 36px;
+					font-weight: 400;
+					color: #000;
+				}
+			}
+			.right {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+	}
+	.two {
+		display: flex;
+		min-height: 100px;
+		.left,
+		.right {
+			flex: 2;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			i {
+				font-size: 12px;
+				font-weight: 400;
+				color: #666;
+			}
+			span {
+				margin-top: 10px;
+				font-size: 30px;
+				font-weight: 400;
+				color: #000;
+			}
+		}
+		.center {
+			flex: 1;
+			max-width: 1px;
+			background: #dadada;
+			height: 60px;
+			margin-top: 20px;
+		}
+	}
+	/deep/.el-table {
+		th {
+			background: #e0e0e0;
+		}
+	}
+	/deep/.el-popover {
+		background: #fff;
+		border: 1px solid #ebeef5;
+		padding: 35px;
+		font-size: 14px;
+	}
 
-/deep/.el-form-item__label {
-  text-align: left;
-  color: #000;
-}
+	/deep/.el-form-item__label {
+		text-align: left;
+		color: #000;
+	}
 
-.el-button {
-  width: 120px;
-  background: #f4c93a;
-  border: 1px solid #f4c93a;
-  color: #000;
-  padding: 11px 20px;
-  font-size: 12px;
-}
+	.el-button {
+		width: 120px;
+		background: #f4c93a;
+		border: 1px solid #f4c93a;
+		color: #000;
+		padding: 11px 20px;
+		font-size: 12px;
+	}
 
-.el-breadcrumb {
-  margin-top: 18px;
-  margin-bottom: 18px;
+	.el-breadcrumb {
+		margin-top: 18px;
+		margin-bottom: 18px;
 
-  .el-breadcrumb__item {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 30px;
-    color: #666;
-    &:last-child {
-      color: #666;
-    }
-  }
-}
-/deep/.el-breadcrumb__separator {
-  color: #666;
-}
+		.el-breadcrumb__item {
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 30px;
+			color: #666;
+			&:last-child {
+				color: #666;
+			}
+		}
+	}
+	/deep/.el-breadcrumb__separator {
+		color: #666;
+	}
 </style>
