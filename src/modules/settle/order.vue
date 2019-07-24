@@ -122,10 +122,15 @@
 		},
 		methods: {
 			changeMonth (value) {
+				const loading = this.$loading({
+					lock: true,
+					text: "请稍等",
+				});
 				this.items = [];
 				this.page = 1;
 				this.month = Monent(value).format("YYYYMM")
 				this.getData(this.page)
+				loading.close()
 			},
 			async getInfo () {
 				await this.$http.get("api/v2/user/settles/total").then(({ data }) => {
@@ -165,16 +170,12 @@
 						"X-Store-Id": ""
 					}
 				};
-				const loading = this.$loading({
-					lock: false,
-					text: "请稍等",
-				});
+
 				this.$http.get("api/v2/user/settles", param).then(({ data }) => {
 					this.items = [];
 					this.items.push(...data.settles.data);
 					this.page = data.settles.current_page;
 					this.total = data.settles.total;
-					loading.close();
 				});
 			}
 		}, created () {
@@ -192,13 +193,11 @@
 	}
 	.preview {
 		width: 100%;
-		// background: url("/images/settlebg.png") center center no-repeat;
-		// background-size: cover;
-		background: #ededed;
+		background: #e8e8e8;
 		.one {
 			display: flex;
 			min-height: 140px;
-			border-bottom: 1px solid #e6e6e6;
+			border-bottom: 1px solid #dadada;
 			.left {
 				flex: 1;
 				display: flex;
@@ -208,7 +207,7 @@
 				i {
 					font-size: 16px;
 					font-weight: 400;
-					color: #999;
+					color: #666;
 				}
 				span {
 					margin-top: 15px;
@@ -238,7 +237,7 @@
 			i {
 				font-size: 12px;
 				font-weight: 400;
-				color: #999;
+				color: #666;
 			}
 			span {
 				margin-top: 10px;
@@ -250,7 +249,7 @@
 		.center {
 			flex: 1;
 			max-width: 1px;
-			background: #e0e0e0;
+			background: #dadada;
 			height: 60px;
 			margin-top: 20px;
 		}

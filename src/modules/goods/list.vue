@@ -12,7 +12,7 @@
       <el-container>
         <el-main>
           <div class="list">
-            <el-table :data="goods" style="width: 100%; text-align:center;">
+            <el-table :data="goods" style="width: 100%; text-align:center;" @row-click="clickRow">
               <el-table-column align="center" width="200px" prop label="商品">
                 <template slot-scope="scope">
                   <div class="goodsname">
@@ -37,7 +37,7 @@
               <el-table-column align="center" label="操作">
                 <template slot-scope="scope">
                   <el-button
-                    @click.native.prevent="onbuy(scope.row.id, scope.$index)"
+                    @click.stop="onbuy(scope.row.id, scope.$index)"
                     type="button"
                     size="small"
                   >立即购买</el-button>
@@ -108,6 +108,12 @@ export default {
       this.type2 = tab.name;
       this.getList(this.page);
     },
+    clickRow(row) {
+      this.$router.push({
+        name: "goods",
+        params: { goods: row.uuid }
+      });
+    },
     onbuy(id, index) {
       this.$router.push({
         name: "goods.refer",
@@ -146,8 +152,7 @@ export default {
       services.getRecommend().then(data => {
         this.recommend = data.data.goods.data;
       });
-    },
-
+    }
   },
   mounted() {
     this.getRecommend();

@@ -83,19 +83,12 @@
 						page: currentPage,
 					}
 				};
-				const loading = this.$loading({
-					lock: false,
-					text: "请稍等",
-				});
 				this.$http.get("api/v2/user/withdraws", param).then(({ data }) => {
-					console.log(data)
+
 					this.items = [];
 					this.items.push(...data.withdraws.data);
 					this.page = data.withdraws.current_page;
 					this.total = data.withdraws.total;
-
-					loading.close();
-
 				});
 			},
 		},

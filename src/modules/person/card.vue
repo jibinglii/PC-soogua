@@ -31,7 +31,7 @@
                   </div>
                   <div class="right">
                     <i>尾号{{item.bankno_last4}}</i>
-                    <span>{{item.bank_info.cardTypeName}}</span>
+                    <span  v-if="item.bank_info.cardTypeName.length>0 ? true : false">{{item.bank_info.cardTypeName}}</span>
                   </div>
                 </div>
                 <div class="bottom">
@@ -56,7 +56,6 @@
       </v-content>
     </div>
     <v-footer></v-footer>
-    <!-- <delete-card :show.sync="showDelete"/> -->
   </div>
 </template>
 
@@ -65,12 +64,11 @@ import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
 import VContent from "$components/VContent";
 import VAside from "$components/VAside";
-// import DeleteCard from "./deletecard";
 export default {
   data() {
     return {
       isActive: -1,
-      // showDelete: false,
+      addCard: false,
       addCard: {
         img: require("../../assets/images/tianjia.png"),
         label: "添加银行卡"
@@ -83,7 +81,6 @@ export default {
     VFooter,
     VContent,
     VAside
-    // DeleteCard
   },
   mounted() {
     this.getBankCards();
