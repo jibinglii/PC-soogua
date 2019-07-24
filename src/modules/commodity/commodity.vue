@@ -57,19 +57,16 @@
 															 width="300px">
 								<template slot-scope="scope"
 													v-if="!isSeller">
-									<el-button @click.native.prevent="handleDistribution(scope.$index)"
-														 type="button"
+									<el-button type="button"
 														 v-if="scope.row.status == 3"
 														 @click="updateStatus(scope.row.uuid, 'delete')"
 														 size="small">删除</el-button>
 									<el-button style="background:#fff;color:#000"
-														 @click.native.prevent="handleOff(scope.$index)"
 														 type="button"
 														 v-if="scope.row.status == 5"
 														 @click="updateStatus(scope.row.uuid, 'up')"
 														 size="small">上架</el-button>
-									<el-button @click.native.prevent="handleDistribution(scope.$index)"
-														 type="button"
+									<el-button type="button"
 														 v-if="scope.row.status == 4"
 														 @click="copy(scope.row)"
 														 size="small">复制链接</el-button>
@@ -78,35 +75,63 @@
 														 v-if="scope.row.status == 4"
 														 @click="updateStatus(scope.row.uuid, 'down')"
 														 size="small">下架</el-button>
-									<el-button @click.native.prevent="handleDistribution(scope.$index)"
-														 type="button"
+									<el-button type="button"
 														 v-if="scope.row.status == 4"
-														 @click="assign"
+														 @click="showForm(scope.row)"
 														 size="small">分销</el-button>
 
-									<el-button @click.native.prevent="handleDistribution(scope.$index)"
-														 type="button"
+									<el-button type="button"
 														 v-if="scope.row.status == 0 && $user().id == scope.row.user_id"
 														 size="small">修改</el-button>
 								</template>
 								<template slot-scope="scope"
 													v-else>
-									<el-button @click.native.prevent="handleDistribution(scope.$index)"
-														 type="button"
+									<el-button type="button"
 														 v-if="goods.status == 4"
 														 @click="copySeller(goods)"
 														 size="small">复制链接</el-button>
 
-									<el-button @click.native.prevent="handleDistribution(scope.$index)"
-														 type="button"
+									<el-button type="button"
 														 v-if="goods.status == 4 && isSellerStore"
-														 @click="assign"
+														 @click="showForm(scope.row)"
 														 size="small">分销</el-button>
 
 								</template>
 							</el-table-column>
+
 						</el-table>
+
 					</div>
+					<el-dialog title="分配推广员"
+										 :visible.sync="dialogFormVisible"
+										 width="30%">
+						<el-form>
+							<el-form-item label="推广员ID"
+														:label-width="formLabelWidth">
+								<el-input style="width:80%"
+													type="tel"
+													v-model="assignUserId"
+													placeholder="请输入推广员ID"
+													autocomplete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="推广费用比例"
+														:label-width="formLabelWidth">
+								<el-input style="width:80%"
+													type="number"
+													placeholder="请输入推广费用比例"
+													v-model="assignRate"
+													autocomplete="off"></el-input>
+							</el-form-item>
+
+						</el-form>
+						<div slot="footer"
+								 class="dialog-footer">
+							<el-button @click="dialogFormVisible = false">取 消</el-button>
+							<el-button type="primary"
+												 @click="assignSubmit">确 定</el-button>
+						</div>
+					</el-dialog>
+
 					<pagination :total="total"
 											:current-page="page"
 											@pagechange="getGoods"></pagination>
@@ -152,7 +177,15 @@
 				goodsData: [],
 				page: 1,
 				status: -1,
-				total: 0
+				total: 0,
+				assignUserId: '',
+				assignRate: '',
+				currentGoods: {},
+
+				//
+				dialogTableVisible: false,
+				dialogFormVisible: false,
+				formLabelWidth: '120px'
 			};
 		},
 		components: {
@@ -173,12 +206,7 @@
 
 				this.$router.push({ name: "goods", params: { goods: row } });
 			},
-			onCopyLink () { },
-			currentChange () { },
-			onSearch () { },
-			handleOff () {
 
-			},
 			getGoods (currentPage) {
 				this.goodsData = [];
 				let param = {
@@ -196,8 +224,26 @@
 					this.total = data.goods.total;
 				})
 			},
-			handleDistribution () { },
+			assignSubmit () {
+				let params = { goods_id: this.currentGoods.uuid, spread_id: this.assignUserId, profit_rate: this.assignRate }
+				const loading = this.$loading({
+					lock: true,
+					text: "请稍等",
+				});
 
+				this.$http.post('api/v2/store/sellers/my-drp-goods/add', params).then(({ data }) => {
+					this.dialogFormVisible = false
+					this.currentGoods = {}
+					loading.close();
+					this.$message.success('分配成功');
+				}).catch(($message) => {
+					loading.close();
+				});
+			},
+			showForm (row) {
+				this.dialogFormVisible = true;
+				this.currentGoods = row
+			},
 			//
 			updateStatus (uuid, action) {
 				let message = "您确定要[删除]该商品吗？";
