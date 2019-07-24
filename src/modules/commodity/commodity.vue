@@ -14,7 +14,7 @@
 				</div>
 				<div slot="main">
 					<v-tabs :tabs="tabs"
-									activeTab="all"
+									activeTab="-1"
 									@changeTab="changeTab" />
 					<!-- <el-form :inline="true" :model="searchForm" class="form-inline">
             <el-form-item label="关键字">
@@ -192,7 +192,7 @@
 				}
 				services.getGoods(param).then(({ data }) => {
 					this.goodsData = data.goods.data;
-					this.page = data.currentPage;
+          this.page = data.currentPage;
 					this.total = data.goods.total;
 				})
 			},
