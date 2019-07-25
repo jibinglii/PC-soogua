@@ -26,7 +26,7 @@
 									<span>￥ {{ currentUser.wallet.amount|formatMoney }}</span>
 								</div>
 								<div class="right">
-									<el-button @click.native.prevent
+									<el-button @click='withdraw'
 														 type="button"
 														 size="primary">申请提现</el-button>
 								</div>
@@ -135,6 +135,11 @@
 			async getInfo () {
 				await this.$http.get("api/v2/user/settles/total").then(({ data }) => {
 					this.info = data;
+				});
+			},
+			withdraw () {
+				this.$router.push({
+					name: "settle.withdraw"
 				});
 			},
 			changeTab (tab, event) {
