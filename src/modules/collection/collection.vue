@@ -62,10 +62,6 @@ export default {
   },
   methods: {
     async getCollection(currentPage) {
-      const loading = this.$loading({
-        lock: true,
-        text: "请稍等"
-      });
       let param = {
         params: {
           page: currentPage
@@ -78,7 +74,6 @@ export default {
           this.goods = data.data.data;
           this.page = currentPage;
           this.total = data.data.data.total;
-          loading.close();
         })
         .catch(({ response }) => {
           console.log("“cancel”");
