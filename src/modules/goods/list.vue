@@ -121,10 +121,6 @@ export default {
       });
     },
     async getList(currentPage) {
-      const loading = this.$loading({
-        lock: true,
-        text: "请稍等"
-      });
       let param = {
         params: {
           "fields[store_goods]": "id,title,amount,game_id,sale_nums,images",
@@ -142,7 +138,6 @@ export default {
           this.goods = data.goods.data;
           this.page = currentPage;
           this.total = data.goods.total;
-          loading.close();
         })
         .catch(({ response }) => {
           // this.$router.back();

@@ -273,9 +273,9 @@
 
 	.el-button {
 		width: 120px;
-		background: #f4c93a;
-		border: 1px solid #f4c93a;
-		color: #000;
+		background: #000;
+		border: 1px solid #000;
+		color: #fff;
 		padding: 11px 20px;
 		font-size: 12px;
 	}

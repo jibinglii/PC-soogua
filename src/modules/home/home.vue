@@ -71,10 +71,6 @@ export default {
   methods: {
     async getGoods(currentPage) {
       this.goods = [];
-      const loading = this.$loading({
-        lock: true,
-        text: "请稍等"
-      });
       let param = {
         params: {
           "fields[store_goods]":
@@ -89,7 +85,6 @@ export default {
           this.page = currentPage;
           this.total = data.goods.total;
           this.goods = data.goods.data;
-          loading.close();
         })
         .catch(({ response }) => {
           console.log("“cancel”");
