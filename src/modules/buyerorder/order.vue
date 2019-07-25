@@ -94,6 +94,7 @@
 					{ label: "全部订单", name: "-1" },
 					{ label: "待支付", name: "0" },
 					{ label: "待发货", name: "1" },
+					{ label: "已发货", name: "2" },
 					{ label: "已完成", name: "3" },
 					{ label: "退换货", name: "4", }
 				],
