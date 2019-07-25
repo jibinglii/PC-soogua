@@ -71,8 +71,17 @@
           </router-link>
         </div>
         <div class="right">
-          <router-link :to="{name: 'person.person'}" tag="a">个人中心</router-link>
-          <router-link :to="{name: 'person.person'}" tag="a">下载APP</router-link>
+          <router-link v-for="(item, index) in navRight" :to="{name:item.id}" :key="index">
+            <div
+              class="itembox"
+              :class="selected==item.id?'activeText':'text'"
+              @click="selected=item.id"
+            >
+              <span>{{item.name}}</span>
+            </div>
+          </router-link>
+          <!-- <router-link :to="{name: 'person.person'}" tag="a">个人中心</router-link>
+          <router-link :to="{name: 'person.person'}" tag="a">下载APP</router-link>-->
         </div>
       </div>
     </div>
@@ -110,6 +119,18 @@ export default {
         {
           id: "goods.service",
           name: "服务",
+          active: false
+        }
+      ],
+      navRight: [
+        {
+          id: "person.person",
+          name: "个人中心",
+          active: false
+        },
+        {
+          id: "",
+          name: "下载APP",
           active: false
         }
       ]
@@ -159,6 +180,10 @@ export default {
 .header {
   background: url("/images/headerbg.png") center center no-repeat;
   background-size: cover;
+}
+.container{
+  width: 1200px;
+  margin: 0 auto;
 }
 .top {
   width: 100%;
@@ -262,6 +287,7 @@ export default {
   }
   .right {
     float: right;
+    padding-right: 20px;
     p {
       margin-top: 10px;
       font-size: 12px;
@@ -301,12 +327,24 @@ export default {
   }
   .right {
     float: right;
+    display: flex;
     a {
       color: #fff;
-      font-size: 14px;
-      font-weight: 100;
-      line-height: 50px;
-      padding-left: 45px;
+      padding-left: 30px;
+      .itembox {
+        color: #999;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 50px;
+        padding: 0 20px;
+        &:hover {
+          color: #fff;
+        }
+      }
+      .activeText {
+        background: #4c4a4a;
+        color: #fff;
+      }
     }
   }
 }

@@ -19,7 +19,7 @@ export default {};
 .el-main {
   max-width: 984px;
   padding: 0;
-  margin-right: 16px;
+  margin-left: 18px;
   overflow: hidden;
 }
 </style>

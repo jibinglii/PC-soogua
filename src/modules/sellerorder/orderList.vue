@@ -138,13 +138,19 @@ export default {
   margin-top: 16px;
   margin-bottom: 30px;
   .goodsname {
-    display: flex;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
     img {
+      float: left;
       width: 88px;
       height: 88px;
       margin-right: 10px;
+
     }
     span {
+      float: left;
+      width: 58%;
       padding-top: 10px;
       text-align: left;
     }

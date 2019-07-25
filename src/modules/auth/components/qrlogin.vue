@@ -2,7 +2,7 @@
   <div class="login_form">
     <div class="form_title">
       <span>手机扫码,安全登录</span>
-      <img  @click="changeForm(1)" src="~$assets/images/pc_login.png">
+      <img @click="changeForm(1)" src="~$assets/images/pc_login.png">
     </div>
     <div class="form_qrcode">
       <img src="~$assets/images/qrcode.png">
@@ -25,17 +25,16 @@
 </template>
 
 <script>
-
 export default {
   components: {},
   data() {
     return {};
   },
   methods: {
-      changeForm(form) {
+    changeForm(form) {
       this.$emit("change-form", form);
     }
-  },
+  }
 };
 </script>
 <style lang='scss' scoped>
@@ -49,7 +48,7 @@ export default {
     padding: 15px;
     span {
       flex: 4;
-      padding-left:20px;
+      padding-left: 20px;
       line-height: 66px;
       font-size: 18px;
       font-weight: bold;
@@ -74,7 +73,7 @@ export default {
 
     img {
       margin-left: 30%;
-      width: 46px；
+      width: 46px；;
     }
     span {
       padding-left: 5px;
@@ -90,13 +89,15 @@ export default {
   }
   .third_party_login {
     padding-top: 10px;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     img {
-      padding-left: 20px;
-      float: left;
+      padding: 0 5px 0 20px;
     }
     a {
-      float: left;
       height: 24px;
       line-height: 24px;
       font-size: 14px;

@@ -127,7 +127,6 @@
 
 <style lang="scss" scoped>
 	.v-aside {
-		margin-right: 16px;
 		margin-bottom: 20px;
 	}
 	/deep/ .el-card__header {

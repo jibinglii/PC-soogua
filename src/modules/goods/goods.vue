@@ -171,7 +171,6 @@ export default {
       }
     },
     async getDetail() {
-      // this.$toast.loading({ mask: true });
       const loading = this.$loading({
         lock: true,
         text: "请稍等"
@@ -194,16 +193,15 @@ export default {
         });
     },
     collect(goods) {
-      console.log(goods.is_collect);
       if (!goods.is_collect) {
         this.$http
           .put("api/v1/collect/goods/" + this.goodsId)
           .then(({ data }) => {
-            this.$toast.success("收藏成功");
+            this.$message.success("收藏成功");
             this.$set(goods, "is_collect", true);
           })
           .catch(error => {
-            this.$toast.fail(error.data.message);
+            this.$message.error(error.data.message);
           });
       }
     }
