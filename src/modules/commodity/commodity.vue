@@ -16,17 +16,11 @@
 					<v-tabs :tabs="tabs"
 									activeTab="all"
 									@changeTab="changeTab" />
-					<!-- <el-form :inline="true" :model="searchForm" class="form-inline">
-            <el-form-item label="关键字">
-              <el-input v-model="searchForm.commodity" placeholder="请输入商品名称货订单编号"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSearch">搜索</el-button>
-            </el-form-item>
-          </el-form> -->
+
 					<div class="commoditylist">
 						<el-table :data="goodsData"
-											style="width: 100%; text-align:center;">
+											style="width: 100%; text-align:center;"
+											@row-click="goodsInfo">
 							<el-table-column align="center"
 															 width="300px"
 															 prop="title"
@@ -34,7 +28,6 @@
 								<template slot-scope="scope">
 									<div class="commodityname">
 										<img :src="scope.row.logo"
-												 @click="goodsInfo(scope.row.uuid)"
 												 alt />
 										<div class="text">
 											<span>{{scope.row.title}}</span>
@@ -59,25 +52,25 @@
 													v-if="!isSeller">
 									<el-button type="button"
 														 v-if="scope.row.status == 3"
-														 @click="updateStatus(scope.row.uuid, 'delete')"
+														 @click.stop="updateStatus(scope.row.uuid, 'delete')"
 														 size="small">删除</el-button>
 									<el-button style="background:#fff;color:#000"
 														 type="button"
 														 v-if="scope.row.status == 5"
-														 @click="updateStatus(scope.row.uuid, 'up')"
+														 @click.stop="updateStatus(scope.row.uuid, 'up')"
 														 size="small">上架</el-button>
 									<el-button type="button"
 														 v-if="scope.row.status == 4"
-														 @click="copy(scope.row)"
+														 @click.stop="copy(scope.row)"
 														 size="small">复制链接</el-button>
 									<el-button style="background:#fff;color:#000"
 														 type="button"
 														 v-if="scope.row.status == 4"
-														 @click="updateStatus(scope.row.uuid, 'down')"
+														 @click.stop="updateStatus(scope.row.uuid, 'down')"
 														 size="small">下架</el-button>
 									<el-button type="button"
 														 v-if="scope.row.status == 4"
-														 @click="showForm(scope.row)"
+														 @click.stop="showForm(scope.row)"
 														 size="small">分销</el-button>
 
 									<el-button type="button"
@@ -88,12 +81,12 @@
 													v-else>
 									<el-button type="button"
 														 v-if="goods.status == 4"
-														 @click="copySeller(goods)"
+														 @click.stop="copySeller(goods)"
 														 size="small">复制链接</el-button>
 
 									<el-button type="button"
 														 v-if="goods.status == 4 && isSellerStore"
-														 @click="showForm(scope.row)"
+														 @click.stop="showForm(scope.row)"
 														 size="small">分销</el-button>
 
 								</template>
@@ -204,7 +197,7 @@
 			},
 			goodsInfo (row) {
 
-				this.$router.push({ name: "goods", params: { goods: row } });
+				this.$router.push({ name: "goods", params: { goods: row.uuid } });
 			},
 
 			getGoods (currentPage) {
