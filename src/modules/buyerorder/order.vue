@@ -55,7 +55,7 @@
             </el-table>
           </div>
 
-          <pagination :total="total" :current-page="page" @pagechange="getOrder"></pagination>
+          <pagination :total="total" :current-page="page" :display="display" @pagechange="getOrder"></pagination>
         </div>
       </v-content>
     </div>
@@ -84,10 +84,9 @@ export default {
         { label: "退换货", name: "4" }
       ],
       orderData: [],
-      page: 1,
-      infiniteId: +new Date(),
       total: 0, // 记录总条数
-      //	current: 1, // 当前的页数
+      page: 1, // 当前的页数
+      display: 10,
       status: -1
     };
   },
@@ -172,13 +171,12 @@ export default {
       this.status = tab.name;
       this.getOrder(this.page);
     },
-    onSearch() {},
-    currentChange() {},
     getOrder(currentPage) {
       this.orderData = [];
       let param = {
         params: {
-          page: currentPage
+          page: currentPage,
+          display: this.display
         }
       };
 
@@ -186,6 +184,7 @@ export default {
         param["params"]["status"] = this.status;
       }
       this.$http.get("/api/v1/user/orders", param).then(({ data }) => {
+        console.log(data)
         this.orderData = data.orders.data;
         this.page = data.currentPage;
         this.total = data.orders.total;

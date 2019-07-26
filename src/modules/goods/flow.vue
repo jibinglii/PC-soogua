@@ -47,12 +47,7 @@
         </el-main>
         <el-aside width="300px">
           <div class="aside-head">商品精选</div>
-          <goods-item
-            v-for="(item, index) in recommend"
-            :key="index"
-            :recommend="item"
-            :styles="{width:'300px', marginBottom:'16px',background:'#fff'}"
-          />
+          <goods-item/>
         </el-aside>
       </el-container>
     </div>
@@ -69,12 +64,10 @@ import VTabs from "$components/tabs";
 import Pagination from "$components/Pagination";
 
 import * as service from "$modules/home/services";
-import * as services from "$modules/goods/services";
 export default {
   data() {
     return {
       goods: [],
-      recommend: [],
       infiniteId: +new Date(),
       total: 0, // 记录总条数
       display: 10, // 每页显示条数
@@ -138,16 +131,9 @@ export default {
         .catch(({ response }) => {
           this.$router.back();
         });
-    },
-    async getRecommend() {
-      services.getRecommend().then(data => {
-        this.recommend = data.data.goods.data;
-      });
     }
   },
-  mounted() {
-    this.getRecommend();
-  },
+
   components: {
     VHeader,
     VFooter,
@@ -202,7 +188,6 @@ export default {
   display: flex;
   align-items: center;
   img {
-    flex: 0.7;
     width: 88px;
     height: 88px;
     margin-right: 17px;

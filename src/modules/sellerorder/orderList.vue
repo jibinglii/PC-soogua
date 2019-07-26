@@ -78,7 +78,7 @@ export default {
     onDetails(index) {
       this.$router.push({
         name: "seller.orderview",
-        params:{
+        params: {
           order: this.orderData[index].id
         }
       });
@@ -138,21 +138,21 @@ export default {
   margin-top: 16px;
   margin-bottom: 30px;
   .goodsname {
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
+    display: flex;
+    align-items: center;
     img {
-      float: left;
       width: 88px;
       height: 88px;
       margin-right: 10px;
-
     }
     span {
-      float: left;
-      width: 58%;
-      padding-top: 10px;
+      flex: 1;
       text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
     }
   }
 }

@@ -7,6 +7,6 @@ export const goodsView = (goodsId, params) => {
     return http.get('/api/v1/goods/' + goodsId, params)
 }
 
-export const getRecommend = (goodsId, params) => {
-    return http.get('/api/v1/goods/recommend', params)
+export const getRecommend = () => {
+    return http.get('/api/v1/goods/recommend')
 }
