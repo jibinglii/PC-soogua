@@ -17,9 +17,7 @@
                 <template slot-scope="scope">
                   <div class="goodsname">
                     <img :src="scope.row.logo" alt>
-                    <div class="text">
-                      <span>{{scope.row.title}}</span>
-                    </div>
+                    <span>{{scope.row.title}}</span>
                   </div>
                 </template>
               </el-table-column>
@@ -203,32 +201,22 @@ export default {
   }
 }
 .goodsname {
+  display: flex;
+  align-items: center;
   img {
+    flex: 0.7;
     width: 88px;
     height: 88px;
-    margin-right: 10px;
-    float: left;
+    margin-right: 17px;
   }
-  .text {
-    display: flex;
-    flex-direction: column;
-    span {
-      font-size: 14px;
-      font-weight: 400;
-      color: #000;
-      text-align: left;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-    i {
-      font-size: 12px;
-      font-weight: 400;
-      color: #666;
-      text-align: left;
-    }
+  span {
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 }
 .aside-head {
