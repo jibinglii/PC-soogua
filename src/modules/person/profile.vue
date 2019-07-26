@@ -17,45 +17,31 @@
             <div class="title">修改资料设置</div>
             <div class="content">
               <div class="left">
-                <div v-if="identity" class="identity">
-                  <h5>提示：您的实名认证正在审核，请耐心等待</h5>
-                  <p>证件类型： 身份证</p>
-                  <p>真实姓名： 张**</p>
-                  <p>证件号码： 829**********1292</p>
-                </div>
-                <el-form
-                  :model="profile"
-                  :rules="rules"
-                  ref="profile"
-                  label-width="85px"
-                  class="profile-form"
-                >
-                  <el-form-item label="性别：" prop="sex">
-                    <el-radio-group v-model="profile.sex">
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
-                      <el-radio label="保密"></el-radio>
-                    </el-radio-group>
+                <el-form label-width="85px" class="profile-form">
+                  <el-form-item label="昵称：">
+                    <el-input v-model="nickname"></el-input>
                   </el-form-item>
-                  <el-form-item label="昵称：" prop="name">
-                    <el-input v-model="profile.name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="个性签名：" prop="signature">
-                    <el-input
-                      type="textarea"
-                      resize="none"
-                      v-model="profile.signature"
-                      placeholder="请输入您的个性签名"
-                    ></el-input>
-                    <span class="size">{{size}}/40</span>
+                  <el-form-item label="个性签名：">
+                    <el-input type="textarea" resize="none" v-model="sign" placeholder="请输入您的个性签名"></el-input>
+                    <span class="size">{{len}}/40</span>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="submitForm('profile')">确认</el-button>
+                    <el-button type="primary" @click="submit()">确认</el-button>
                   </el-form-item>
                 </el-form>
               </div>
               <div class="right">
-                <img src="~$assets/images/icon.png" alt />
+                <img :src="avatar" alt>
+                <input
+                  id="uploaderInput"
+                  ref="filElem"
+                  class="weui-uploader__input"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  @change="upload"
+                  v-show="false"
+                >
                 <el-button @click.native.prevent="editIcon">修改头像</el-button>
               </div>
             </div>
@@ -72,23 +58,14 @@ import VHeader from "$components/VHeader";
 import VFooter from "$components/VFooter";
 import VContent from "$components/VContent";
 import VAside from "$components/VAside";
+import SparkMD5 from "spark-md5";
 export default {
   data() {
     return {
-      identity: true,
-      profile: {
-        sex: 0,
-        name: "hahah",
-        signature: "123"
-      },
-      rules: {
-        name: [
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
-        ],
-        signature: [
-          { max: 40, message: "长度不得超过40个字符", trigger: "blur" }
-        ]
-      }
+      editLogo: false,
+      nickname: this.$user().nickname,
+      sign: this.$user().sign,
+      avatar: [this.$user().avatar]
     };
   },
   components: {
@@ -98,13 +75,100 @@ export default {
     VAside
   },
   computed: {
-    size() {
-      return this.profile.signature.length || 0;
+    len() {
+      return this.sign.length || 0;
+    }
+  },
+  watch: {
+    sign(val) {
+      if (val.length > 40) {
+        this.sign = val.substr(0, 40);
+      }
     }
   },
   methods: {
-    submitForm() {},
-    editIcon() {}
+    submit() {
+      let param = {
+        nickname: this.nickname,
+        sign: this.sign,
+        avatar: this.avatar
+      };
+      const loading = this.$loading({ lock: true, text: "请稍等" });
+      this.$http
+        .post("api/v1/user/update-user", param)
+        .then(({ data }) => {
+          loading.close();
+          this.$store.dispatch("loadUser");
+          this.$router.back();
+        })
+        .catch(error => {
+          loading.close();
+        });
+    },
+    editIcon() {
+      this.$refs.filElem.dispatchEvent(new MouseEvent("click"));
+    },
+    upload(e) {
+      let file = event.target.files[0];
+      this.$toast.loading("正在上传...");
+      let param = new FormData(); //创建form对象
+      this.md5(file, (err, md5) => {
+        // 请求配置
+        this.$http
+          .post("api/v1/upload/policy", { filename: file.name, md5: md5 })
+          .then(({ data }) => {
+            let config = data;
+            param.append("key", config.key);
+            param.append("policy", config.policy);
+            param.append("OSSAccessKeyId", config.OSSAccessKeyId);
+            param.append("success_action_status", "200"); //让服务端返回200,不然，默认会返回204
+            param.append("signature", config.signature);
+            param.append("file", file, file.name); //通过append向form对象添加数据
+            this.$http
+              .post(config.server, param, { loading: false })
+              .then(response => {
+                this.$toast.clear();
+                this.avatar = config.site_url;
+                this.editLogo = true;
+              })
+              .catch(error => {
+                this.$toast.clear();
+                this.$message.error("设置失败，请重试");
+              });
+          });
+      });
+    },
+    md5(file, md5Fn) {
+      let currentChunk = 0;
+      const blobSlice =
+        File.prototype.slice ||
+        File.prototype.mozSlice ||
+        File.prototype.webkitSlice;
+      const chunkSize = 2097152;
+      const chunks = Math.ceil(file.size / chunkSize);
+      const spark = new SparkMD5.ArrayBuffer();
+      const reader = new FileReader();
+
+      loadNext();
+
+      reader.onloadend = e => {
+        spark.append(e.target.result); // Append array buffer
+        currentChunk++;
+        if (currentChunk < chunks) {
+          loadNext();
+        } else {
+          md5Fn(null, spark.end());
+        }
+      };
+
+      /////////////////////////
+      function loadNext() {
+        const start = currentChunk * chunkSize;
+        const end =
+          start + chunkSize >= file.size ? file.size : start + chunkSize;
+        reader.readAsArrayBuffer(blobSlice.call(file, start, end));
+      }
+    }
   }
 };
 </script>
@@ -145,18 +209,6 @@ export default {
     }
   }
   .left {
-    .identity {
-      font-size: 14px;
-      font-weight: 400;
-      h5 {
-        color: #999;
-        margin-bottom: 30px;
-      }
-      p {
-        color: #000;
-        margin-bottom: 30px;
-      }
-    }
     .profile-form {
       min-width: 400px;
       .el-form-item {

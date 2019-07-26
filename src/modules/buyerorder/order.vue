@@ -68,7 +68,7 @@
 						</el-table>
 					</div>
 
-          <pagination :total="total" :current-page="page" :display="display" @pagechange="getOrder"></pagination>
+          <pagination :total="total" :current-page="page" @pagechange="getOrder"></pagination>
         </div>
       </v-content>
     </div>
@@ -239,7 +239,6 @@ import * as services from "$modules/buyerorder/services";
     display: flex;
     align-items: center;
     img {
-      flex: 0.7;
       width: 88px;
       height: 88px;
       margin-right: 17px;
