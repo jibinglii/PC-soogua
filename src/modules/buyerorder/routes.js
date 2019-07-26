@@ -7,5 +7,13 @@ export default [
         },
         component: () => import('./order')
     },
+    {
+        path: 'buyer/orderview/:order.html',
+        name: 'buyer.orderview',
+        meta: {
+            requiresAuth: true
+        },
+        component: () => import('./order-view')
+    },
 ]
 

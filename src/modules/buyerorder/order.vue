@@ -1,59 +1,72 @@
 <template>
-  <div class="order">
-    <v-header></v-header>
-    <div class="container">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人中心</el-breadcrumb-item>
-        <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-      </el-breadcrumb>
-      <v-content>
-        <div slot="aside">
-          <v-aside></v-aside>
-        </div>
-        <div slot="main">
-          <div class="title">查看我的订单</div>
-          <v-tabs :tabs="tabs" activeTab="-1" @changeTab="changeTab"/>
-          <div class="goodslist">
-            <el-table :data="orderData" style="width: 100%; text-align:center;">
-              <el-table-column align="center" prop="id" label="订单编号"></el-table-column>
-              <el-table-column align="center" width="130" prop="goods_server" label="服务器名称"></el-table-column>
-              <el-table-column align="center" width="250" label="商品名称">
-                <template slot-scope="scope">
-                  <div class="goodsname">
-                    <img :src="scope.row.goods_logo" alt>
-                    <span>{{scope.row.goods_title}}</span>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="goods_price" label="价格"></el-table-column>
-              <el-table-column align="center" prop="num" label="数量"></el-table-column>
-              <el-table-column align="center" prop="total_amount" label="总支付"></el-table-column>
-              <el-table-column
-                align="center"
-                prop="status_label"
-                :formatter="statusFormat"
-                label="订单状态"
-              ></el-table-column>
-              <el-table-column align="center" label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    v-if="scope.row.status==2"
-                    @click.native.prevent="confirm(scope.row.id,scope.$index)"
-                    type="button"
-                    size="small"
-                  >确认收货</el-button>
-                  <el-button
-                    v-if="scope.row.status==0"
-                    @click.native.prevent="destroy(scope.row.id,scope.$index)"
-                    type="button"
-                    size="small"
-                  >删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
+	<div class="order">
+		<v-header></v-header>
+		<div class="container">
+			<el-breadcrumb separator-class="el-icon-arrow-right">
+				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
+				<el-breadcrumb-item>个人中心</el-breadcrumb-item>
+				<el-breadcrumb-item>订单管理</el-breadcrumb-item>
+			</el-breadcrumb>
+			<v-content>
+				<div slot="aside">
+					<v-aside></v-aside>
+				</div>
+				<div slot="main">
+					<div class="title">查看我的订单</div>
+					<v-tabs :tabs="tabs"
+									activeTab="-1"
+									@changeTab="changeTab" />
+					<div class="goodslist">
+						<el-table :data="orderData"
+											style="width: 100%; text-align:center;"
+											@row-click="onDetails">
+							<el-table-column align="center"
+															 prop="id"
+															 label="订单编号"></el-table-column>
+							<el-table-column align="center"
+															 width="130"
+															 prop="goods_server"
+															 label="服务器名称"></el-table-column>
+							<el-table-column align="center"
+															 width="250"
+															 label="商品名称">
+								<template slot-scope="scope">
+									<div class="goodsname">
+										<img :src='scope.row.goods_logo'
+												 alt />
+										<span>{{scope.row.goods_title}}</span>
+									</div>
+								</template>
+							</el-table-column>
+							<el-table-column align="center"
+															 prop="goods_price"
+															 label="价格"></el-table-column>
+							<el-table-column align="center"
+															 prop="num"
+															 label="数量"></el-table-column>
+							<el-table-column align="center"
+															 prop="total_amount"
+															 label="总支付"></el-table-column>
+							<el-table-column align="center"
+															 prop="status_label"
+															 :formatter="statusFormat"
+															 label="订单状态"></el-table-column>
+							<el-table-column align="center"
+															 label="操作">
+								<template slot-scope="scope">
+									<el-button v-if="scope.row.status==2"
+														 @click.native.prevent="confirm(scope.row.id,scope.$index)"
+														 type="button"
+														 size="small">确认收货</el-button>
+									<el-button v-if="scope.row.status==0"
+														 @click.native.prevent="destroy(scope.row.id,scope.$index)"
+														 type="button"
+														 size="small">删除</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
 
           <pagination :total="total" :current-page="page" :display="display" @pagechange="getOrder"></pagination>
         </div>
@@ -164,23 +177,38 @@ import * as services from "$modules/buyerorder/services";
 				this.status = tab.name;
 				this.getOrder(this.page);
 			},
+			onDetails (row) {
+				this.$router.push({
+					name: "buyer.orderview",
+					params: {
+						order: row.id
+					}
+				});
+			},
 			getOrder (currentPage) {
 
-      if (this.status != -1) {
-        param["params"]["status"] = this.status;
-      }
-      this.$http.get("/api/v1/user/orders", param).then(({ data }) => {
-        console.log(data)
-        this.orderData = data.orders.data;
-        this.page = data.currentPage;
-        this.total = data.orders.total;
-      });
-    }
-  },
-  created() {
-    this.getOrder(this.page);
-  }
-};
+				this.orderData = [];
+				let param = {
+					params: {
+						page: currentPage,
+					}
+				};
+
+				if (this.status != -1) {
+					param['params']['status'] = this.status
+				}
+				this.$http.get('/api/v1/user/orders', param).then(({ data }) => {
+
+					this.orderData = data.orders.data;
+					this.page = data.currentPage;
+					this.total = data.orders.total;
+
+				})			}
+		},
+		created () {
+			this.getOrder(this.page);
+		}
+	};
 </script>
 
 <style lang="scss" scoped>

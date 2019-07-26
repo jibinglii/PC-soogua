@@ -55,29 +55,6 @@
 
 								</div>
 							</div>
-							<!-- <div class="order-info">
-								<div class="left">
-									<div class="info-item">
-										<span>商品名称：</span>
-										<i>{{ goods.title }}</i>
-										<span></span>
-										<i>{{ goods.game_name }}</i>
-										<span></span>
-										<i>{{ goods.server_name }}</i>
-										<span>商品价格：</span>
-										<i>￥{{ goods.amount | formatMoney }}</i>
-										<span>担保无忧：</span>
-										<i>{{order.insure_name}}</i>
-										<span>担保费：</span>
-										<i>{{order.insure_fee}}</i>
-									</div>
-								</div>
-								<a href="javascript:">
-									<img src="~$assets/images/kefu@2x.png"
-											 alt>
-									<b>联系买家</b>
-								</a>
-							</div> -->
 
 							<div class="subtitle">
 								<span>订单信息</span>
@@ -102,10 +79,6 @@
 										<span>付款时间</span>
 										<i>{{order.payment_time}}</i>
 									</div>
-									<!-- <div class="order-time">
-										<span>发货时间</span>
-										<i>{{order.updated_at}}</i>
-									</div> -->
 
 								</div>
 								<div class="right">
@@ -135,21 +108,38 @@
 								</div>
 
 							</div>
-
-							<div v-if="order.status==1"
-									 class="nextstep">
-								<el-button @click.native="shipping()"
-													 type="button"
-													 size="medium">确认发货</el-button>
+							<div class="btnBox">
+								<div v-if="order.closed"
+										 class="nextstep">
+									<el-button type="button"
+														 size="medium">订单已关闭</el-button>
+								</div>
+								<div v-if="!order.closed"
+										 class="nextstep">
+									<el-button type="button"
+														 @click.native="connectSaler()"
+														 size="medium">联系卖家</el-button>
+								</div>
+								<div v-if="!order.closed && order.status==2"
+										 class="nextstep">
+									<el-button type="button"
+														 @click.native="confirm(order.id)"
+														 size="medium">确认收货</el-button>
+								</div>
+								<div v-if="!order.closed && order.status==0"
+										 class="nextstep">
+									<el-button type="button"
+														 @click.native="destroy(order.id)"
+														 size="medium">取消订单</el-button>
+								</div>
+								<div v-if="!order.closed && order.status==0"
+										 class="nextstep">
+									<el-button type="button"
+														 @click.native="pay(order.id)"
+														 size="medium">去付款</el-button>
+								</div>
 							</div>
 
-							<!-- <div class="order-info">
-								<span>发货信息</span>
-								<div class="order-time">
-									<span>发货时间</span>
-									<i>{{order.payment_time}}</i>
-								</div>
-							</div> -->
 						</div>
 					</div>
 				</div>
@@ -193,35 +183,33 @@
 					},
 					0: {
 						status_desc_1: "待支付",
-						status_desc_2: "24小时未支付订单将自动取消",
+						status_desc_2: "30分钟未支付订单将自动取消",
 						icon: '/images/shop/order-dfk.png'
 					},
 					1: {
 						status_desc_1: "待发货",
-						status_desc_2: "买家付款成功，等待商家发货",
-						icon: '/images/shop/order-dsh.png'
+						status_desc_2: "你已付款成功，等待商家发货",
+						icon: '/images/shop/order-dfh.png'
 					},
 					2: {
 						status_desc_1: "待收货",
-						status_desc_2: "24小时买家未处理，将自动收货",
+						status_desc_2: "24小时未处理订单将自动确认收货",
 						icon: '/images/shop/order-dsh.png'
 					},
 					3: {
 						status_desc_1: "已完成",
-						status_desc_2: "交易已完成",
-						icon: '/images/shop/order-dsh.png'
+						status_desc_2: "交易已完成，如需售后请联系客服",
+						icon: '/images/shop/order-ywc.png'
 					},
 					4: {
 						status_desc_1: "退货中",
-						status_desc_2: "协商处理中",
+						status_desc_2: "协商处理中，请及时关注订单状态",
 						icon: '/images/shop/order-thh.png'
 					},
 				},
 				order: {
 					status: -1
-				},
-				show: false,
-				express_remark: ''
+				}
 			}
 		},
 		created () {
@@ -232,11 +220,10 @@
 			async getDetail () {
 				const loading = this.$loading({
 					lock: true,
-					text: "请稍等"
+					text: "请稍等",
 				});
-				this.$http.get('/api/v1/seller-order/' + this.id)
+				this.$http.get('/api/v1/order/' + this.id, { loading: true })
 					.then(({ data }) => {
-						loading.close();
 						this.order = data.order;
 						let index = this.order.goods_title.indexOf(' ');
 						let title = this.order.goods_title.substr(index + 1)
@@ -249,49 +236,66 @@
 							server_name: this.order.goods_server,
 							amount: this.order.goods_price
 						};
-						this.goods = goods
+						this.goods = goods;
+						loading.close()
 					}).catch(({ response }) => {
-						this.$router.back()
+						if (response.status == 404) {
+							this.$router.back()
+						}
 					});
 			},
-			shipping () {
-				this.$prompt('请输入发货备注信息', '提示', {
+			connectSaler () {
+				this.$message.error('请时候用搜瓜App联系')
+			},
+			async destroy (id) {
+
+				let message = "您确定要[取消]该订单吗？";
+				await this.$confirm(message, '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
-					inputPattern: /\S/,
-					inputErrorMessage: '请输入备注'
-				}).then(({ value }) => {
-					this.$confirm('您确定要[确认发货]该订单吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-						type: 'warning',
-						center: true
-					}).then(() => {
-						const loading = this.$loading({
-							lock: true,
-							text: "发货中",
-						});
-						this.$http.post('api/v1/order/shipping/' + this.id, { express_remark: value }, { loading: true }).then((data) => {
+					type: 'warning',
+					center: true
+				}).then(() => {
+					const loading = this.$loading({ lock: true, text: "取消订单中" });
+					this.$http.post('api/v1/order/' + id + '/close', {}, { loading: true }).then(({ message }) => {
+						loading.close()
+						this.$message.success(message)
+						this.$router.back()
+					}).catch(() => {
+						loading.close()
+					});
+				})
 
-							loading.close()
-							this.$message.success(data.message);
-							this.getDetail()
-						})
-							.catch(() => {
-								console.log(123)
-								loading.close()
+			},
+			async	confirm (id) {
+				let message = "您确定要[确认收货]该订单吗？";
+				await this.$confirm(message, '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning',
+					center: true
+				}).then(() => {
+					const loading = this.$loading({ lock: true, text: "确认收货中" });
+					this.$http.post('api/v1/order/confirm/' + id, {}, { loading: true }).then(({ message }) => {
+						loading.close()
+						this.$message.success(message);
+						this.getDetail()
+						// setTimeout(() => {
+						// 	window.location.reload()
+						// }, 500)
+					}).catch(() => {
+						loading.close()
 
-							});
-					})
+					});
 
 				})
-				// .catch(() => {
-				// 	this.$message({
-				// 		type: 'info',
-				// 		message: '取消输入'
-				// 	});
-				// });
+
+			},
+			pay (id) {
+				this.$message.error('......')
+				//this.$router.push({ name: 'pay.type', params: { 'order': id } })
 			}
+
 		},
 
 		components: {
@@ -476,10 +480,16 @@
 		padding: 11px 20px;
 		font-size: 12px;
 	}
-	.nextstep {
-		margin-bottom: 60px;
+	.btnBox {
 		display: flex;
-		align-items: center;
 		justify-content: center;
+		.nextstep {
+			margin-top: 20px;
+			//	margin-bottom: 60px;
+			margin-right: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 </style>
