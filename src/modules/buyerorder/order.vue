@@ -19,7 +19,8 @@
 									@changeTab="changeTab" />
 					<div class="goodslist">
 						<el-table :data="orderData"
-											style="width: 100%; text-align:center;">
+											style="width: 100%; text-align:center;"
+											@row-click="onDetails">
 							<el-table-column align="center"
 															 prop="id"
 															 label="订单编号"></el-table-column>
@@ -179,8 +180,14 @@
 				this.status = tab.name;
 				this.getOrder(this.page);
 			},
-			onSearch () { },
-			currentChange () { },
+			onDetails (row) {
+				this.$router.push({
+					name: "buyer.orderview",
+					params: {
+						order: row.id
+					}
+				});
+			},
 			getOrder (currentPage) {
 
 				this.orderData = [];

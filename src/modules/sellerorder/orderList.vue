@@ -18,7 +18,8 @@
 									@changeTab="changeTab" />
 					<div class="goodslist">
 						<el-table :data="orderData"
-											style="width: 100%; text-align:center;">
+											style="width: 100%; text-align:center;"
+											@row-click="onDetails">
 							<el-table-column align="center"
 															 prop="id"
 															 label="商品单号"></el-table-column>
@@ -45,14 +46,14 @@
 							<el-table-column align="center"
 															 prop="status_label"
 															 label="订单状态"></el-table-column>
-							<el-table-column align="center"
+							<!-- <el-table-column align="center"
 															 label="操作">
 								<template slot-scope="scope">
 									<el-button @click.native.prevent="onDetails(scope.row)"
 														 type="button"
 														 size="small">查看详情</el-button>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 						</el-table>
 					</div>
 					<pagination :total="total"
