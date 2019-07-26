@@ -32,7 +32,7 @@
               <el-table-column align="center" label="操作">
                 <template slot-scope="scope">
                   <el-button
-                    @click.native.prevent="onDetails(scope.$index)"
+                    @click.native.prevent="onDetails(scope.row)"
                     type="button"
                     size="small"
                   >查看详情</el-button>
@@ -75,11 +75,11 @@ export default {
   },
 
   methods: {
-    onDetails(index) {
+    onDetails(row) {
       this.$router.push({
         name: "seller.orderview",
         params: {
-          order: this.orderData[index].id
+          order: row.id
         }
       });
     },

@@ -72,113 +72,99 @@ import VTabs from "$components/tabs";
 import Pagination from "$components/Pagination";
 import * as services from "$modules/buyerorder/services";
 
-export default {
-  data() {
-    return {
-      searchForm: { order: "" },
-      tabs: [
-        { label: "全部订单", name: "-1" },
-        { label: "待支付", name: "0" },
-        { label: "待发货", name: "1" },
-        { label: "已完成", name: "3" },
-        { label: "退换货", name: "4" }
-      ],
-      orderData: [],
-      total: 0, // 记录总条数
-      page: 1, // 当前的页数
-      display: 10,
-      status: -1
-    };
-  },
-  components: {
-    VHeader,
-    VFooter,
-    VContent,
-    VAside,
-    VTabs,
-    Pagination
-  },
-  methods: {
-    statusFormat(row, column) {
-      if (row.closed) {
-        return "订单已关闭";
-      } else {
-        return row.status_label;
-      }
-    },
-    confirm(id, index) {
-      let message = "您确定要[确认收货]该订单吗？";
-      let that = this;
-      this.$confirm(message, "提示", {
-        confirmButtonText: "确认收货",
-        cancelButtonText: "取消"
-      })
-        .then(function() {
-          const loading = that.$loading({
-            lock: true,
-            text: "请稍等"
-          });
-          services
-            .orderConfirm(id)
-            .then(data => {
-              loading.close();
-              that.$message.success(data);
-              that.orderData[index].status_label = "已完成";
-              that.orderData[index].status = "3";
-            })
-            .catch(fail => {
-              loading.close();
-              //that.$message.error(fail.data.message);
-            });
-        })
-        .catch(() => {
-          loading.close();
-          console.log("“cancel”");
-        });
-    },
-    destroy(id, index) {
-      let message = "您确定要[删除]该订单吗？";
-      let that = this;
-      this.$confirm(message, "提示", {
-        confirmButtonText: "删除",
-        cancelButtonText: "取消"
-      })
-        .then(function() {
-          const loading = that.$loading({
-            lock: true,
-            text: "请稍等"
-          });
-          services
-            .orderDelete(id)
-            .then(({ message }) => {
-              loading.close();
-              that.$message.success(message);
-              //删除orderData中的这一行数据
-              that.$delete(that.orderData, index);
-            })
-            .catch(fail => {
-              loading.close();
-              //that.$message.error(fail.data.message);
-            });
-        })
-        .catch(() => {
-          loading.close();
-          console.log("“cancel”");
-        });
-    },
-    changeTab(tab, event) {
-      this.page = 1;
-      this.status = tab.name;
-      this.getOrder(this.page);
-    },
-    getOrder(currentPage) {
-      this.orderData = [];
-      let param = {
-        params: {
-          page: currentPage,
-          display: this.display
-        }
-      };
+	export default {
+		data () {
+			return {
+				searchForm: { order: "" },
+				tabs: [
+					{ label: "全部订单", name: "-1" },
+					{ label: "待支付", name: "0" },
+					{ label: "待发货", name: "1" },
+					{ label: "已发货", name: "2" },
+					{ label: "已完成", name: "3" },
+					{ label: "退换货", name: "4", }
+				],
+				orderData: [],
+				page: 1,
+				infiniteId: +new Date(),
+				total: 0, // 记录总条数
+				status: -1,
+			};
+		},
+		components: {
+			VHeader,
+			VFooter,
+			VContent,
+			VAside,
+			VTabs,
+			Pagination
+		},
+		methods: {
+			statusFormat (row, column) {
+				if (row.closed) {
+					return "订单已关闭"
+				} else {
+					return row.status_label
+				}
+			},
+			confirm (id, index) {
+				let message = "您确定要[确认收货]该订单吗？";
+				let that = this;
+				this.$confirm(message, '提示', {
+					confirmButtonText: '确认收货',
+					cancelButtonText: '取消',
+				}).then(function () {
+					const loading = that.$loading({
+						lock: true,
+						text: "请稍等",
+					});
+					services.orderConfirm(id).then(data => {
+						loading.close();
+						that.$message.success(data);
+						that.orderData[index].status_label = '已完成';
+						that.orderData[index].status = '3';
+					}).catch(fail => {
+						loading.close();
+						//that.$message.error(fail.data.message);
+					});
+				})
+					.catch(() => {
+						loading.close();
+						console.log('“cancel”');
+					});
+			},
+			destroy (id, index) {
+				let message = "您确定要[删除]该订单吗？";
+				let that = this;
+				this.$confirm(message, '提示', {
+					confirmButtonText: '删除',
+					cancelButtonText: '取消',
+				}).then(function () {
+					const loading = that.$loading({
+						lock: true,
+						text: "请稍等",
+					});
+					services.orderDelete(id).then(({ message }) => {
+						loading.close();
+						that.$message.success(message);
+						//删除orderData中的这一行数据
+						that.$delete(that.orderData, index)
+					}).catch(fail => {
+						loading.close();
+						//that.$message.error(fail.data.message);
+					});
+				})
+					.catch(() => {
+						loading.close();
+						console.log('“cancel”');
+					});
+			},
+			changeTab (tab, event) {
+				this.page = 1;
+				this.status = tab.name;
+				this.getOrder(this.page);
+			},
+			getOrder (currentPage) {
 
       if (this.status != -1) {
         param["params"]["status"] = this.status;
