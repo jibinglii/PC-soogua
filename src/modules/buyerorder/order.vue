@@ -56,11 +56,11 @@
 															 label="操作">
 								<template slot-scope="scope">
 									<el-button v-if="scope.row.status==2"
-														 @click.native.prevent="confirm(scope.row.id,scope.$index)"
+														 @click.stop="confirm(scope.row.id,scope.$index)"
 														 type="button"
 														 size="small">确认收货</el-button>
 									<el-button v-if="scope.row.status==0"
-														 @click.native.prevent="destroy(scope.row.id,scope.$index)"
+														 @click.stop="destroy(scope.row.id,scope.$index)"
 														 type="button"
 														 size="small">删除</el-button>
 								</template>
@@ -68,22 +68,24 @@
 						</el-table>
 					</div>
 
-          <pagination :total="total" :current-page="page" :display="display" @pagechange="getOrder"></pagination>
-        </div>
-      </v-content>
-    </div>
-    <v-footer></v-footer>
-  </div>
+					<pagination :total="total"
+											:current-page="page"
+											@pagechange="getOrder"></pagination>
+				</div>
+			</v-content>
+		</div>
+		<v-footer></v-footer>
+	</div>
 </template>
 
 <script>
-import VHeader from "$components/VHeader";
-import VFooter from "$components/VFooter";
-import VContent from "$components/VContent";
-import VAside from "$components/VAside";
-import VTabs from "$components/tabs";
-import Pagination from "$components/Pagination";
-import * as services from "$modules/buyerorder/services";
+	import VHeader from "$components/VHeader";
+	import VFooter from "$components/VFooter";
+	import VContent from "$components/VContent";
+	import VAside from "$components/VAside";
+	import VTabs from "$components/tabs";
+	import Pagination from "$components/Pagination";
+	import * as services from "$modules/buyerorder/services";
 
 	export default {
 		data () {
@@ -212,74 +214,74 @@ import * as services from "$modules/buyerorder/services";
 </script>
 
 <style lang="scss" scoped>
-.title {
-  font-size: 14px;
-  font-weight: 400;
-  padding-left: 16px;
-  line-height: 50px;
-  border-bottom: 1px solid #ededed;
-  background: #fff;
-}
+	.title {
+		font-size: 14px;
+		font-weight: 400;
+		padding-left: 16px;
+		line-height: 50px;
+		border-bottom: 1px solid #ededed;
+		background: #fff;
+	}
 
-.form-inline {
-  margin-top: 17px;
-  width: 350px;
-  .el-form-item {
-    margin-bottom: 17px;
-  }
-  .el-button {
-    width: 80px;
-  }
-}
+	.form-inline {
+		margin-top: 17px;
+		width: 350px;
+		.el-form-item {
+			margin-bottom: 17px;
+		}
+		.el-button {
+			width: 80px;
+		}
+	}
 
-.goodslist {
-  margin-top: 16px;
-  margin-bottom: 30px;
-  .goodsname {
-    display: flex;
-    align-items: center;
-    img {
-      flex: 0.7;
-      width: 88px;
-      height: 88px;
-      margin-right: 17px;
-    }
-    span {
-      flex: 1;
-      text-align: left;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-    }
-  }
-}
+	.goodslist {
+		margin-top: 16px;
+		margin-bottom: 30px;
+		.goodsname {
+			display: flex;
+			align-items: center;
+			img {
+				flex: 0.7;
+				width: 88px;
+				height: 88px;
+				margin-right: 17px;
+			}
+			span {
+				flex: 1;
+				text-align: left;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;
+			}
+		}
+	}
 
-.el-breadcrumb {
-  margin-top: 18px;
-  margin-bottom: 18px;
+	.el-breadcrumb {
+		margin-top: 18px;
+		margin-bottom: 18px;
 
-  .el-breadcrumb__item {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 30px;
-    color: #666;
-    &:last-child {
-      color: #666;
-    }
-  }
-}
-/deep/.el-breadcrumb__separator {
-  color: #666;
-}
+		.el-breadcrumb__item {
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 30px;
+			color: #666;
+			&:last-child {
+				color: #666;
+			}
+		}
+	}
+	/deep/.el-breadcrumb__separator {
+		color: #666;
+	}
 
-.el-button {
-  width: 80px;
-  background: #000;
-  border: 1px solid #000;
-  color: #fff;
-  padding: 10px 10px;
-  font-size: 12px;
-}
+	.el-button {
+		width: 80px;
+		background: #000;
+		border: 1px solid #000;
+		color: #fff;
+		padding: 10px 10px;
+		font-size: 12px;
+	}
 </style>

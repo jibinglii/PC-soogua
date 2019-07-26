@@ -239,6 +239,7 @@
 						this.goods = goods;
 						loading.close()
 					}).catch(({ response }) => {
+						loading.close()
 						if (response.status == 404) {
 							this.$router.back()
 						}

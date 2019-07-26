@@ -36,16 +36,32 @@
 					<i>请您认真核对填写的联系方式，以便客服及时能够联系到您</i>
 				</div>
 				<div class="content">
+
 					<el-form label-position="left"
 									 label-width="110px">
-						<el-form-item label="收货人手机号">
+
+						<el-form-item label="您的姓名">
+							<el-input v-model="receiver_name"></el-input>
+						</el-form-item>
+						<el-form-item label="您的电话">
 							<el-input v-model="receiver_mobile"></el-input>
 						</el-form-item>
-						<el-form-item label="联系QQ">
-							<el-input v-model="receiver_qq"></el-input>
-							<span class="tips">客服将以此QQ号确定买家身份</span>
+
+						<el-form-item label="所选服务">
+
+							<el-select v-model="serviceValue.value"
+												 @change="getTotal"
+												 placeholder="请选择担保产品">
+								<el-option v-for="(item ,index) in services"
+													 :key="index"
+													 :label="item.name"
+													 :value="index">
+								</el-option>
+							</el-select>
+
 						</el-form-item>
 					</el-form>
+
 				</div>
 			</div>
 			<div class="refer-info">
@@ -55,9 +71,10 @@
 						<van-cell title="购买数"
 											value="1件" />
 						<van-cell title="商品价格">￥{{goods.amount}}</van-cell>
+						<van-cell title="配送方式">在线发货</van-cell>
 					</van-cell-group>
 					<el-checkbox class="cehckbox"
-											 v-model="checked">
+											 v-model="isagree">
 						点击提交订单表示已阅读并同意
 						<!-- <a href>《搜瓜用户服务协议及规则》</a> -->
 						<a @click="showAgree">《担保服务购买须知》</a>
@@ -68,7 +85,7 @@
 								 :content="insureContent" />
 					<div class="confirm">
 						<i>实际付款</i>
-						<span>{{goods.amount}}</span>
+						<span>{{totalHtml}}</span>
 						<el-button @click="next"
 											 :class="{disabled: !canSubmit}">提交订单</el-button>
 					</div>
@@ -96,112 +113,149 @@
 	export default {
 		data () {
 			return {
-				currentPage: 1,
-				checked: false,
-				receiver_mobile: "",
-				receiver_qq: "",
+				gameId: '',
+				total: 0,
+				totalHtml: '',
 				goods: {},
+				serviceColumns: [],
+				defaultIndex: 2,
+				receiver_name: '',
+				receiver_mobile: '',
+				services: [{ "name": "30天担保产品", "value": "1", "day": 30, "rate": 0.1 }, { "name": "60天担保产品", "value": "2", "day": 60, "rate": 0.15 }, { "name": "不参与担保服务", "value": "0", "day": 0, "rate": 0 }],
+				serviceValue: {
+					value: '不参与担保服务',
+					index: 2
+				},
+				creating: false,
 				insureContent: '',
-				creating: false
-			};
+				isagree: false,
+				spread_id: 0,
+				token: ''
+			}
 		},
 		watch: {
-			receiver_mobile (val) {
-				localforage.setItem("receiver_mobile", val);
+			receiver_name (val) {
+				localforage.setItem('receiver_name', val)
 			},
-			receiver_qq (val) {
-				localforage.setItem("receiver_qq", val);
+			receiver_mobile (val) {
+				localforage.setItem('receiver_mobile', val)
 			}
 		},
 		computed: {
 			canSubmit () {
-				if (this.receiver_mobile != "" && this.receiver_qq != "") {
-					return true;
+				if (this.receiver_name != '' && this.receiver_mobile != '') {
+					return true
 				}
-				return false;
+				return false
 			}
 		},
 		created () {
-			this.goodsId = this.$route.params.goods;
+			this.goodsId = this.$route.params.goods
 			this.getDetail();
 			this.getSaleProtocol();
 			this.getToken();
-			localforage.getItem("receiver_mobile").then(val => {
-				val == "" || (this.receiver_mobile = val);
-			});
-			localforage.getItem("receiver_qq").then(val => {
-				val == "" || (this.receiver_qq = val);
-			});
-			if (
-				this.$cookies.get("goods-spread") != undefined &&
-				this.$cookies.get("goods-spread") != "undefined"
-			) {
-				this.spread_id = this.$cookies.get("goods-spread");
+			localforage.getItem('receiver_name').then(val => {
+				val == '' || (this.receiver_name = val)
+			})
+			localforage.getItem('receiver_mobile').then(val => {
+				val == '' || (this.receiver_mobile = val)
+			})
+			if (this.$cookies.get('goods-spread') != undefined && this.$cookies.get('goods-spread') != 'undefined') {
+				this.spread_id = this.$cookies.get('goods-spread')
 			}
-			if (this.$route.query["spread_id"] != undefined) {
-				this.spread_id = this.$route.query["spread_id"];
+			if (this.$route.query['spread_id'] != undefined) {
+				this.spread_id = this.$route.query['spread_id']
 			}
 		},
 		methods: {
 			next () {
+
 				if (this.canSubmit) {
-					if (this.checked == false) {
-						this.$toast({ message: "您必须同意《担保服务协议》才能继续" });
-						return;
+					if (this.serviceValue.index != this.serviceColumns.length - 1 && this.isagree == false) {
+						this.$message.error({ message: '您必须同意《担保服务协议》才能继续' });
+						return
 					}
 					if (!this.creating) {
 						this.creating = true;
 						// 创建订单
 						let param = {
 							num: 1,
+							receiver_name: this.receiver_name,
 							receiver_mobile: this.receiver_mobile,
-							receiver_qq: this.receiver_qq,
 							express_type: 0,
+							insure: this.serviceValue.index,
 							spread_id: this.spread_id,
-							_token: this.token
+							'_token': this.token
 						};
-						this.$toast.loading({ mask: true });
-						this.$http
-							.post("api/v1/order/" + this.goodsId, param)
-							.then(({ data }) => {
-								this.$toast.clear();
-								this.creating = false;
-								let orderId = data.id;
-								this.$router.push({
-									name: "pay.type",
-									params: { order: orderId }
-								});
-							})
-							.catch(({ data }) => {
-								this.$toast.clear();
-								this.creating = false;
-								this.$toast(data.message);
-							});
+						const loading = this.$loading({
+							lock: true,
+							text: "正在下单",
+						});
+						this.$http.post('api/v1/order/' + this.goodsId, param).then(({ data }) => {
+
+							loading.close();
+							this.$message.success('下单成功')
+							this.creating = false;
+							let orderId = data.id;
+							//	this.$router.push({ name: 'pay.type', params: { 'order': orderId } })
+						}).catch(({ data }) => {
+							loading.close();
+							this.creating = false;
+							this.$message.error(data.message)
+						})
 					}
 				} else {
-					this.$toast.fail("请先输入收货信息");
+					this.$message.error('请先输入收货信息')
 				}
 			},
 			async getDetail () {
-				this.$toast.loading({ mask: true });
-				service.goodsView(this.goodsId).then(({ data }) => {
+				this.$toast.loading({
+					mask: true,
+					message: '加载中...'
+				});
+				await this.$http.get('/api/v1/goods/' + this.goodsId).then(({ data }) => {
+					this.$toast.clear()
 					this.goods = data.goods;
-					window.document.title = this.goods.title;
-					this.$toast.clear();
+
+					this.initService();
+					this.getTotal();
+				})
+			},
+			getTotal (e) {
+				if (e == undefined) {
+					var rate = this.services[this.serviceValue.index].rate;
+				} else {
+					this.serviceValue.index = e
+					var rate = this.services[this.serviceValue.index].rate;
+				}
+
+
+				this.total = (this.goods.amount * rate) + this.goods.amount;
+				this.totalHtml = " ¥ " + this.formatMoney(this.total) + " 元";
+
+			},
+			initService () {
+				this.services.forEach((value) => {
+					let name = value.name;
+					if (value.value != "0") {
+
+						name = name + " ( ¥ " + this.formatMoney((this.goods.amount * value.rate)) + ')';
+					}
+					this.serviceColumns.push(name);
 				});
 			},
 			showAgree () {
-				this.$refs.agree.show();
+				this.$refs.agree.show()
 			},
 			getSaleProtocol () {
-				protocol.getProtocol("insure").then(data => {
-					this.insureContent = data.data.content;
-				});
+				protocol.getProtocol('insure').then(data => {
+					this.insureContent = data.data.content
+				})
 			},
 			getToken () {
-				this.$http.get("api/request-token").then(data => {
-					this.token = data.data;
-				});
+				this.$http.get('api/request-token').then(data => {
+					this.token = data.data
+				})
 			}
 		},
 		components: {
