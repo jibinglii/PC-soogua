@@ -40,15 +40,18 @@
 														 type="button"
 														 size="small">查看详情</el-button>
 								</template>
-              </el-table-column>-->
-            </el-table>
-          </div>
-          <pagination :total="total" :current-page="page" @pagechange="getOrder"></pagination>
-        </div>
-      </v-content>
-    </div>
-    <v-footer></v-footer>
-  </div>
+							</el-table-column> -->
+						</el-table>
+					</div>
+					<pagination :total="total"
+											:display="display"
+											:current-page="page"
+											@pagechange="getOrder"></pagination>
+				</div>
+			</v-content>
+		</div>
+		<v-footer></v-footer>
+	</div>
 </template>
 
 <script>
@@ -59,67 +62,69 @@ import VAside from "$components/VAside";
 import VTabs from "$components/tabs";
 import Pagination from "$components/Pagination";
 
-import * as services from "$modules/sellerorder/services";
-export default {
-  data() {
-    return {
-      tabs: [
-        { label: "全部", name: "-1" },
-        { label: "待发货", name: "1" },
-        { label: "待收货", name: "2" },
-        { label: "已完成", name: "3" },
-        { label: "退货中", name: "4" }
-      ],
-      orderData: [],
-      page: 1,
-      status: -1,
-      total: 0
-    };
-  },
+	import * as services from "$modules/sellerorder/services";
+	export default {
+		data () {
+			return {
+				tabs: [
+					{ label: "全部", name: "-1" },
+					{ label: "待发货", name: "1" },
+					{ label: "待收货", name: "2" },
+					{ label: "已完成", name: "3" },
+					{ label: "退货中", name: "4" }
+				],
+				orderData: [],
+				page: 1,
+				display: 15,
+				status: -1,
+				total: 0
+			};
+		},
 
-  methods: {
-    onDetails(row) {
-      this.$router.push({
-        name: "seller.orderview",
-        params: {
-          order: row.id
-        }
-      });
-    },
-    changeTab(tab, event) {
-      this.page = 1;
-      this.status = tab.name;
-      this.getOrder(this.page);
-    },
-    getOrder(currentPage) {
-      this.orderData = [];
-      let param = {
-        params: {
-          page: currentPage
-        }
-      };
-      if (this.status != -1) {
-        param["params"]["status"] = this.status;
-      }
-      services.getOrder(param).then(({ data }) => {
-        this.orderData = data.orders.data;
-        this.page = currentPage;
-        this.total = data.orders.total;
-      });
-    }
-  },
-  created() {
-    this.getOrder(this.page);
-  },
-  components: {
-    VHeader,
-    VFooter,
-    VContent,
-    VAside,
-    VTabs,
-    Pagination
-  }
-};
+		methods: {
+			onDetails (row) {
+				this.$router.push({
+					name: "seller.orderview",
+					params: {
+						order: row.id
+					}
+				});
+			},
+			changeTab (tab, event) {
+				this.page = 1;
+				this.status = tab.name;
+				this.getOrder(this.page);
+			},
+			getOrder (currentPage) {
+				this.orderData = [];
+				let param = {
+					params: {
+						page: currentPage,
+						per_page: this.display
+					}
+				};
+				if (this.status != -1) {
+					param["params"]["status"] = this.status;
+				}
+				services.getOrder(param).then(({ data }) => {
+					this.orderData = data.orders.data;
+					this.page = currentPage;
+					this.total = data.orders.total;
+				});
+			}
+		},
+		created () {
+			this.getOrder(this.page);
+		},
+		components: {
+			VHeader,
+			VFooter,
+			VContent,
+			VAside,
+			VTabs,
+			Pagination
+		}
+	};
 </script>
 
 <style lang="scss" scoped>

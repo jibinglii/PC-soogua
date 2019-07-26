@@ -37,6 +37,7 @@
 						</el-table>
 					</div>
 					<pagination :total="total"
+											:display="display"
 											:current-page="page"
 											@pagechange="gethistory"></pagination>
 				</div>
@@ -62,6 +63,7 @@
 				],
 				items: [],
 				page: 1,
+				display: 20,
 				total: 0,
 			};
 		},
@@ -81,6 +83,7 @@
 				let param = {
 					params: {
 						page: currentPage,
+						per_page: this.display
 					}
 				};
 				this.$http.get("api/v2/user/withdraws", param).then(({ data }) => {
