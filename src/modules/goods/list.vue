@@ -17,9 +17,7 @@
                 <template slot-scope="scope">
                   <div class="goodsname">
                     <img :src="scope.row.logo" alt>
-                    <div class="text">
-                      <span>{{scope.row.title}}</span>
-                    </div>
+                    <span>{{scope.row.title}}</span>
                   </div>
                 </template>
               </el-table-column>
@@ -49,12 +47,7 @@
         </el-main>
         <el-aside width="300px">
           <div class="aside-head">商品精选</div>
-          <goods-item
-            v-for="(item, index) in recommend"
-            :key="index"
-            :recommend="item"
-            :styles="{width:'300px', marginBottom:'16px',background:'#fff'}"
-          />
+          <goods-item></goods-item>
         </el-aside>
       </el-container>
     </div>
@@ -71,12 +64,11 @@ import VTabs from "$components/tabs";
 import Pagination from "$components/Pagination";
 
 import * as service from "$modules/home/services";
-import * as services from "$modules/goods/services";
 export default {
   data() {
     return {
       goods: [],
-      recommend: [],
+      // recommend: [],
       infiniteId: +new Date(),
       total: 0, // 记录总条数
       display: 10, // 每页显示条数
@@ -143,14 +135,6 @@ export default {
           // this.$router.back();
         });
     },
-    async getRecommend() {
-      services.getRecommend().then(data => {
-        this.recommend = data.data.goods.data;
-      });
-    }
-  },
-  mounted() {
-    this.getRecommend();
   },
   components: {
     VHeader,
@@ -203,32 +187,21 @@ export default {
   }
 }
 .goodsname {
+  display: flex;
+  align-items: center;
   img {
     width: 88px;
     height: 88px;
-    margin-right: 10px;
-    float: left;
+    margin-right: 17px;
   }
-  .text {
-    display: flex;
-    flex-direction: column;
-    span {
-      font-size: 14px;
-      font-weight: 400;
-      color: #000;
-      text-align: left;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-    i {
-      font-size: 12px;
-      font-weight: 400;
-      color: #666;
-      text-align: left;
-    }
+  span {
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 }
 .aside-head {

@@ -16,15 +16,16 @@
           <pagination :total="total" :current-page="page" @pagechange="getGoods"></pagination>
         </el-main>
         <el-aside width="300px">
-          <div class="aside-head">本店销售排行</div>
-          <div class="aside-item" v-for="(item,key) in aside" :key="key">
+          <div class="aside-head">商品精选</div>
+          <!-- <div class="aside-item" v-for="(item,key) in aside" :key="key">
             <img class="icon" src="~$assets/images/goods1.png" alt>
             <div class="desc">
               <h4>{{item.title}}</h4>
               <h5>{{item.price}}</h5>
               <p>{{item.sellNum}}</p>
             </div>
-          </div>
+          </div> -->
+          <goods />
         </el-aside>
       </el-container>
     </div>
@@ -35,8 +36,10 @@
 
 <script>
 import VHeader from "$components/VHeader";
+
 import VFooter from "$components/VFooter";
 import GoodsItem from "./components/GoodsItem";
+import goods from "./components/goods-item";
 import Pagination from "$components/Pagination";
 
 import * as services from "./services";
@@ -48,23 +51,23 @@ export default {
       total: 0, // 记录总条数
       display: 10, // 每页显示条数
       page: 1, // 当前的页数
-      aside: [
-        {
-          title: "王者荣耀【苹果QQ】外婆缘 一大元素使武装战姬摄魂海克妮...",
-          price: "¥128.00",
-          sellNum: "已出售20件"
-        },
-        {
-          title: "王者荣耀【苹果QQ】外婆缘 一大元素使武装战姬摄魂海克妮...",
-          price: "¥128.00",
-          sellNum: "已出售20件"
-        },
-        {
-          title: "王者荣耀【苹果QQ】外婆缘 一大元素使武装战姬摄魂海克妮...",
-          price: "¥128.00",
-          sellNum: "已出售20件"
-        }
-      ]
+      // aside: [
+      //   {
+      //     title: "王者荣耀【苹果QQ】外婆缘 一大元素使武装战姬摄魂海克妮...",
+      //     price: "¥128.00",
+      //     sellNum: "已出售20件"
+      //   },
+      //   {
+      //     title: "王者荣耀【苹果QQ】外婆缘 一大元素使武装战姬摄魂海克妮...",
+      //     price: "¥128.00",
+      //     sellNum: "已出售20件"
+      //   },
+      //   {
+      //     title: "王者荣耀【苹果QQ】外婆缘 一大元素使武装战姬摄魂海克妮...",
+      //     price: "¥128.00",
+      //     sellNum: "已出售20件"
+      //   }
+      // ]
     };
   },
 
@@ -98,7 +101,8 @@ export default {
     VHeader,
     VFooter,
     GoodsItem,
-    Pagination
+    Pagination,
+    goods
   }
 };
 </script>

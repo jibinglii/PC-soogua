@@ -10,7 +10,7 @@
       <div class="content clearfix">
         <img class="logo" :src="goods.logo" alt>
         <div class="text">
-          <h4>{{goods.game_name}}</h4>
+          <h4>{{goods.title}}</h4>
           <p>
             游戏区服：
             <span>{{goods.server_name}}</span>
@@ -34,7 +34,7 @@
               class="buy"
               :class="{disabled: !canBuy, 'can-not-contact': !canContact}"
             >{{canBuy?'立即购买':'暂时无货'}}</button>
-            <router-link class="graphic" v-show="canContact" :to="{name: 'contact'}">
+            <router-link class="graphic" v-show="canContact" :to="{name: ''}">
               <img src="~$assets/images/kefu@2x.png" alt>
               <span>联系商家</span>
             </router-link>
@@ -83,8 +83,8 @@
           </div>
         </el-main>
         <el-aside width="300px">
-          <div class="aside-head">浏览记录</div>
-          <div class="aside-text">
+          <div class="aside-head">商品精选</div>
+          <!-- <div class="aside-text">
             <div class="detail" v-for="i in 3" :key="i">
               <span>账</span>
               <div>
@@ -92,7 +92,8 @@
                 <h6>￥300.00</h6>
               </div>
             </div>
-          </div>
+          </div> -->
+          <goods-item></goods-item>
         </el-aside>
       </el-container>
     </div>
@@ -102,6 +103,7 @@
 
 <script>
 import VHeader from "$components/VHeader";
+import GoodsItem from "./components/GoodsItem";
 import VFooter from "$components/VFooter";
 
 import * as service from "$modules/goods/services";
@@ -110,22 +112,23 @@ export default {
     return {
       goodsId: "",
       goods: { images: [], game: [], server: [], specs: [] },
-      aside: [
-        {
-          title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
-          price: "￥300.00",
-          stock: "库存1件"
-        },
-        {
-          title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
-          price: "￥300.00",
-          stock: "库存1件"
-        }
-      ]
+      // aside: [
+      //   {
+      //     title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
+      //     price: "￥300.00",
+      //     stock: "库存1件"
+      //   },
+      //   {
+      //     title: "王者荣耀【苹果QQ】外婆缘 48000碎片 12万金 30级 挂绑改密",
+      //     price: "￥300.00",
+      //     stock: "库存1件"
+      //   }
+      // ]
     };
   },
   components: {
     VHeader,
+    GoodsItem,
     VFooter
   },
   computed: {
