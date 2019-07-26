@@ -57,6 +57,7 @@
 						</el-table>
 					</div>
 					<pagination :total="total"
+											:display="display"
 											:current-page="page"
 											@pagechange="getOrder"></pagination>
 				</div>
@@ -87,6 +88,7 @@
 				],
 				orderData: [],
 				page: 1,
+				display: 15,
 				status: -1,
 				total: 0
 			};
@@ -110,7 +112,8 @@
 				this.orderData = [];
 				let param = {
 					params: {
-						page: currentPage
+						page: currentPage,
+						per_page: this.display
 					}
 				};
 				if (this.status != -1) {
