@@ -237,29 +237,28 @@
 		}
 	}
 
-	.goodslist {
-		margin-top: 16px;
-		margin-bottom: 30px;
-		.goodsname {
-			display: flex;
-			align-items: center;
-			img {
-				flex: 0.7;
-				width: 88px;
-				height: 88px;
-				margin-right: 17px;
-			}
-			span {
-				flex: 1;
-				text-align: left;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				display: -webkit-box;
-				-webkit-box-orient: vertical;
-				-webkit-line-clamp: 3;
-			}
-		}
-	}
+.goodslist {
+  margin-top: 16px;
+  margin-bottom: 30px;
+  .goodsname {
+    display: flex;
+    align-items: center;
+    img {
+      width: 88px;
+      height: 88px;
+      margin-right: 17px;
+    }
+    span {
+      flex: 1;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+  }
+}
 
 	.el-breadcrumb {
 		margin-top: 18px;
