@@ -69,6 +69,7 @@
 					</div>
 
 					<pagination :total="total"
+											:display="display"
 											:current-page="page"
 											@pagechange="getOrder"></pagination>
 				</div>
@@ -103,6 +104,7 @@
 				page: 1,
 				infiniteId: +new Date(),
 				total: 0, // 记录总条数
+				display: 15,
 				status: -1,
 			};
 		},
@@ -193,6 +195,7 @@
 				let param = {
 					params: {
 						page: currentPage,
+						per_page: this.display
 					}
 				};
 

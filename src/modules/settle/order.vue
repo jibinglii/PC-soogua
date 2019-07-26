@@ -72,6 +72,7 @@
 						</el-table>
 					</div>
 					<pagination :total="total"
+											:display="display"
 											:current-page="page"
 											@pagechange="getData"></pagination>
 				</div>
@@ -98,6 +99,7 @@
 				defaultValue: '',
 				info: {},
 				page: 1,
+				display: 15,
 				total: 0,
 				currentDate: "",
 				mainTabs: [
@@ -169,6 +171,7 @@
 					params: {
 						month: this.month,
 						page: currentPage,
+						per_page: this.display,
 						include: "order"
 					},
 					headers: {
