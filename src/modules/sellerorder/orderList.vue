@@ -5,7 +5,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人中心</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
       </el-breadcrumb>
       <v-content>
@@ -29,9 +29,19 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="goods_price" label="商品价格"></el-table-column>
-              <el-table-column align="center" prop="num" label="购买数量"></el-table-column>
-              <el-table-column align="center" prop="total_amount" label="总支付"></el-table-column>
+              <el-table-column
+                align="center"
+                prop="goods_price"
+                label="商品价格"
+                :formatter="priceFormat"
+              ></el-table-column>
+              <el-table-column align="center" prop="num" label="购买数量" :formatter="numsFormat"></el-table-column>
+              <el-table-column
+                align="center"
+                prop="total_amount"
+                label="总支付"
+                :formatter="totalNumsFormat"
+              ></el-table-column>
               <el-table-column align="center" prop="status_label" label="订单状态"></el-table-column>
               <!-- <el-table-column align="center"
 															 label="操作">
@@ -40,18 +50,15 @@
 														 type="button"
 														 size="small">查看详情</el-button>
 								</template>
-							</el-table-column> -->
-						</el-table>
-					</div>
-					<pagination :total="total"
-											:display="display"
-											:current-page="page"
-											@pagechange="getOrder"></pagination>
-				</div>
-			</v-content>
-		</div>
-		<v-footer></v-footer>
-	</div>
+              </el-table-column>-->
+            </el-table>
+          </div>
+          <pagination :total="total" :display="display" :current-page="page" @pagechange="getOrder"></pagination>
+        </div>
+      </v-content>
+    </div>
+    <v-footer></v-footer>
+  </div>
 </template>
 
 <script>
@@ -62,69 +69,78 @@ import VAside from "$components/VAside";
 import VTabs from "$components/tabs";
 import Pagination from "$components/Pagination";
 
-	import * as services from "$modules/sellerorder/services";
-	export default {
-		data () {
-			return {
-				tabs: [
-					{ label: "全部", name: "-1" },
-					{ label: "待发货", name: "1" },
-					{ label: "待收货", name: "2" },
-					{ label: "已完成", name: "3" },
-					{ label: "退货中", name: "4" }
-				],
-				orderData: [],
-				page: 1,
-				display: 15,
-				status: -1,
-				total: 0
-			};
-		},
+import * as services from "$modules/sellerorder/services";
+export default {
+  data() {
+    return {
+      tabs: [
+        { label: "全部", name: "-1" },
+        { label: "待发货", name: "1" },
+        { label: "待收货", name: "2" },
+        { label: "已完成", name: "3" },
+        { label: "退货中", name: "4" }
+      ],
+      orderData: [],
+      page: 1,
+      display: 15,
+      status: -1,
+      total: 0
+    };
+  },
 
-		methods: {
-			onDetails (row) {
-				this.$router.push({
-					name: "seller.orderview",
-					params: {
-						order: row.id
-					}
-				});
-			},
-			changeTab (tab, event) {
-				this.page = 1;
-				this.status = tab.name;
-				this.getOrder(this.page);
-			},
-			getOrder (currentPage) {
-				this.orderData = [];
-				let param = {
-					params: {
-						page: currentPage,
-						per_page: this.display
-					}
-				};
-				if (this.status != -1) {
-					param["params"]["status"] = this.status;
-				}
-				services.getOrder(param).then(({ data }) => {
-					this.orderData = data.orders.data;
-					this.page = currentPage;
-					this.total = data.orders.total;
-				});
-			}
-		},
-		created () {
-			this.getOrder(this.page);
-		},
-		components: {
-			VHeader,
-			VFooter,
-			VContent,
-			VAside,
-			VTabs,
-			Pagination
-		}
-	};
+  methods: {
+    priceFormat(row, column) {
+      return "￥" + row.goods_price;
+    },
+    numsFormat(row, column) {
+      return row.num + "件";
+    },
+    totalNumsFormat(row, column) {
+      return "￥" + row.total_amount;
+    },
+    onDetails(row) {
+      this.$router.push({
+        name: "seller.orderview",
+        params: {
+          order: row.id
+        }
+      });
+    },
+    changeTab(tab, event) {
+      this.page = 1;
+      this.status = tab.name;
+      this.getOrder(this.page);
+    },
+    getOrder(currentPage) {
+      this.orderData = [];
+      let param = {
+        params: {
+          page: currentPage,
+          per_page: this.display
+        }
+      };
+      if (this.status != -1) {
+        param["params"]["status"] = this.status;
+      }
+      services.getOrder(param).then(({ data }) => {
+        this.orderData = data.orders.data;
+        this.page = currentPage;
+        this.total = data.orders.total;
+      });
+    }
+  },
+  created() {
+    this.getOrder(this.page);
+  },
+  components: {
+    VHeader,
+    VFooter,
+    VContent,
+    VAside,
+    VTabs,
+    Pagination
+  }
+};
 </script>
 
 <style lang="scss" scoped>
