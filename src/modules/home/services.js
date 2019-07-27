@@ -6,3 +6,6 @@ import http from '$utils/http'
 export const goods = (params) => {
     return http.get('api/v2/store/goods', params)
 }
+export const getRecommend = () => {
+    return http.get('/api/v1/goods/recommend')
+}

@@ -26,7 +26,6 @@ export default {
     async getRecommend() {
       services.getRecommend().then(data => {
         this.recommend = data.data.goods.data;
-        // console.log(data);
       });
     }
   },

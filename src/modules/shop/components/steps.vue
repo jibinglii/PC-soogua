@@ -1,13 +1,13 @@
 <template>
 	<div class="steps">
 		<div class="cell">
-			<img src="~$assets/images/xuanzeleixing.png"
+			<img src="~$assets/images/xuanzeyouxi.png"
 					 alt />
 			<span>选择游戏</span>
 		</div>
 		<i>...</i>
 		<div class="cell">
-			<img src="~$assets/images/tianxiefabu.png"
+			<img src="~$assets/images/leixing.png"
 					 alt />
 			<span>选择类型</span>
 		</div>
@@ -19,13 +19,13 @@
 		</div>
 		<i>...</i>
 		<div class="cell">
-			<img src="~$assets/images/tianxiefabu.png"
+			<img src="~$assets/images/guige.png"
 					 alt />
 			<span>规格参数</span>
 		</div>
 		<i>...</i>
 		<div class="cell">
-			<img src="~$assets/images/fabuchenggong.png"
+			<img src="~$assets/images/chenggong.png"
 					 alt />
 			<span>发布成功</span>
 		</div>

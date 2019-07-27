@@ -37,24 +37,36 @@ export default [{
     {
         path: 'person/profile',
         name: 'person.profile',
+        meta: {
+            requiresAuth: true
+        },
         component: () =>
             import ('./profile')
     },
     {
         path: 'person/approve',
         name: 'person.approve',
+        meta: {
+            requiresAuth: true
+        },
         component: () =>
             import ('./approve')
     },
     {
         path: 'person/card',
         name: 'person.card',
+        meta: {
+            requiresAuth: true
+        },
         component: () =>
             import ('./card')
     },
     {
         path: 'person/addcard',
         name: 'person.addcard',
+        meta: {
+            requiresAuth: true
+        },
         component: () =>
             import ('./addcard')
     }
