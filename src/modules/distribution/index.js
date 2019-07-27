@@ -1,6 +1,8 @@
-const routes = [
-    {
+const routes = [{
         path: 'distribution',
+        meta: {
+            requiresAuth: true
+        },
         redirect: {
             name: 'distribution.task'
         }
@@ -8,22 +10,38 @@ const routes = [
     {
         path: 'distribution/task',
         name: 'distribution.task',
-        component: () => import('./task')
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import ('./task')
     },
     {
         path: 'distribution/order',
         name: 'distribution.order',
-        component: () => import('./order')
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import ('./order')
     },
     {
         path: 'distribution/personnel',
         name: 'distribution.personnel',
-        component: () => import('./personnel')
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import ('./personnel')
     },
     {
         path: 'distribution/personnel/state',
         name: 'distribution.personnel.state',
-        component: () => import('./state')
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import ('./state')
     }
 ]
 

@@ -1,10 +1,13 @@
-const routes = [
-    {
+const routes = [{
         path: 'flow',
         name: 'flow',
-        component: () => import('./flow')
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import ('./flow')
     }
     // 操作流程
 ]
 
-export {routes}
+export { routes }

@@ -105,7 +105,7 @@
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
-			padding: 23px 90px 60px 90px;
+			padding: 50px 0;
 			cursor: pointer;
 			img {
 				width: 50px;

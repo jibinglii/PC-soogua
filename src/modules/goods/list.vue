@@ -186,7 +186,8 @@
 		color: #666;
 	}
 	.el-container {
-		margin-top: 15px;
+    margin-top: 15px;
+    min-height: 400px;
 		.el-main {
 			max-width: 884px;
 			padding: 0;

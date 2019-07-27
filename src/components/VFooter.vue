@@ -44,6 +44,9 @@ export default {};
 
 <style lang="scss" scoped>
 .footer {
+  // position: fixed;
+  // bottom: 0;
+  // width: 100%;
   font-size: 12px;
   font-weight: 500;
   line-height: 13px;

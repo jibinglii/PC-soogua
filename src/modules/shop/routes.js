@@ -1,17 +1,17 @@
-
-export default [
-    {
+export default [{
         path: 'shop',
         name: 'shop',
         meta: {
             requiresAuth: true
         },
-        component: () => import('./shop')
+        component: () =>
+            import ('./shop')
     },
     {
         path: 'shop/release',
         name: 'shop.release',
-        component: () => import('./release')
+        component: () =>
+            import ('./release')
     },
     {
         path: 'shop/profile',
@@ -19,7 +19,8 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./profile')
+        component: () =>
+            import ('./profile')
     },
     {
         path: 'shop/selectgame',
@@ -27,7 +28,8 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./selectgame')
+        component: () =>
+            import ('./selectgame')
     },
     {
         path: 'shop/add',
@@ -35,12 +37,14 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./add')
+        component: () =>
+            import ('./add')
     },
     {
         path: 'shop/types/:id.html',
         name: 'shop.types',
-        component: () => import('./types')
+        component: () =>
+            import ('./types')
     },
     {
         path: 'shop/fill/:id.html',
@@ -48,7 +52,8 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./fill')
+        component: () =>
+            import ('./fill')
     },
     {
         path: 'shop/spec/:id.html',
@@ -56,17 +61,26 @@ export default [
         meta: {
             requiresAuth: true
         },
-        component: () => import('./spec')
+        component: () =>
+            import ('./spec')
     },
     {
         path: 'shop/success',
         name: 'shop.success',
-        component: () => import('./success')
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import ('./success')
     },
     {
         path: 'shop/payresult',
         name: 'shop.payresult',
-        component: () => import('./payresult')
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import ('./payresult')
     },
     {
         path: 'shop/edit-game-info/:id.html',
@@ -75,7 +89,7 @@ export default [
             requiresAuth: true
         },
         component: () =>
-            import('./EditGameInfo')
+            import ('./EditGameInfo')
     },
     {
         path: 'shop/edit-game-spec/:id.html',
@@ -84,7 +98,6 @@ export default [
             requiresAuth: true
         },
         component: () =>
-            import('./EditGameSpec')
+            import ('./EditGameSpec')
     },
 ]
-

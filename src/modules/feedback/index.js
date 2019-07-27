@@ -1,9 +1,11 @@
-const routes = [
-    {
-        path: 'feedback',
-        name: 'feedback',
-        component: () => import('./feedback')
-    }
-]
+const routes = [{
+    path: 'feedback',
+    name: 'feedback',
+    meta: {
+        requiresAuth: true
+    },
+    component: () =>
+        import ('./feedback')
+}]
 
-export {routes}
+export { routes }
