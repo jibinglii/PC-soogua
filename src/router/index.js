@@ -21,17 +21,47 @@ Vue.use(Router)
 const AppRoute = {
     path: '/:store/',
     component: () =>
-        import ('../app'),
+        import('../app'),
     children: [...home, ...auth, ...person, ...goods, ...buyerorder, ...sellerorder, ...shop, ...distribution, ...help, ...feedback, ...message, ...collection, ...commodity, ...flow, ...settle]
 }
 
-const routes = [AppRoute]
+const routes = [{
+    path: '/404',
+    component: () =>
+        import('../not-found')
+}, AppRoute, {
+    path: '*',
+    component: () =>
+        import('../not-found')
+}]
+
+const scrollBehavior = function (to, from, savedPosition) {
+    if (savedPosition) {
+        return savedPosition
+    } else {
+        if (to.hash) {
+            if (document.querySelector(to.hash)) {
+                return {
+                    selector: to.hash
+                }
+            }
+            return false
+        }
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({ x: 0, y: 0 });
+            }, 0);
+        })
+    }
+}
 
 const router = new Router({
     routes,
-    mode: 'history'
+    linkActiveClass: 'active',
+    linkExactActiveClass: 'active',
+    mode: 'history',
+    scrollBehavior
 })
 
 router.beforeEach(beforeEach)
-
 export default router
