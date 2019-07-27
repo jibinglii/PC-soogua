@@ -36,7 +36,7 @@
 		flex-direction: column;
 		background-color: white;
 		img {
-			width: 80%;
+			width: 20%;
 			height: auto;
 		}
 	}
