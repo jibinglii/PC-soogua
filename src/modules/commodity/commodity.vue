@@ -1,136 +1,133 @@
 <template>
-	<div>
-		<v-header />
-		<div class="container">
-			<el-breadcrumb separator-class="el-icon-arrow-right">
-				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
-				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>我是卖家</el-breadcrumb-item>
-				<el-breadcrumb-item>商品管理</el-breadcrumb-item>
-			</el-breadcrumb>
-			<v-content>
-				<div slot="aside">
-					<v-aside></v-aside>
-				</div>
-				<div slot="main">
-					<v-tabs :tabs="tabs"
-									activeTab="all"
-									@changeTab="changeTab" />
+  <div>
+    <v-header/>
+    <div class="container">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
+        <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      </el-breadcrumb>
+      <v-content>
+        <div slot="aside">
+          <v-aside></v-aside>
+        </div>
+        <div slot="main">
+          <v-tabs :tabs="tabs" activeTab="-1" @changeTab="changeTab"/>
 
-					<div class="commoditylist">
-						<el-table :data="goodsData"
-											style="width: 100%; text-align:center;"
-											@row-click="goodsInfo">
-							<el-table-column align="center"
-															 width="300px"
-															 prop="title"
-															 label="商品名称">
-								<template slot-scope="scope">
-									<div class="commodityname">
-										<img :src="scope.row.logo"
-												 alt>
-										<div class="text">
-											<span>{{scope.row.title}}</span>
-											<i>{{scope.row.content}}</i>
-										</div>
-									</div>
-								</template>
-							</el-table-column>
-							<el-table-column align="center"
-															 prop="amount"
-															 label="单价"></el-table-column>
-							<el-table-column align="center"
-															 prop="store_nums"
-															 label="数量"></el-table-column>
-							<el-table-column align="center"
-															 prop="status_label"
-															 label="商品状态"></el-table-column>
-							<el-table-column align="center"
-															 label="操作"
-															 width="300px">
-								<template slot-scope="scope"
-													v-if="!isSeller">
-									<el-button type="button"
-														 v-if="scope.row.status == 3"
-														 @click.stop="updateStatus(scope.row.uuid, 'delete')"
-														 size="small">删除</el-button>
-									<el-button style="background:#fff;color:#000"
-														 type="button"
-														 v-if="scope.row.status == 5"
-														 @click.stop="updateStatus(scope.row.uuid, 'up')"
-														 size="small">上架</el-button>
-									<el-button type="button"
-														 v-if="scope.row.status == 4"
-														 @click.stop="copy(scope.row)"
-														 size="small">复制链接</el-button>
-									<el-button style="background:#fff;color:#000"
-														 type="button"
-														 v-if="scope.row.status == 4"
-														 @click.stop="updateStatus(scope.row.uuid, 'down')"
-														 size="small">下架</el-button>
-									<el-button type="button"
-														 v-if="scope.row.status == 4"
-														 @click.stop="showForm(scope.row)"
-														 size="small">分销</el-button>
+          <div class="commoditylist">
+            <el-table
+              :data="goodsData"
+              style="width: 100%; text-align:center;"
+              @row-click="goodsInfo"
+            >
+              <el-table-column align="center" width="300px" prop="title" label="商品名称">
+                <template slot-scope="scope">
+                  <div class="commodityname">
+                    <img :src="scope.row.logo" alt>
+                    <div class="text">
+                      <span>{{scope.row.title}}</span>
+                      <i>{{scope.row.content}}</i>
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="amount" label="单价" :formatter="priceFormat"></el-table-column>
+              <el-table-column align="center" prop="store_nums" label="数量" :formatter="numsFormat"></el-table-column>
+              <el-table-column align="center" prop="status_label" label="商品状态"></el-table-column>
+              <el-table-column align="center" label="操作" width="300px">
+                <template slot-scope="scope" v-if="!isSeller">
+                  <el-button
+                    type="button"
+                    v-if="scope.row.status == 3"
+                    @click.stop="updateStatus(scope.row.uuid, 'delete')"
+                    size="small"
+                  >删除</el-button>
+                  <el-button
+                    style="background:#fff;color:#000"
+                    type="button"
+                    v-if="scope.row.status == 5"
+                    @click.stop="updateStatus(scope.row.uuid, 'up')"
+                    size="small"
+                  >上架</el-button>
+                  <el-button
+                    type="button"
+                    v-if="scope.row.status == 4"
+                    @click.stop="copy(scope.row)"
+                    size="small"
+                  >复制链接</el-button>
+                  <el-button
+                    style="background:#fff;color:#000"
+                    type="button"
+                    v-if="scope.row.status == 4"
+                    @click.stop="updateStatus(scope.row.uuid, 'down')"
+                    size="small"
+                  >下架</el-button>
+                  <el-button
+                    type="button"
+                    v-if="scope.row.status == 4"
+                    @click.stop="showForm(scope.row)"
+                    size="small"
+                  >分销</el-button>
 
-									<el-button type="button"
-														 v-if="scope.row.status == 0 && $user().id == scope.row.user_id"
-														 @click.stop="editGameInfo(scope.row.uuid)"
-														 size="small">修改</el-button>
-								</template>
-								<template slot-scope="scope"
-													v-else>
-									<el-button type="button"
-														 v-if="goods.status == 4"
-														 @click.stop="copySeller(goods)"
-														 size="small">复制链接</el-button>
+                  <el-button
+                    type="button"
+                    @click.stop="editGameInfo(scope.row.uuid)"
+                    v-if="scope.row.status == 0 && $user().id == scope.row.user_id"
+                    size="small"
+                  >修改</el-button>
+                </template>
+                <template slot-scope="scope" v-else>
+                  <el-button
+                    type="button"
+                    v-if="goods.status == 4"
+                    @click.stop="copySeller(goods)"
+                    size="small"
+                  >复制链接</el-button>
 
-									<el-button type="button"
-														 v-if="goods.status == 4 && isSellerStore"
-														 @click.stop="showForm(scope.row)"
-														 size="small">分销</el-button>
-								</template>
-							</el-table-column>
-						</el-table>
-					</div>
-					<el-dialog title="分配推广员"
-										 :visible.sync="dialogFormVisible"
-										 width="30%">
-						<el-form>
-							<el-form-item label="推广员ID"
-														:label-width="formLabelWidth">
-								<el-input style="width:80%"
-													type="tel"
-													v-model="assignUserId"
-													placeholder="请输入推广员ID"
-													autocomplete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="推广费用比例"
-														:label-width="formLabelWidth">
-								<el-input style="width:80%"
-													type="number"
-													placeholder="请输入推广费用比例"
-													v-model="assignRate"
-													autocomplete="off"></el-input>
-							</el-form-item>
-						</el-form>
-						<div slot="footer"
-								 class="dialog-footer">
-							<el-button @click="dialogFormVisible = false">取 消</el-button>
-							<el-button type="primary"
-												 @click="assignSubmit">确 定</el-button>
-						</div>
-					</el-dialog>
+                  <el-button
+                    type="button"
+                    v-if="goods.status == 4 && isSellerStore"
+                    @click.stop="showForm(scope.row)"
+                    size="small"
+                  >分销</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <el-dialog title="分配推广员" :visible.sync="dialogFormVisible" width="30%">
+            <el-form>
+              <el-form-item label="推广员ID" :label-width="formLabelWidth">
+                <el-input
+                  style="width:80%"
+                  type="tel"
+                  v-model="assignUserId"
+                  placeholder="请输入推广员ID"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="推广费用比例" :label-width="formLabelWidth">
+                <el-input
+                  style="width:80%"
+                  type="number"
+                  placeholder="请输入推广费用比例"
+                  v-model="assignRate"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="assignSubmit">确 定</el-button>
+            </div>
+          </el-dialog>
 
-					<pagination :total="total"
-											:display="display"
-											:current-page="page"
-											@pagechange="getGoods"></pagination>
-				</div>
-			</v-content>
-		</div>
-		<v-footer />
-	</div>
+          <pagination :total="total" :display="display" :current-page="page" @pagechange="getGoods"></pagination>
+        </div>
+      </v-content>
+    </div>
+    <v-footer/>
+  </div>
 </template>
 
 <script>
@@ -177,29 +174,35 @@
 				assignRate: "",
 				currentGoods: {},
 
-				//
-				dialogTableVisible: false,
-				dialogFormVisible: false,
-				formLabelWidth: "120px"
-			};
-		},
-		components: {
-			VHeader,
-			VFooter,
-			VContent,
-			VAside,
-			VTabs,
-			Pagination
-		},
-		methods: {
-			changeTab (tab, event) {
-				this.page = 1;
-				this.status = tab.name;
-				this.getGoods(this.page);
-			},
-			goodsInfo (row) {
-				this.$router.push({ name: "goods", params: { goods: row.uuid } });
-			},
+      //
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      formLabelWidth: "120px"
+    };
+  },
+  components: {
+    VHeader,
+    VFooter,
+    VContent,
+    VAside,
+    VTabs,
+    Pagination
+  },
+  methods: {
+    priceFormat(row, column) {
+      return "￥" + row.amount;
+    },
+    numsFormat(row, column) {
+      return row.store_nums + "件";
+    },
+    changeTab(tab, event) {
+      this.page = 1;
+      this.status = tab.name;
+      this.getGoods(this.page);
+    },
+    goodsInfo(row) {
+      this.$router.push({ name: "goods", params: { goods: row.uuid } });
+    },
 
 			getGoods (currentPage) {
 				this.goodsData = [];
@@ -318,10 +321,10 @@
 					);
 				}
 			},
-			editGameInfo (id) {
-				this.$router.push({ name: "shop.editGameInfo", params: { id: id } });
+    editGameInfo (id) {
+      this.$router.push({ name: "shop.editGameInfo", params: { id: id } });
 
-			}
+    }
 		},
 		created () {
 			this.getGoods(this.page);
@@ -330,68 +333,68 @@
 </script>
 
 <style lang="scss" scoped>
-	.commodityname {
-		display: flex;
-		align-items: center;
-		img {
-			width: 88px;
-			height: 88px;
-			margin-right: 17px;
-		}
-		.text {
-			text-align: left;
-			flex: 1;
+.commodityname {
+  display: flex;
+  align-items: center;
+  img {
+    width: 88px;
+    height: 88px;
+    margin-right: 17px;
+  }
+  .text {
+    text-align: left;
+    flex: 1;
 
-			span {
-				font-size: 14px;
-				font-weight: 400;
-				color: #000;
-				display: block;
-			}
-			i {
-				font-size: 12px;
-				font-weight: 400;
-				color: #666;
-			}
-		}
-	}
-	.form-inline {
-		margin-top: 17px;
-		width: 350px;
-		.el-form-item {
-			margin-bottom: 17px;
-		}
-		.el-button {
-			width: 80px;
-		}
-	}
-	/deep/.el-form--inline {
-		.el-form-item {
-			margin-right: 0;
-		}
-	}
-	.el-button {
-		background: #000;
-		border: 1px solid #000;
-		color: #fff;
-		font-size: 12px;
-	}
+    span {
+      font-size: 14px;
+      font-weight: 400;
+      color: #000;
+      display: block;
+    }
+    i {
+      font-size: 12px;
+      font-weight: 400;
+      color: #666;
+    }
+  }
+}
+.form-inline {
+  margin-top: 17px;
+  width: 350px;
+  .el-form-item {
+    margin-bottom: 17px;
+  }
+  .el-button {
+    width: 80px;
+  }
+}
+/deep/.el-form--inline {
+  .el-form-item {
+    margin-right: 0;
+  }
+}
+.el-button {
+  background: #000;
+  border: 1px solid #000;
+  color: #fff;
+  font-size: 12px;
+}
 
-	.el-breadcrumb {
-		margin-top: 18px;
-		margin-bottom: 18px;
+.el-breadcrumb {
+  margin-top: 18px;
+  margin-bottom: 18px;
 
-		.el-breadcrumb__item {
-			font-size: 14px;
-			font-weight: 400;
-			line-height: 30px;
-			color: #666;
-			&:last-child {
-				color: #666;
-			}
-		}
-	}
-	/deep/.el-breadcrumb__separator {
-		color: #666;
-	}
+  .el-breadcrumb__item {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 30px;
+    color: #666;
+    &:last-child {
+      color: #666;
+    }
+  }
+}
+/deep/.el-breadcrumb__separator {
+  color: #666;
+}
 </style>

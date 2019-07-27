@@ -36,32 +36,31 @@
 					<i>请您认真核对填写的联系方式，以便客服及时能够联系到您</i>
 				</div>
 				<div class="content">
-
 					<el-form label-position="left"
-									 label-width="110px">
-
+									 label-width="80px">
 						<el-form-item label="您的姓名">
-							<el-input v-model="receiver_name"></el-input>
+							<el-col :span="12">
+								<el-input v-model="receiver_name"></el-input>
+							</el-col>
 						</el-form-item>
 						<el-form-item label="您的电话">
-							<el-input v-model="receiver_mobile"></el-input>
+							<el-col :span="12">
+								<el-input v-model="receiver_mobile"></el-input>
+							</el-col>
 						</el-form-item>
 
 						<el-form-item label="所选服务">
-
 							<el-select v-model="serviceValue.value"
 												 @change="getTotal"
-												 placeholder="请选择担保产品">
+												 placeholder="请选择担保产品"
+												 style="width:516px">
 								<el-option v-for="(item ,index) in services"
 													 :key="index"
 													 :label="item.name"
-													 :value="index">
-								</el-option>
+													 :value="index"></el-option>
 							</el-select>
-
 						</el-form-item>
 					</el-form>
-
 				</div>
 			</div>
 			<div class="refer-info">
@@ -113,67 +112,78 @@
 	export default {
 		data () {
 			return {
-				gameId: '',
+				gameId: "",
 				total: 0,
-				totalHtml: '',
+				totalHtml: "",
 				goods: {},
 				serviceColumns: [],
 				defaultIndex: 2,
-				receiver_name: '',
-				receiver_mobile: '',
-				services: [{ "name": "30天担保产品", "value": "1", "day": 30, "rate": 0.1 }, { "name": "60天担保产品", "value": "2", "day": 60, "rate": 0.15 }, { "name": "不参与担保服务", "value": "0", "day": 0, "rate": 0 }],
+				receiver_name: "",
+				receiver_mobile: "",
+				services: [
+					{ name: "30天担保产品", value: "1", day: 30, rate: 0.1 },
+					{ name: "60天担保产品", value: "2", day: 60, rate: 0.15 },
+					{ name: "不参与担保服务", value: "0", day: 0, rate: 0 }
+				],
 				serviceValue: {
-					value: '不参与担保服务',
+					value: "不参与担保服务",
 					index: 2
 				},
 				creating: false,
-				insureContent: '',
+				insureContent: "",
 				isagree: false,
 				spread_id: 0,
-				token: ''
-			}
+				token: ""
+			};
 		},
 		watch: {
 			receiver_name (val) {
-				localforage.setItem('receiver_name', val)
+				localforage.setItem("receiver_name", val);
 			},
 			receiver_mobile (val) {
-				localforage.setItem('receiver_mobile', val)
+				localforage.setItem("receiver_mobile", val);
 			}
 		},
 		computed: {
 			canSubmit () {
-				if (this.receiver_name != '' && this.receiver_mobile != '') {
-					return true
+				if (this.receiver_name != "" && this.receiver_mobile != "") {
+					return true;
 				}
-				return false
+				return false;
 			}
 		},
 		created () {
-			this.goodsId = this.$route.params.goods
+			this.goodsId = this.$route.params.goods;
 			this.getDetail();
 			this.getSaleProtocol();
 			this.getToken();
-			localforage.getItem('receiver_name').then(val => {
-				val == '' || (this.receiver_name = val)
-			})
-			localforage.getItem('receiver_mobile').then(val => {
-				val == '' || (this.receiver_mobile = val)
-			})
-			if (this.$cookies.get('goods-spread') != undefined && this.$cookies.get('goods-spread') != 'undefined') {
-				this.spread_id = this.$cookies.get('goods-spread')
+			localforage.getItem("receiver_name").then(val => {
+				val == "" || (this.receiver_name = val);
+			});
+			localforage.getItem("receiver_mobile").then(val => {
+				val == "" || (this.receiver_mobile = val);
+			});
+			if (
+				this.$cookies.get("goods-spread") != undefined &&
+				this.$cookies.get("goods-spread") != "undefined"
+			) {
+				this.spread_id = this.$cookies.get("goods-spread");
 			}
-			if (this.$route.query['spread_id'] != undefined) {
-				this.spread_id = this.$route.query['spread_id']
+			if (this.$route.query["spread_id"] != undefined) {
+				this.spread_id = this.$route.query["spread_id"];
 			}
 		},
 		methods: {
 			next () {
-
 				if (this.canSubmit) {
-					if (this.serviceValue.index != this.serviceColumns.length - 1 && this.isagree == false) {
-						this.$message.error({ message: '您必须同意《担保服务协议》才能继续' });
-						return
+					if (
+						this.serviceValue.index != this.serviceColumns.length - 1 &&
+						this.isagree == false
+					) {
+						this.$message.error({
+							message: "您必须同意《担保服务协议》才能继续"
+						});
+						return;
 					}
 					if (!this.creating) {
 						this.creating = true;
@@ -185,77 +195,80 @@
 							express_type: 0,
 							insure: this.serviceValue.index,
 							spread_id: this.spread_id,
-							'_token': this.token
+							_token: this.token
 						};
 						const loading = this.$loading({
 							lock: true,
-							text: "正在下单",
+							text: "正在下单"
 						});
-						this.$http.post('api/v1/order/' + this.goodsId, param).then(({ data }) => {
-
-							loading.close();
-							this.$message.success('下单成功')
-							this.creating = false;
-							let orderId = data.id;
-							//	this.$router.push({ name: 'pay.type', params: { 'order': orderId } })
-						}).catch(({ data }) => {
-							loading.close();
-							this.creating = false;
-							this.$message.error(data.message)
-						})
+						this.$http
+							.post("api/v1/order/" + this.goodsId, param)
+							.then(({ data }) => {
+								loading.close();
+								this.$message.success("下单成功");
+								this.creating = false;
+								let orderId = data.id;
+								//	this.$router.push({ name: 'pay.type', params: { 'order': orderId } })
+							})
+							.catch(({ data }) => {
+								loading.close();
+								this.creating = false;
+								this.$message.error(data.message);
+							});
 					}
 				} else {
-					this.$message.error('请先输入收货信息')
+					this.$message.error("请先输入收货信息");
 				}
 			},
 			async getDetail () {
-				this.$toast.loading({
-					mask: true,
-					message: '加载中...'
+				const loading = this.$loading({
+					lock: true,
+					text: "加载中",
 				});
-				await this.$http.get('/api/v1/goods/' + this.goodsId).then(({ data }) => {
-					this.$toast.clear()
+				await this.$http.get("/api/v1/goods/" + this.goodsId).then(({ data }) => {
+					loading.close();
 					this.goods = data.goods;
 
 					this.initService();
 					this.getTotal();
-				})
+				});
 			},
 			getTotal (e) {
 				if (e == undefined) {
 					var rate = this.services[this.serviceValue.index].rate;
 				} else {
-					this.serviceValue.index = e
+					this.serviceValue.index = e;
 					var rate = this.services[this.serviceValue.index].rate;
 				}
 
-
-				this.total = (this.goods.amount * rate) + this.goods.amount;
+				this.total = this.goods.amount * rate + this.goods.amount;
 				this.totalHtml = " ¥ " + this.formatMoney(this.total) + " 元";
-
 			},
 			initService () {
-				this.services.forEach((value) => {
+				this.services.forEach(value => {
 					let name = value.name;
 					if (value.value != "0") {
-
-						name = name + " ( ¥ " + this.formatMoney((this.goods.amount * value.rate)) + ')';
+						name =
+							name +
+							" ( ¥ " +
+							this.formatMoney(this.goods.amount * value.rate) +
+							")";
 					}
 					this.serviceColumns.push(name);
 				});
 			},
 			showAgree () {
-				this.$refs.agree.show()
+				this.$refs.agree.show();
 			},
 			getSaleProtocol () {
-				protocol.getProtocol('insure').then(data => {
-					this.insureContent = data.data.content
-				})
+				protocol.getProtocol("insure").then(data => {
+					this.insureContent = data.data.content;
+				});
 			},
 			getToken () {
-				this.$http.get('api/request-token').then(data => {
-					this.token = data.data
-				})
+				this.$http.get("api/request-token").then(data => {
+					this.token = data.data;
+				});
 			}
 		},
 		components: {
@@ -349,8 +362,8 @@
 			border-bottom: 1px solid #ededed;
 		}
 		.content {
-			padding-left: 43px;
-			padding-right: 43px;
+			padding-left: 26px;
+			padding-right: 26px;
 			overflow: hidden;
 			.confirm {
 				padding-bottom: 80px;
@@ -391,7 +404,6 @@
 	}
 	.el-form-item {
 		position: relative;
-		width: 400px;
 		margin-bottom: 15px;
 	}
 	.tips {

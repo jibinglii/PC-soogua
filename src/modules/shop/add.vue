@@ -5,7 +5,7 @@
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>店铺管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'shop'}">店铺管理</el-breadcrumb-item>
 				<el-breadcrumb-item>发布商品</el-breadcrumb-item>
 			</el-breadcrumb>
 			<steps />
@@ -24,33 +24,30 @@
 									 :model="param"
 									 label-width="80px">
 						<el-form-item label="交易主类">
-							<el-col :span="22">
+							<el-col :span="12">
 								<el-select v-model="param.type2"
 													 placeholder="请选择">
 									<el-option v-for="item in typeOptions"
 														 :key="item.value"
 														 :label="item.text"
-														 :value="item.value">
-									</el-option>
+														 :value="item.value"></el-option>
 								</el-select>
 							</el-col>
 						</el-form-item>
 						<el-form-item label="交易辅类">
-							<el-col :span="22">
+							<el-col :span="12">
 								<el-select v-model="param.game_id"
 													 placeholder="请选择"
 													 @change="loadServer">
 									<el-option v-for="item in gamesOptions"
 														 :key="item.value"
 														 :label="item.text"
-														 :value="item.value">
-									</el-option>
+														 :value="item.value"></el-option>
 								</el-select>
 							</el-col>
-
 						</el-form-item>
 						<el-form-item label="商品属性">
-							<el-col :span="22">
+							<el-col :span="12">
 								<el-select v-model="param.server_id"
 													 placeholder="请选择商品属性"
 													 @Change="setServerName">
@@ -60,16 +57,12 @@
 										<el-option v-for="(item,index2) in group"
 															 :key="item"
 															 :label="index2"
-															 :value="item">
-										</el-option>
+															 :value="item"></el-option>
 									</el-option-group>
 								</el-select>
-
 							</el-col>
-
 						</el-form-item>
 					</el-form>
-
 				</div>
 			</div>
 			<!--  -->
@@ -80,7 +73,7 @@
 									 :model="param"
 									 label-width="80px">
 						<el-form-item label="商品标题">
-							<el-col :span="22">
+							<el-col :span="12">
 								<el-input v-model="param.title"
 													title="商品标题"
 													placeholder="一句话介绍下商品吧"
@@ -88,7 +81,7 @@
 							</el-col>
 						</el-form-item>
 						<el-form-item label="发布价格">
-							<el-col :span="22">
+							<el-col :span="12">
 								<el-input v-model="param.amount"
 													title="发布价格"
 													type="number"
@@ -98,10 +91,10 @@
 													:max="1000000"></el-input>
 							</el-col>
 							<el-col class="line"
-											:span="2">元</el-col>
+											:span="1">元</el-col>
 						</el-form-item>
 						<el-form-item label="发布数量">
-							<el-col :span="22">
+							<el-col :span="12">
 								<el-input v-model.number="param.store_nums"
 													title="发布数量"
 													type="number"
@@ -110,12 +103,12 @@
 													:min="1"></el-input>
 							</el-col>
 							<el-col class="line"
-											:span="2">件</el-col>
+											:span="1">件</el-col>
 						</el-form-item>
 					</el-form>
 					<div class="info-tips">
 						<img src="~$assets/images/gantan.png"
-								 alt />
+								 alt>
 						<span>您当前商品成交后，所需服务费为 {{service_fee}}元</span>
 					</div>
 				</div>
@@ -125,20 +118,21 @@
 				<div class="content">
 					<el-form ref="form-desc"
 									 :model="param"
-									 label-width="100px">
+									 label-width="80px">
 						<el-form-item label="详情描述"
 													prop="content">
-							<el-input type="textarea"
-												resize="none"
-												v-model="param.content"
-												text
-												placeholder="在这里描述您的商品"
-												rows="5"></el-input>
-							<span class="size">{{size}}/300</span>
+							<el-col :span="15">
+								<el-input type="textarea"
+													resize="none"
+													v-model="param.content"
+													text
+													placeholder="在这里描述您的商品"
+													rows="5"></el-input>
+								<span class="size">{{size}}/300</span>
+							</el-col>
 						</el-form-item>
-						<el-form-item label="上传图片：">
-							<div style="width:650px;">
-								<!--  -->
+						<el-form-item label="上传图片">
+							<el-col :span="15">
 								<el-upload action="#"
 													 :file-list="fileList"
 													 list-type="picture-card"
@@ -176,13 +170,11 @@
 								<el-dialog :visible.sync="dialogVisible">
 									<img width="100%"
 											 :src="dialogImageUrl"
-											 alt="">
+											 alt>
 								</el-dialog>
 
 								<span class="imgTip">一次最多可选15张，可以上传你认为有卖点的商品图片，请勿添加联系方式和其他平台信息，否则将导致商品下架。</span>
-								<!--  -->
-							</div>
-
+							</el-col>
 						</el-form-item>
 					</el-form>
 					<el-checkbox class="cehckbox"
@@ -208,30 +200,11 @@
 	</div>
 </template>
 
-<script>
-	// import XHeader from "$components/XHeader";
-	// import XPicker from "$components/XPicker";
-	// import Agree from "$components/Agree";
-	// import CellGroup from "vant/lib/cell-group";
-	// import Cell from "vant/lib/cell";
-	// import "vant/lib/cell/style";
-	// import DropdownMenu from "vant/lib/dropdown-menu";
-	// import "vant/lib/dropdown-menu/style";
-	// import DropdownItem from "vant/lib/dropdown-item";
-	// import "vant/lib/dropdown-item/style";
-	// import Button from "vant/lib/button";
-	// import "vant/lib/button/style";
-	// import XUploader from "$components/XUploader";
-	import protocol from '$api/protocol'
-	// import XCellGroup from "$components/XCellGroup";
-	// import InputCell from "$components/InputCell";
-	// import TextCell from "$components/TextCell";
-	// import {mapGetters} from 'vuex'
-	// import Popup from 'vant/lib/popup';
-	// import 'vant/lib/popup/style';
 
-	// import TreeSelect from 'vant/lib/tree-select'
-	// import 'vant/lib/tree-select/style'
+<script>
+	import protocol from "$api/protocol";
+
+
 	import VHeader from "$components/VHeader";
 	import VFooter from "$components/VFooter";
 	import Steps from "./components/steps";
@@ -343,21 +316,20 @@
 				let params = this.param
 				// 参数验证
 				if (this.param.type2 == "") {
-					this.$toast.fail('请选择交易主类')
+					this.$message.error('请选择交易主类')
 					return
 				}
 				if (this.param.game_id == "") {
-					this.$toast.fail('请选择交易辅类')
+					this.$message.error('请选择交易辅类')
 					return
 				}
 				if (this.param.server_id == "") {
-					this.$toast.fail('请选择商品属性')
+					this.$message.error('请选择商品属性')
 					return
 				}
 				if (!this.isagree) {
 					this.$alert("请阅读并同意《商品寄售服务协议》");
 				} else {
-					console.log(this.saving);
 					if (!this.saving) {
 
 						this.saving = true;
@@ -420,7 +392,7 @@
 							loading.close();
 						}).catch((error => {
 							loading.close();
-							this.$toast('上传失败')
+							this.$message.error('上传失败')
 						}))
 					})
 				})
@@ -515,8 +487,11 @@
 			font-size: 12px;
 			font-weight: 300;
 			color: #999;
+			display: flex;
+			align-items: center;
 			img {
 				vertical-align: middle;
+				padding: 0 3px 0 75px;
 			}
 		}
 	}
@@ -540,7 +515,7 @@
 			.size {
 				position: absolute;
 				bottom: 0;
-				right: -320px;
+				left: 560px;
 				width: 38px;
 				font-size: 14px;
 				font-weight: 400;
@@ -583,7 +558,7 @@
 	}
 	.el-form-item {
 		position: relative;
-		width: 380px;
+		// width: 380px;
 		margin-bottom: 15px;
 	}
 	.el-select {

@@ -314,7 +314,7 @@
 							loading.close();
 						}).catch((error => {
 							loading.close();
-							this.$toast('上传失败')
+							this.$message.error('上传失败')
 						}))
 					})
 				})

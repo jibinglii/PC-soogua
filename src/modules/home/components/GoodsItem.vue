@@ -4,21 +4,18 @@
     <div class="info">
       <div class="group">
         <span class="title">{{ goods.title }}</span>
-        <i class="tag"></i>
+        <span class="name">{{ goods.game_name }}</span>
       </div>
-      <p class="content"> {{ goods.game_name }}</p>
       <p class="desc">{{ goods.server_name }}</p>
       <div class="group">
         <span class="price">￥{{ goods.amount }}</span>
-        <i class="stock">库存{{ goods.store_nums }}件</i>
+        <i class="stock">库存{{ goods.sale_nums }}件</i>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Image from "vant/lib/image";
-import "vant/lib/image/style";
 export default {
   name: "goods-item",
   props: {
@@ -27,9 +24,7 @@ export default {
   data() {
     return {};
   },
-  components: {
-    [Image.name]: Image
-  },
+  components: {},
   methods: {
     onGoods() {
       this.$router.push({ name: "goods", params: { goods: this.goods.uuid } });
@@ -64,24 +59,8 @@ export default {
       color: #000;
       line-height: 16px;
     }
-    .tag {
-      font-size: 12px;
-      font-weight: 400;
-      color: #000;
-      line-height: 16px;
-    }
-    .content {
-      margin-top: 10px;
-      font-size: 12px;
-      font-weight: 400;
-      color: #000;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-    }
     .desc {
-      margin-top: 8px;
+      margin-top: 23px;
       font-size: 12px;
       font-weight: 400;
       color: #999;
@@ -98,9 +77,13 @@ export default {
       color: #000;
       line-height: 20px;
     }
+    .name{
+      font-size: 14px;
+    }
     .group {
       margin-top: 10px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
     }
   }

@@ -5,7 +5,7 @@
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>店铺管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'shop'}">店铺管理</el-breadcrumb-item>
 				<el-breadcrumb-item>发布商品</el-breadcrumb-item>
 			</el-breadcrumb>
 			<steps />
@@ -288,7 +288,7 @@
 							loading.close();
 						}).catch((error => {
 							loading.close();
-							this.$toast('上传失败')
+							this.$message.error('上传失败')
 						}))
 					})
 				})

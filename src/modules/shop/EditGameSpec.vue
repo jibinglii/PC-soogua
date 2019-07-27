@@ -119,11 +119,11 @@
 				this.uuid = this.getQueryString("id");
 			},
 			async initData () {
-				this.$toast.loading({ mask: true, message: '规格信息加载中...' });
+				const loading = this.$loading({ lock: true, text: "规格信息加载中", });
 				await this.$http
 					.get("/api/v1/goods/specs/" + this.uuid)
 					.then(({ data }) => {
-						this.$toast.clear()
+						loading.close()
 						this.spec.push(...data);
 						this.initSpec(data)
 					});

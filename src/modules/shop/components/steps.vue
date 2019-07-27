@@ -47,12 +47,6 @@
 		align-items: center;
 		justify-content: center;
 		height: 100px;
-		i {
-			flex: 1;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
 		.cell {
 			flex: 2;
 			display: flex;
