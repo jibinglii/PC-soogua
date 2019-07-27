@@ -37,7 +37,7 @@
                 <div class="group">
                   <router-link tag="a" :to="{name:'home'}" class="graphic m-right">
                     <img src="~$assets/images/dianpu.png" alt>
-                    <span>店铺预览</span>
+                    <span>店铺首页</span>
                   </router-link>
                   <router-link tag="a" :to="{name:'person.card'}" class="graphic">
                     <img src="~$assets/images/yinhangka.png" alt>
