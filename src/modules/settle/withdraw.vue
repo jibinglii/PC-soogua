@@ -5,8 +5,8 @@
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>个人中心</el-breadcrumb-item>
-				<el-breadcrumb-item>结算管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'settle.order'}">结算管理</el-breadcrumb-item>
 				<el-breadcrumb-item>申请提现</el-breadcrumb-item>
 			</el-breadcrumb>
 			<v-content>

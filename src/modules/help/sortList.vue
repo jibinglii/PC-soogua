@@ -5,8 +5,8 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人中心</el-breadcrumb-item>
-        <el-breadcrumb-item>使用帮助</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name:'help.help'}">使用帮助</el-breadcrumb-item>
         <el-breadcrumb-item>帮助详情</el-breadcrumb-item>
       </el-breadcrumb>
       <el-card class="box-card" shadow="never">
