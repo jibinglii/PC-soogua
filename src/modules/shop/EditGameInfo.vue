@@ -6,15 +6,12 @@
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
 				<el-breadcrumb-item>店铺管理</el-breadcrumb-item>
-				<el-breadcrumb-item>发布商品</el-breadcrumb-item>
+				<el-breadcrumb-item>修改商品</el-breadcrumb-item>
 			</el-breadcrumb>
 			<steps />
 			<div class="nav">
 				<span>当前选择</span>
-				<i>{{serverName}}</i>
-				<router-link :to="{name:'shop.release'}">
-					<el-button>修改</el-button>
-				</router-link>
+				<i>{{goods.game_name}}-{{goods.server_name}}</i>
 			</div>
 			<div class="goods-info">
 				<div class="title">商品信息</div>
@@ -138,11 +135,11 @@
 			</div>
 			<div class="bottom-nav">
 				<span>当前选择：</span>
-				<i>{{serverName}}</i>
+				<i>{{goods.game_name}}-{{goods.server_name}}</i>
 			</div>
 
 			<div class="nextstep">
-				<el-button @click.native.prevent="onNext"
+				<el-button @click.native.prevent="next"
 									 type="button"
 									 size="medium">下一步</el-button>
 			</div>
@@ -157,24 +154,21 @@
 	import Steps from "./components/steps";
 	import SparkMD5 from 'spark-md5'
 	import { mapGetters } from 'vuex'
+	import protocol from '$api/protocol';
 
 	export default {
 		data () {
 			return {
-
+				goods: {},
 				serverName: "...",
 				param: {
-					title: "",
-					content: "",
-					game_id: this.$route.params.id,
-					amount: "",
+					title: '',
+					content: '',
+					amount: 0,
 					store_nums: 1,
 					images: [],
-					server_id: 0,
-					type2: 0,
-					device: 0
 				},
-				hasSpec: 0,
+
 				isagree: true,
 				saving: false,
 				saleProtocol: '',
@@ -197,15 +191,26 @@
 			...mapGetters(['currentUser']),
 			serviceFee () {
 				return this.param.amount * this.currentUser.service_fee;
+			},
+			hasSpec () {
+				return this.goods.game.specs.length > 0
 			}
+		},
+		created () {
+			this.getGoods(this.$route.params.id);
+			this.getSaleProtocol();
 		},
 		watch: {
 			formDesc (newValue, oldValue) { }
 		},
 		methods: {
-			onNext () {
-				//this.$router.push({ name: "shop.success" });
 
+			getSaleProtocol () {
+				protocol.getProtocol('transaction').then(({ data }) => {
+					this.saleProtocol = data.content
+				})
+			},
+			next () {
 				if (!this.isagree) {
 					this.$alert("请勾选《商品寄售服务协议》");
 				} else {
@@ -213,39 +218,60 @@
 						this.saving = true;
 						this.imagesToArr();
 						const loading = this.$loading({ lock: true, text: "商品保存中", });
-						this.$http
-							.post("api/v1/goods", this.param)
-							.then(response => {
-								this.saving = false;
-								loading.close();
-								if (this.hasSpec > 0) {
-									let uuid = response.data.uuid;
-									this.$router.replace({
-										name: 'shop.spec',
-										params: { id: this.param.game_id },
-										query: {
-											id: uuid,
-											server_name: this.serverName
-										}
-									})
-								} else {
-									this.$router.replace({
-										name: 'shop.success',
-										params: {
-											'status': 2
-										}
-									})
-								}
-							})
-							.catch(fail => {
-								this.saving = false;
-								loading.close();
-							});
+						this.$http.post('api/v1/goods/update/' + this.goods.uuid, this.param).then((res) => {
+							this.saving = false;
+							loading.close()
+							if (this.hasSpec) {
+								this.$router.push({
+									name: 'shop.editGameSpec',
+									params: { id: this.goods.game_id },
+									query: {
+										id: this.goods.uuid
+									}
+								})
+							} else {
+								this.$router.back()
+							}
+						}).catch(fail => {
+							this.saving = false;
+							loading.close()
+						});
 					}
-
 				}
-
 			},
+			async getGoods (id) {
+				const that = this;
+				const loading = this.$loading({ lock: true, text: "请稍后", });
+				await this.$http.get('api/v1/goods/' + id, {
+					loading: true,
+					params: { include: 'game.specs' }
+				}).then(({ data }) => {
+					loading.close()
+					this.$nextTick(() => {
+						let goods = data.goods;
+						this.goods = goods;
+
+						goods.images.forEach(function (url, index) {
+							let item = {
+								uid: index,
+								url: url
+							};
+							that.fileList.push(item);
+						});
+						this.param = {
+							amount: goods.amount,
+							title: goods.title,
+							store_nums: goods.store_nums,
+							content: goods.content,
+							images: goods.images
+						}
+					})
+				})
+			},
+			showAgree () {
+				this.$refs.agree.show();
+			},
+
 			imgRemove (file, fileList) {
 				let uid = file.uid;
 				fileList = this.fileList
@@ -294,16 +320,6 @@
 				})
 			},
 
-			initParam () {
-				this.serverName = this.getQueryString("server_name");
-				this.param.server_id = this.getQueryString("server_id");
-				this.param.type2 = this.getQueryString("type");
-				this.param.device = this.getQueryString("device");
-				this.hasSpec = this.getQueryString("spec");
-			},
-
-			handlePreview () { },
-			handleExceed () { },
 			md5 (file, md5Fn) {
 				let currentChunk = 0;
 				const blobSlice =
@@ -335,9 +351,7 @@
 				}
 			}
 		},
-		mounted () {
-			this.initParam();
-		}
+
 	};
 </script>
 

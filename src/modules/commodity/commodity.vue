@@ -75,6 +75,7 @@
 
 									<el-button type="button"
 														 v-if="scope.row.status == 0 && $user().id == scope.row.user_id"
+														 @click.stop="editGameInfo(scope.row.uuid)"
 														 size="small">修改</el-button>
 								</template>
 								<template slot-scope="scope"
@@ -317,8 +318,9 @@
 					);
 				}
 			},
-			assign () {
-				this.$emit("assign", this.goods);
+			editGameInfo (id) {
+				this.$router.push({ name: "shop.editGameInfo", params: { id: id } });
+
 			}
 		},
 		created () {

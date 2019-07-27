@@ -140,6 +140,7 @@
 							<div style="width:650px;">
 								<!--  -->
 								<el-upload action="#"
+													 :file-list="fileList"
 													 list-type="picture-card"
 													 :auto-upload="true"
 													 :multiple="true"
