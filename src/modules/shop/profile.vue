@@ -132,7 +132,10 @@
 			},
 			upload (e) {
 				let file = event.target.files[0];
-				this.$toast.loading('正在上传...');
+				const loading = this.$loading({
+					lock: true,
+					text: "正在上传",
+				});
 				let param = new FormData(); //创建form对象
 				this.md5(file, (err, md5) => {
 					// 请求配置
@@ -145,11 +148,11 @@
 						param.append('signature', config.signature);
 						param.append('file', file, file.name);//通过append向form对象添加数据
 						this.$http.post(config.server, param, { loading: false }).then((response) => {
-							this.$toast.clear();
+							loading.close()
 							this.profile.logo = config.site_url;
 							this.editLogo = true;
 						}).catch((error => {
-							this.$toast.clear();
+							loading.close()
 							this.$message.error("设置失败，请重试");
 						}))
 					})

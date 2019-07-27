@@ -67,6 +67,24 @@ export default [
         path: 'shop/payresult',
         name: 'shop.payresult',
         component: () => import('./payresult')
-    }
+    },
+    {
+        path: 'shop/edit-game-info/:id.html',
+        name: 'shop.editGameInfo',
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import('./EditGameInfo')
+    },
+    {
+        path: 'shop/edit-game-spec/:id.html',
+        name: 'shop.editGameSpec',
+        meta: {
+            requiresAuth: true
+        },
+        component: () =>
+            import('./EditGameSpec')
+    },
 ]
 

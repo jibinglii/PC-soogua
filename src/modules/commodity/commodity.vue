@@ -72,6 +72,7 @@
 
                   <el-button
                     type="button"
+                    @click.stop="editGameInfo(scope.row.uuid)"
                     v-if="scope.row.status == 0 && $user().id == scope.row.user_id"
                     size="small"
                   >修改</el-button>
@@ -130,48 +131,48 @@
 </template>
 
 <script>
-import VHeader from "$components/VHeader";
-import VFooter from "$components/VFooter";
-import VContent from "$components/VContent";
-import VAside from "$components/VAside";
-import VTabs from "$components/tabs";
-import Pagination from "$components/Pagination";
-import * as services from "$modules/commodity/services";
-import Vue from "vue";
-import VueClipboard from "vue-clipboard2";
-VueClipboard.config.autoSetContainer = true;
-Vue.use(VueClipboard);
-export default {
-  computed: {
-    isSeller() {
-      return _.indexOf(this.$user().roles, "分销员") != -1;
-    },
-    isSellerStore() {
-      return (
-        _.indexOf(this.$currentStore().roles, "推广店铺") != -1 &&
-        _.indexOf(this.$user().roles, "分销员") == -1
-      );
-    }
-  },
-  data() {
-    return {
-      searchForm: { commodity: "" },
-      tabs: [
-        { label: "全部", name: "-1" },
-        { label: "审核中", name: "1" },
-        { label: "审核退回", name: "3" },
-        { label: "在售中", name: "4" },
-        { label: "已下架", name: "5" },
-        { label: "已出售", name: "7" }
-      ],
-      goodsData: [],
-      page: 1,
-      display: 15,
-      status: -1,
-      total: 0,
-      assignUserId: "",
-      assignRate: "",
-      currentGoods: {},
+	import VHeader from "$components/VHeader";
+	import VFooter from "$components/VFooter";
+	import VContent from "$components/VContent";
+	import VAside from "$components/VAside";
+	import VTabs from "$components/tabs";
+	import Pagination from "$components/Pagination";
+	import * as services from "$modules/commodity/services";
+	import Vue from "vue";
+	import VueClipboard from "vue-clipboard2";
+	VueClipboard.config.autoSetContainer = true;
+	Vue.use(VueClipboard);
+	export default {
+		computed: {
+			isSeller () {
+				return _.indexOf(this.$user().roles, "分销员") != -1;
+			},
+			isSellerStore () {
+				return (
+					_.indexOf(this.$currentStore().roles, "推广店铺") != -1 &&
+					_.indexOf(this.$user().roles, "分销员") == -1
+				);
+			}
+		},
+		data () {
+			return {
+				searchForm: { commodity: "" },
+				tabs: [
+					{ label: "全部", name: "-1" },
+					{ label: "审核中", name: "1" },
+					{ label: "审核退回", name: "3" },
+					{ label: "在售中", name: "4" },
+					{ label: "已下架", name: "5" },
+					{ label: "已出售", name: "7" }
+				],
+				goodsData: [],
+				page: 1,
+				display: 15,
+				status: -1,
+				total: 0,
+				assignUserId: "",
+				assignRate: "",
+				currentGoods: {},
 
       //
       dialogTableVisible: false,
@@ -203,131 +204,132 @@ export default {
       this.$router.push({ name: "goods", params: { goods: row.uuid } });
     },
 
-    getGoods(currentPage) {
-      this.goodsData = [];
-      let param = {
-        params: {
-          page: currentPage,
-          per_page: this.display
-        }
-      };
+			getGoods (currentPage) {
+				this.goodsData = [];
+				let param = {
+					params: {
+						page: currentPage,
+						per_page: this.display
+					}
+				};
 
-      if (this.status != -1) {
-        param["params"]["status"] = this.status;
-      }
-      services.getGoods(param).then(({ data }) => {
-        this.goodsData = data.goods.data;
-        this.page = data.currentPage;
-        this.total = data.goods.total;
-      });
-    },
-    assignSubmit() {
-      let params = {
-        goods_id: this.currentGoods.uuid,
-        spread_id: this.assignUserId,
-        profit_rate: this.assignRate
-      };
-      const loading = this.$loading({
-        lock: true,
-        text: "请稍等"
-      });
+				if (this.status != -1) {
+					param["params"]["status"] = this.status;
+				}
+				services.getGoods(param).then(({ data }) => {
+					this.goodsData = data.goods.data;
+					this.page = data.currentPage;
+					this.total = data.goods.total;
+				});
+			},
+			assignSubmit () {
+				let params = {
+					goods_id: this.currentGoods.uuid,
+					spread_id: this.assignUserId,
+					profit_rate: this.assignRate
+				};
+				const loading = this.$loading({
+					lock: true,
+					text: "请稍等"
+				});
 
-      this.$http
-        .post("api/v2/store/sellers/my-drp-goods/add", params)
-        .then(({ data }) => {
-          this.dialogFormVisible = false;
-          this.currentGoods = {};
-          loading.close();
-          this.$message.success("分配成功");
-        })
-        .catch($message => {
-          loading.close();
-        });
-    },
-    showForm(row) {
-      this.dialogFormVisible = true;
-      this.currentGoods = row;
-    },
-    //
-    updateStatus(uuid, action) {
-      let message = "您确定要[删除]该商品吗？";
-      if (action == "up") {
-        message = "您确定要[上架]该商品吗？";
-      } else if (action == "down") {
-        message = "您确定要[下架]该商品吗？";
-      }
+				this.$http
+					.post("api/v2/store/sellers/my-drp-goods/add", params)
+					.then(({ data }) => {
+						this.dialogFormVisible = false;
+						this.currentGoods = {};
+						loading.close();
+						this.$message.success("分配成功");
+					})
+					.catch($message => {
+						loading.close();
+					});
+			},
+			showForm (row) {
+				this.dialogFormVisible = true;
+				this.currentGoods = row;
+			},
+			//
+			updateStatus (uuid, action) {
+				let message = "您确定要[删除]该商品吗？";
+				if (action == "up") {
+					message = "您确定要[上架]该商品吗？";
+				} else if (action == "down") {
+					message = "您确定要[下架]该商品吗？";
+				}
 
-      this.$confirm(message, {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        center: true,
-        showClose: false
-      })
-        .then(() => {
-          const loading = this.$loading({
-            lock: true,
-            text: "请稍等"
-          });
-          this.$http
-            .post("api/v1/goods/" + uuid + "/" + action, {}, { loading: true })
-            .then(({ message }) => {
-              loading.close();
-              this.$message.success(message);
-              this.getGoods(this.page);
-            });
-        })
-        .catch(() => {
-          console.log("“cancel”");
-        });
-    },
-    copy(goods) {
-      if (undefined != goods.uuid) {
-        let url =
-          location.origin +
-          "/" +
-          window.STORE_ID +
-          "/goods/" +
-          goods.uuid +
-          ".html?spread_id=" +
-          this.$user().id;
-        this.$copyText(url).then(
-          e => {
-            this.$message.success(
-              "复制成功，赶快去微信、QQ粘贴分享给你的好友吧"
-            );
-          },
-          function(e) {}
-        );
-      }
-    },
-    copySeller(goods) {
-      if (undefined != goods.uuid) {
-        let url =
-          location.origin +
-          "/" +
-          goods.store_uuid +
-          "/goods/" +
-          goods.uuid +
-          ".html?spread_id=" +
-          this.$user().id;
-        this.$copyText(url).then(
-          e => {
-            this.$message.success(
-              "复制成功，赶快去微信、QQ粘贴分享给你的好友吧"
-            );
-          },
-          function(e) {}
-        );
-      }
-    },
-    assign() {
-      this.$emit("assign", this.goods);
+				this.$confirm(message, {
+					confirmButtonText: "确定",
+					cancelButtonText: "取消",
+					center: true,
+					showClose: false
+				})
+					.then(() => {
+						const loading = this.$loading({
+							lock: true,
+							text: "请稍等"
+						});
+						this.$http
+							.post("api/v1/goods/" + uuid + "/" + action, {}, { loading: true })
+							.then(({ message }) => {
+								loading.close();
+								this.$message.success(message);
+								this.getGoods(this.page);
+							});
+					})
+					.catch(() => {
+						console.log("“cancel”");
+					});
+			},
+			copy (goods) {
+				if (undefined != goods.uuid) {
+					let url =
+						location.origin +
+						"/" +
+						window.STORE_ID +
+						"/goods/" +
+						goods.uuid +
+						".html?spread_id=" +
+						this.$user().id;
+					this.$copyText(url).then(
+						e => {
+							this.$message.success(
+								"复制成功，赶快去微信、QQ粘贴分享给你的好友吧"
+							);
+						},
+						function (e) { }
+					);
+				}
+			},
+			copySeller (goods) {
+				if (undefined != goods.uuid) {
+					let url =
+						location.origin +
+						"/" +
+						goods.store_uuid +
+						"/goods/" +
+						goods.uuid +
+						".html?spread_id=" +
+						this.$user().id;
+					this.$copyText(url).then(
+						e => {
+							this.$message.success(
+								"复制成功，赶快去微信、QQ粘贴分享给你的好友吧"
+							);
+						},
+						function (e) { }
+					);
+				}
+			},
+    editGameInfo (id) {
+      this.$router.push({ name: "shop.editGameInfo", params: { id: id } });
+
     }
-  },
-  created() {
-    this.getGoods(this.page);
-  }
-};
+		},
+		created () {
+			this.getGoods(this.page);
+		}
+	};
 </script>
 
 <style lang="scss" scoped>
