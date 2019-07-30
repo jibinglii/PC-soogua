@@ -4,6 +4,7 @@ import * as services from '$modules/auth/services'
 import localforage from 'localforage'
 import { isEmpty } from 'lodash'
 import * as TYPES from './mutations-types'
+import $route from '../routes'
 
 export const attemptLogin = ({ dispatch }, payload) =>
   services

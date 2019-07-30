@@ -8,7 +8,7 @@
 						<a href="javascript:void(0)">{{currentUser.nickname}}</a>
 					</router-link>
 
-					<a @click="logout()"
+					<a @click="toLogout"
 						 v-if="isLogged">退出</a>
 					<router-link v-if="!isLogged"
 											 :to="{name: 'auth.login'}"
@@ -183,6 +183,11 @@
 			selectedFun (val) {
 				//切换导航时，将selected设为当前项
 				this.selected = val;
+			},
+			toLogout () {
+				this.$router.push({ name: "auth.login" });
+				this.$message.success("退出成功，请重新登录")
+				this.logout();
 			}
 		},
 		components: {}
