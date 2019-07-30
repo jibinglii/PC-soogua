@@ -6,7 +6,7 @@
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
 				<el-breadcrumb-item>分销管理</el-breadcrumb-item>
-				<el-breadcrumb-item>分销任务</el-breadcrumb-item>
+				<el-breadcrumb-item>分销订单管理</el-breadcrumb-item>
 			</el-breadcrumb>
 			<v-content>
 				<div slot="aside">
@@ -19,49 +19,43 @@
 
 					<div class="orderlist">
 						<el-table :data="orderData"
+											@row-click="onDetails"
 											style="width: 100%; text-align:center;">
 							<el-table-column width="170px"
 															 align="center"
-															 prop="time"
-															 label="发布时间"></el-table-column>
+															 prop="id"
+															 label="订单号"></el-table-column>
 							<el-table-column width="170px"
 															 align="center"
-															 prop="goodsname"
+															 prop="goods_title"
 															 label="商品名称"></el-table-column>
-							<el-table-column align="center"
-															 prop="price"
-															 label="商品价格"></el-table-column>
 
 							<el-table-column align="center"
-															 prop="type"
-															 label="商品类型"
+															 prop="goods_price"
+															 label="订单价格"></el-table-column>
+
+							<el-table-column align="center"
+															 prop="status"
+															 label="订单状态"
 															 :filters="typeFilter"
 															 :filter-method="filterType"
 															 filter-placement="bottom-end"
 															 :filter-multiple="false">
 								<template slot-scope="scope">
-									<span>{{scope.row.type}}</span>
+									<span>{{scope.row.status_label}}</span>
 								</template>
 							</el-table-column>
+
 							<el-table-column align="center"
-															 prop="prop"
-															 label="佣金比例"></el-table-column>
-							<el-table-column align="center"
-															 prop="person"
-															 label="分销人员"></el-table-column>
-							<el-table-column align="center"
-															 label="操作">
-								<template slot-scope="scope">
-									<el-button @click.native.prevent="onDistribution(scope.row.goodsname)"
-														 type="button"
-														 size="small">分销商品</el-button>
-								</template>
-							</el-table-column>
+															 prop="created_at"
+															 label="下单时间"></el-table-column>
+
 						</el-table>
 					</div>
-					<pagination :total="50"
-											:pageSize="12"
-											@currentChange="currentChange" />
+					<pagination :total="total"
+											:display="display"
+											:current-page="page"
+											@pagechange="getOrder"></pagination>
 				</div>
 			</v-content>
 		</div>
@@ -76,6 +70,7 @@
 	import VAside from "$components/VAside";
 	import VTabs from "$components/tabs";
 	import Pagination from "$components/Pagination";
+	import * as services from "$modules/sellerorder/services";
 	export default {
 		computed: {
 			showPeople () {
@@ -96,55 +91,24 @@
 						{ label: "分销人员管理", name: "personnel" },
 						{ label: "分销订单管理", name: "order" }
 					]
-
 				}
 			}
-
 		},
 		data () {
-
-
 			return {
-				searchForm: { order: "" },
 
 				typeFilter: [
-					{ text: "流量", value: "流量" },
-					{ text: "账号", value: "账号" },
-					{ text: "游戏", value: "游戏" },
-					{ text: "服务", value: "服务" }
+					{ text: "待发货", value: 1 },
+					{ text: "已发货", value: 2 },
+					{ text: "已完成", value: 3 },
+					{ text: "退货中", value: 4 }
 				],
-				orderData: [
-					{
-						id: 162534281732,
-						time: "2019-05-26 23:22:126",
-						type: "游戏",
-						goodsname: "王者荣耀V8满英雄号，很多 限定皮肤",
-						price: "￥300.00",
-						prop: "10%",
-						person: "张三 128374",
-						link: "复制链接"
-					},
-					{
-						id: 162534281732,
-						time: "2019-05-26 23:22:126",
-						type: "游戏",
-						goodsname: "王者荣耀V8满英雄号，很多 限定皮肤",
-						price: "￥300.00",
-						prop: "10%",
-						person: "张三 128374",
-						link: "复制链接"
-					},
-					{
-						id: 162534281732,
-						time: "2019-05-26 23:22:126",
-						type: "游戏",
-						goodsname: "王者荣耀V8满英雄号，很多 限定皮肤",
-						price: "￥300.00",
-						prop: "10%",
-						person: "张三 128374",
-						link: "复制链接"
-					}
-				]
+				orderData: [],
+				page: 1,
+				total: 0,
+				display: 15,
+				status: -1
+
 			};
 		},
 		components: {
@@ -159,16 +123,42 @@
 			changeTab (tab, event) {
 				this.$router.push({ name: `distribution.${tab.name}` });
 			},
-			onDistribution () { },
-			currentChange () { },
 			formatter (row, column) {
 				return row.address;
 			},
 			filterType (value, row) {
-				console.log("TCL: filterType -> value", value);
-				return row.type === value;
+				return row.status === value;
 			},
-			onSearch () { }
+			onDetails (row) {
+				this.$router.push({
+					name: "seller.orderview",
+					params: {
+						order: row.id
+					}
+				});
+			},
+			getOrder (currentPage) {
+				const loading = this.$loading({
+					lock: true,
+					text: "请稍等"
+				});
+				this.orderData = [];
+				let param = {
+					params: {
+						page: currentPage,
+						per_page: this.display
+					}
+				};
+				services.getOrder(param).then(({ data }) => {
+					this.orderData = data.orders.data;
+					this.page = data.orders.current_page;
+					this.total = data.orders.total;
+					loading.close();
+				});
+			}
+		},
+		created () {
+			this.getOrder(this.page);
 		}
 	};
 </script>
