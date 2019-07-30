@@ -1,127 +1,213 @@
 <template>
-  <div>
-    <v-header />
-    <div class="container">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item>您的位置：</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>分销人员管理</el-breadcrumb-item>
-        <el-breadcrumb-item>分销状况</el-breadcrumb-item>
-      </el-breadcrumb>
-      <v-content>
-        <div slot="aside">
-          <v-aside></v-aside>
-        </div>
-        <div slot="main">
-          <v-tabs :tabs="tabs" activeTab="all" @changeTab="changeTab" />
-          <div class="personnellist">
-            <el-table :data="taskData" style="width: 100%; text-align:center;">
-              <el-table-column align="center" prop="completeTime" label="交易完成时间"></el-table-column>
-              <el-table-column align="center" prop="name" label="商品名称"></el-table-column>
-              <el-table-column align="center" prop="type" label="商品类型"></el-table-column>
-              <el-table-column align="center" prop="price" label="商品价格"></el-table-column>
-              <el-table-column align="center" prop="settleTime" label="结算时间"></el-table-column>
-              <el-table-column align="center" prop="state" label="结算状态"></el-table-column>
-            </el-table>
-          </div>
-          <pagination :total="50" :pageSize="12" @currentChange="currentChange" />
-        </div>
-      </v-content>
-    </div>
-  </div>
+	<div>
+		<v-header />
+		<div class="container">
+			<el-breadcrumb separator-class="el-icon-arrow-right">
+				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
+				<el-breadcrumb-item>分销人员管理</el-breadcrumb-item>
+				<el-breadcrumb-item>分销商品</el-breadcrumb-item>
+			</el-breadcrumb>
+			<v-content>
+				<div slot="aside">
+					<v-aside></v-aside>
+				</div>
+				<div slot="main">
+
+					<div class="personnellist">
+						<el-table :data="sellerGoods"
+											style="width: 100%; text-align:center;">
+							<el-table-column align="center"
+															 prop="title"
+															 label="商品名称"></el-table-column>
+							<el-table-column align="center"
+															 prop="amount"
+															 label="商品价格"></el-table-column>
+							<el-table-column align="center"
+															 prop="seller.profit_rate"
+															 label="分润比例"></el-table-column>
+							<el-table-column align="center"
+															 label="操作"
+															 width="400px">
+								<template slot-scope="scope">
+
+									<el-popover :ref="'popover-'+scope.$index"
+															placement="left-start"
+															width="400"
+															trigger="click">
+										<el-form ref="form"
+														 label-width="100px">
+											<el-form-item label="推广费比例">
+												<el-input v-model="profit_rate_goods"></el-input>
+											</el-form-item>
+
+											<el-form-item>
+												<el-button type="primary"
+																	 @click="save">确认</el-button>
+												<el-button @click="onCancel(scope.$index)">取消</el-button>
+											</el-form-item>
+										</el-form>
+									</el-popover>
+
+									<el-button @click.native.prevent="copyGoods(scope.row.uuid)"
+														 type="button"
+														 size="small">复制链接</el-button>
+									<el-button style="background:#fff;color:#000"
+														 @click.native.prevent="onManage(scope.row)"
+														 type="button"
+														 size="small"
+														 v-popover="'popover-'+scope.$index">修改</el-button>
+									<el-button style="background:#fff;color:#000"
+														 @click.native.prevent="del(scope.row.uuid)"
+														 type="button"
+														 size="small">删除</el-button>
+
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
+
+				</div>
+			</v-content>
+		</div>
+	</div>
 </template>
 
 <script>
-import VHeader from "$components/VHeader";
-import VFooter from "$components/VFooter";
-import VContent from "$components/VContent";
-import VAside from "$components/VAside";
-import VTabs from "$components/tabs";
-import Pagination from "$components/Pagination";
-export default {
-  data() {
-    return {
-      tabs: [
-        { label: "全部", name: "all" },
-        { label: "已启用", name: "enable" },
-        { label: "未启用", name: "disable" }
-      ],
+	import VHeader from "$components/VHeader";
+	import VFooter from "$components/VFooter";
+	import VContent from "$components/VContent";
+	import VAside from "$components/VAside";
+	import VTabs from "$components/tabs";
+	import Pagination from "$components/Pagination";
+	import Vue from 'vue';
+	import VueClipboard from 'vue-clipboard2';
+	VueClipboard.config.autoSetContainer = true
+	Vue.use(VueClipboard);
+	export default {
+		data () {
+			return {
+				sellerGoods: [],
+				spread_id: '',
+				profit_rate_goods: '',
+				current: {},
 
-      taskData: [
-        {
-          completeTime: "2019-05-27 23:23:42",
-          name: "王者荣耀V8满英雄号，很多 限定皮肤",
-          type: "游戏",
-          price: "￥100.00",
-          settleTime: "2019-05-28 23:23:42",
-          state: "已结算"
-        },
-        {
-          completeTime: "2019-05-27 23:23:42",
-          name: "王者荣耀V8满英雄号，很多 限定皮肤",
-          type: "游戏",
-          price: "￥100.00",
-          settleTime: "2019-05-28 23:23:42",
-          state: "已结算"
-        },
-        {
-          completeTime: "2019-05-27 23:23:42",
-          name: "王者荣耀V8满英雄号，很多 限定皮肤",
-          type: "游戏",
-          price: "￥100.00",
-          settleTime: "2019-05-28 23:23:42",
-          state: "已结算"
-        },
-        {
-          completeTime: "2019-05-27 23:23:42",
-          name: "王者荣耀V8满英雄号，很多 限定皮肤",
-          type: "游戏",
-          price: "￥100.00",
-          settleTime: "2019-05-28 23:23:42",
-          state: "已结算"
-        }
-      ]
-    };
-  },
-  components: {
-    VHeader,
-    VFooter,
-    VContent,
-    VAside,
-    VTabs,
-    Pagination
-  },
-  methods: {
-    changeTab(tab, event) {
-      console.log(`TCL: handleClick -> data`, tab.name,event);
-    },
-    onCopyLink() {},
-    currentChange() {}
-  }
-};
+			};
+		},
+		components: {
+			VHeader,
+			VFooter,
+			VContent,
+			VAside,
+			VTabs,
+			Pagination
+		},
+		methods: {
+			changeTab (tab, event) {
+				console.log(`TCL: handleClick -> data`, tab.name, event);
+			},
+			onCopyLink () { },
+			currentChange () { },
+			async getSellerGoods () {
+				const loading = this.$loading({
+					lock: true,
+					text: "加载中"
+				});
+				this.sellerGoods = [];
+				await this.$http.get('api/v2/store/sellers/my-drp-goods/' + this.spread_id).then(({ data }) => {
+					this.sellerGoods = data.goods
+					loading.close();
+				})
+			},
+			save () {
+				const loading = this.$loading({
+					lock: true,
+					text: "加载中"
+				});
+				this.$http.post('api/v2/store/sellers/my-drp-goods/update', { spread_id: this.spread_id, goods_id: this.current.uuid, profit_rate: this.profit_rate_goods }).then(({ data }) => {
+					loading.close();
+					this.profit_rate_goods = ''
+					this.getSellerGoods()
+					this.$message.success("修改成功")
+				}).catch(() => {
+					loading.close()
+					this.getSellerGoods()
+				});
+			},
+			onManage (row) {
+				this.profit_rate_goods = row.seller.profit_rate;
+				this.current = row;
+			},
+			onCancel (index) {
+				this.$refs[`popover-` + index].doClose()
+				this.profit_rate_goods = ''
+			},
+			del (uuid) {
+				this.$confirm('您确定要删除该分销员吗', "提示", {
+					confirmButtonText: "删除",
+					cancelButtonText: "取消"
+				}).then(() => {
+					const { spread_id } = this
+					const loading = this.$loading({
+						lock: true,
+						text: "加载中"
+					});
+					this.$http.post('api/v2/store/sellers/my-drp-goods/delete', { spread_id, goods_id: uuid }).then(({ data }) => {
+						loading.close()
+						this.getSellerGoods()
+						this.$message.success("删除成功")
+					})
+				}).catch(() => {
+					console.log('cancel')
+				}
+				)
+			},
+			copyGoods (uuid) {
+				let url = location.origin + '/' + window.STORE_ID + '/goods/' + uuid + '.html?spread_id=' + this.spread_id
+				this.$copyText(url).then((e) => {
+					this.$message.success('复制成功，赶快去微信、QQ粘贴给你的分销员推广吧');
+				}, function (e) {
+				})
+			},
+
+		},
+		mounted () {
+
+			let id = this.$route.params.id
+			this.spread_id = id
+			this.getSellerGoods()
+		},
+	};
 </script>
 
 <style lang="scss" scoped>
-/deep/.el-table {
-  th {
-    background: #ededed;
-  }
-}
-.el-breadcrumb {
-  margin-top: 18px;
-  margin-bottom: 18px;
+	/deep/.el-table {
+		th {
+			background: #ededed;
+		}
+	}
+	.el-breadcrumb {
+		margin-top: 18px;
+		margin-bottom: 18px;
 
-  .el-breadcrumb__item {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 30px;
-    color: #666;
-    &:last-child {
-      color: #666;
-    }
-  }
-}
-/deep/.el-breadcrumb__separator {
-  color: #666;
-}
+		.el-breadcrumb__item {
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 30px;
+			color: #666;
+			&:last-child {
+				color: #666;
+			}
+		}
+	}
+	/deep/.el-breadcrumb__separator {
+		color: #666;
+	}
+	.el-button {
+		background: #000;
+		border: 1px solid #000;
+		color: #fff;
+		padding: 11px 20px;
+		font-size: 12px;
+	}
 </style>
