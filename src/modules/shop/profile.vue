@@ -6,7 +6,8 @@
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
-				<el-breadcrumb-item>店铺管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'shop'}">店铺管理</el-breadcrumb-item>
+				<el-breadcrumb-item>店铺设置</el-breadcrumb-item>
 			</el-breadcrumb>
 			<v-content>
 				<div slot="aside">

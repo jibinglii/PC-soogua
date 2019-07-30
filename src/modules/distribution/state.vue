@@ -5,7 +5,8 @@
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item>您的位置：</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>分销人员管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ name:'distribution.personnel'}">分销管理</el-breadcrumb-item>
 				<el-breadcrumb-item>分销商品</el-breadcrumb-item>
 			</el-breadcrumb>
 			<v-content>
