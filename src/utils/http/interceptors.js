@@ -40,11 +40,14 @@ export default http => {
             window.location.href = '/' + window.STORE_ID + '/auth/login'
           }
           break
+        case 404:
+          //Toast.fail('404')
+          break;
         case 500:
         case 501:
         case 503:
         default:
-          Toast.fail('内容走丢了')
+          Toast.fail('服务器内部出错')
       }
       return Promise.reject(error.response)
     }
