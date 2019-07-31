@@ -40,7 +40,7 @@
 		mounted () {
 
 			user.getAuthStatus().then(({ data }) => {
-				if (data.auth_status.is_auth == 0 || data.auth_status.is_auth == 4) {
+				if (data.auth_status.is_auth == 0 || data.auth_status.is_auth == 3) {
 					this.$alert("您还没有认证，请下载搜瓜App进行认证").then(() => {
 						// window.soogua.postMessage(JSON.stringify({
 						// 	"action": "route",

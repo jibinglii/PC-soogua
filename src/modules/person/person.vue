@@ -115,14 +115,20 @@
 								<router-link tag="a"
 														 :to="{name:'person.resetpaypwd'}">{{payImg?"修改":"设置"}}</router-link>
 							</div>
-							<!-- <div class="safe-item">
-                <div class="left">
-                  <img src="~$assets/images/false.png" alt>
-                  <i>实名认证</i>
-                  <span>发布商品时需完成实名认证，使您的交易更安全。</span>
-                </div>
-                <router-link tag="a" :to="{name:'person.approve'}">认证</router-link>
-              </div> -->
+							<div class="safe-item">
+								<div class="left">
+									<img v-if="authImg"
+											 src="~$assets/images/true.png"
+											 alt>
+									<img v-else
+											 src="~$assets/images/false.png"
+											 alt>
+									<i>实名认证</i>
+									<span>发布商品时需完成实名认证，使您的交易更安全。</span>
+								</div>
+								<router-link tag="a"
+														 :to="{name:'person.approve'}">{{authImg?"通过":"认证"}}</router-link>
+							</div>
 						</div>
 					</div>
 					<div class="link-center">
@@ -221,6 +227,7 @@
 			return {
 				pwdImg: false,
 				payImg: false,
+				authImg: false,
 				orderCount: {
 					buyer_count: {
 						0: {
@@ -278,12 +285,21 @@
 						this.pwdImg = true
 					}
 				})
+			},
+			authStatus () {
+				user.getAuthStatus().then(({ data }) => {
+					if (data.auth_status.is_auth == 2) {
+						this.authImg = true;
+					}
+				})
+
 			}
 		},
 		mounted () {
 			this.getOrderCount();
 			this.getAccountTotal();
 			this.checkSetPwd();
+			this.authStatus();
 		},
 		filters: {
 			checkNum (num) {

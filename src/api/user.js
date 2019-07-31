@@ -9,26 +9,30 @@ const md5 = (str) => {
 
 import http from '$utils/http'
 export default {
-  async getUserInfo(loading) {
+  async getUserInfo (loading) {
     let load = loading || false;
     return await http.get('api/v1/auth/me', { loading: load })
   },
-  async setPayPasswd(pwd, loading) {
+  async setPayPasswd (pwd, loading) {
     let load = loading || false;
     return await http.post('api/v1/user/set-pay-password', { password: md5(pwd) }, { loading: load })
   },
-  async veryPPwd(pwd, loading) {
+  async veryPPwd (pwd, loading) {
     let load = loading || false;
     return await http.post('api/v1/user/verify-password', { password: md5(pwd) }, { loading: load })
   },
-  async modifyPPwd(old_pwd, pwd, loading) {
+  async modifyPPwd (old_pwd, pwd, loading) {
     let load = loading || false;
     return await http.post('api/v1/user/modify-password', { password: md5(old_pwd), new_pass: md5(pwd) }, { loading: load })
   },
-  async getAuthStatus() {
+  async getAuthStatus () {
     return await http.get('api/v1/user/store/auth/status', { loading: true })
   },
-  async login(mobile, password) {
+  async getAuthInfo () {
+    return await http.get('api/v1/user/store/auth/basic', { loading: true })
+  },
+
+  async login (mobile, password) {
     let params = {
       username: mobile,
       password: password,
@@ -39,7 +43,7 @@ export default {
     };
     return await http.post('api/v1/auth/login', params, { loading: true })
   },
-  async loginByCode(mobile, code) {
+  async loginByCode (mobile, code) {
     let params = {
       mobile: mobile,
       code: code,
