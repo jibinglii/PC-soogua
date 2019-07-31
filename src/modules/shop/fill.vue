@@ -60,7 +60,7 @@
 					<div class="info-tips">
 						<img src="~$assets/images/gantan.png"
 								 alt>
-						<span>您当前商品成交后，所需服务费为 {{service_fee}}元</span>
+						<span>您当前商品成交后，所需服务费为 {{formatMoney(serviceFee)}}元</span>
 					</div>
 				</div>
 			</div>
@@ -195,6 +195,7 @@
 			},
 			...mapGetters(["currentUser"]),
 			serviceFee () {
+				console.log(this.param.amount)
 				return this.param.amount * this.currentUser.service_fee;
 			}
 		},
