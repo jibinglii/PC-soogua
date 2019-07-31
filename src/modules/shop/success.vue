@@ -41,21 +41,14 @@
 
 			user.getAuthStatus().then(({ data }) => {
 				if (data.auth_status.is_auth == 0 || data.auth_status.is_auth == 3) {
-					this.$alert("您还没有认证，请下载搜瓜App进行认证").then(() => {
-						// window.soogua.postMessage(JSON.stringify({
-						// 	"action": "route",
-						// 	"params": JSON.stringify({ "url": "cardOCR" })
-						// }))
+					this.$alert("您还没有认证，请点击确认进行认证").then(() => {
+						this.$router.push({ name: "person.approve" });
 					})
 				}
 			}).catch(error => {
-				console.log(error);
-				this.$alert("您还没有认证，请下载搜瓜App进行认证").then(() => {
 
-					// window.soogua.postMessage(JSON.stringify({
-					// 	"action": "route",
-					// 	"params": JSON.stringify({ "url": "cardOCR" })
-					// }))
+				this.$alert("您还没有认证，请点击确认进行认证").then(() => {
+					this.$router.push({ name: "person.approve" });
 				})
 			})
 
