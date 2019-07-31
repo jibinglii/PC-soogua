@@ -1,11 +1,11 @@
 <template>
 	<div class="steps">
-		<div class="cell">
+		<!-- <div class="cell">
 			<img src="~$assets/images/xuanzeyouxi.png"
 					 alt />
 			<span>选择游戏</span>
 		</div>
-		<i>...</i>
+		<i>...</i> -->
 		<div class="cell">
 			<img src="~$assets/images/leixing.png"
 					 alt />
