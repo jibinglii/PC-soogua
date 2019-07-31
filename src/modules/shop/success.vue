@@ -17,14 +17,14 @@
 				<p>您的商品已提交审核，请注意查收消息或通知</p>
 				<el-button @click.native.prevent="onHome()">返回店铺</el-button>
 			</div>
-			<div class="title">
+			<!-- <div class="title">
 				热门推荐
 			</div>
 			<div class="recommend">
 				<goods-item v-for="k in 5"
 										:key="k"
 										:styles="{width:'225px', float:'left', marginRight:'19px',background:'#fff'}" />
-			</div>
+			</div> -->
 		</div>
 		<v-footer />
 	</div>
@@ -35,7 +35,31 @@
 	import VFooter from "$components/VFooter";
 	import Steps from "./components/steps";
 	import GoodsItem from "$components/GoodsItem";
+	import user from '$api/user'
 	export default {
+		mounted () {
+
+			user.getAuthStatus().then(({ data }) => {
+				if (data.auth_status.is_auth == 0 || data.auth_status.is_auth == 4) {
+					this.$alert("您还没有认证，请下载搜瓜App进行认证").then(() => {
+						// window.soogua.postMessage(JSON.stringify({
+						// 	"action": "route",
+						// 	"params": JSON.stringify({ "url": "cardOCR" })
+						// }))
+					})
+				}
+			}).catch(error => {
+				console.log(error);
+				this.$alert("您还没有认证，请下载搜瓜App进行认证").then(() => {
+
+					// window.soogua.postMessage(JSON.stringify({
+					// 	"action": "route",
+					// 	"params": JSON.stringify({ "url": "cardOCR" })
+					// }))
+				})
+			})
+
+		},
 		data () {
 			return {
 				checked: false,
