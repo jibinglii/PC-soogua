@@ -172,10 +172,8 @@
 					this.$message.success("认证信息提交成功，请等待审核");
 					this.identity = true
 					this.authStatus();
-
 				}).catch((error => {
 					loading.close()
-
 				}))
 
 			},
@@ -185,7 +183,6 @@
 						this.identity = true;
 						this.auth_status = data.label[data.auth_status.is_auth];
 					}
-
 				}).catch(error => {
 					this.identity = false;
 				})
