@@ -38,7 +38,7 @@
 								<p>请扫描二维码完成下单付款</p>
 								<div id="qrcode"
 										 ref="qrcode"></div>
-								<el-button @click="toOrder">已经完成付款</el-button>
+								<el-button @click="toOrder">完成付款</el-button>
 							</div>
 							<el-button type="button"
 												 class="buy"

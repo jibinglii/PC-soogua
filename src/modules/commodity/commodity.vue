@@ -31,7 +31,7 @@
 												 alt>
 										<div class="text">
 											<span>{{scope.row.title}}</span>
-											<i>{{scope.row.content}}</i>
+											<i>{{scope.row.content|ellipsis}}</i>
 										</div>
 									</div>
 								</template>
@@ -149,6 +149,15 @@
 	VueClipboard.config.autoSetContainer = true;
 	Vue.use(VueClipboard);
 	export default {
+		filters: {
+			ellipsis (value) {
+				if (!value) return ''
+				if (value.length > 12) {
+					return value.slice(0, 12) + '...'
+				}
+				return value
+			}
+		},
 		computed: {
 			isSeller () {
 				return _.indexOf(this.$user().roles, "分销员") != -1;
