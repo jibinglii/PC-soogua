@@ -219,7 +219,7 @@
 			img {
 				display: block;
 				width: 106px;
-				height: auto;
+				height: 106px;
 				max-width: 100%;
 			}
 			.el-button {
