@@ -71,19 +71,19 @@
 						title: "查看详情",
 						img: require("../../assets/images/zheng.png"),
 						desc:
-							"1. 身份证上的信息不能被遮挡，且清晰可见 2. 照片请勿进行任何软件处理 3. 照片支持ipge/ipg/gif/bmp/p"
+							"1. 身份证上的信息不能被遮挡，且清晰可见 \n 2. 照片请勿进行任何软件处理\n 3. 照片支持ipge/ipg/gif/bmp/p"
 					},
 					fan: {
 						title: "查看详情",
 						img: require("../../assets/images/fan.png"),
 						desc:
-							"1. 身份证上的信息不能被遮挡，且清晰可见 2. 照片请勿进行任何软件处理 3. 照片支持ipge/ipg/gif/bmp/p"
+							"1. 身份证上的信息不能被遮挡，且清晰可见 \n 2. 照片请勿进行任何软件处理 \n 3. 照片支持ipge/ipg/gif/bmp/p"
 					},
 					shouchi: {
 						title: "查看详情",
 						img: require("../../assets/images/shouchi.png"),
 						desc:
-							"1. 身份证上的信息不能被遮挡，且清晰可见 2. 照片请勿进行任何软件处理 3. 照片支持ipge/ipg/gif/bmp/p"
+							"1. 身份证上的信息不能被遮挡，且清晰可见 \n 2. 照片请勿进行任何软件处理 \n 3. 照片支持ipge/ipg/gif/bmp/p"
 					}
 				}
 			};

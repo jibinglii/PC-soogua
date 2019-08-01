@@ -24,7 +24,7 @@
 											 tag="a">帮助中心</router-link>
 					<router-link :to="{name: 'collection'}"
 											 tag="a">我的收藏</router-link>
-					<a href="javascript:">客服中心</a>
+					<a @click="tipDown">客服中心</a>
 				</div>
 			</div>
 		</div>
@@ -39,12 +39,12 @@
 							<span>{{currentStore.name}}</span>
 							<i>实名认证</i>
 						</div>
-						<p>店铺介绍：{{currentStore.desc}}</p>
+						<p>店铺介绍：{{currentStore.desc|ellipsis}}</p>
 						<div class="group-2">
 							<a href="javascript:">
 								<img src="~$assets/images/kefu-white.png"
 										 alt>
-								<span>联系商家</span>
+								<span @click="tipDown">联系商家</span>
 							</a>
 							<!-- <a href>
                 <img src="~$assets/images/shoucang-6@2x.png" alt />
@@ -92,8 +92,16 @@
 							<span>{{item.name}}</span>
 						</div>
 					</router-link>
-					<!-- <router-link :to="{name: 'person.person'}" tag="a">个人中心</router-link>
-          <router-link :to="{name: 'person.person'}" tag="a">下载APP</router-link>-->
+					<el-tooltip placement="bottom"
+											effect="light">
+						<img slot="content"
+								 src="~$assets/images/erweima.png">
+						<el-button>下载APP</el-button>
+					</el-tooltip>
+					<!-- <router-link :to="{name: 'person.person'}"
+											 tag="a">个人中心</router-link>
+					<router-link :to="{name: 'person.person'}"
+											 tag="a">下载APP</router-link> -->
 				</div>
 			</div>
 		</div>
@@ -104,6 +112,16 @@
 	import { mapGetters, mapActions } from "vuex";
 	import * as services from "$modules/home/services";
 	export default {
+		filters: {
+			ellipsis (value) {
+				if (!value) return ''
+				if (value.length > 50) {
+					return value.slice(0, 50) + '...'
+				}
+				return value
+			}
+		},
+
 		data () {
 			return {
 				selected: "home",
@@ -140,11 +158,11 @@
 						name: "个人中心",
 						active: false
 					},
-					{
-						id: "",
-						name: "下载APP",
-						active: false
-					}
+					// {
+					// 	id: "",
+					// 	name: "下载APP",
+					// 	active: false
+					// }
 				]
 			};
 		},
@@ -188,6 +206,9 @@
 				this.$router.push({ name: "auth.login" });
 				this.$message.success("退出成功，请重新登录")
 				this.logout();
+			},
+			tipDown () {
+				this.$message.error('请下载App联系客服或商家');
 			}
 		},
 		components: {}
@@ -361,6 +382,18 @@
 				}
 				.activeText {
 					background: #4c4a4a;
+					color: #fff;
+				}
+			}
+			/deep/.el-tooltip {
+				color: #999;
+				background: #222;
+				font-size: 15px;
+				font-weight: 400;
+				line-height: 50px;
+				padding: 0 20px;
+				border: 0;
+				&:hover {
 					color: #fff;
 				}
 			}

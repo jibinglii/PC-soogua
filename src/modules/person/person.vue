@@ -44,13 +44,13 @@
 							<div class="right">
 								<p>快捷入口</p>
 								<div class="group">
-									<router-link tag="a"
-															 :to="{name:'home'}"
-															 class="graphic m-right">
+									<a tag="a"
+										 @click="toMyStore"
+										 class="graphic m-right">
 										<img src="~$assets/images/dianpu.png"
 												 alt>
 										<span>店铺首页</span>
-									</router-link>
+									</a>
 									<router-link tag="a"
 															 :to="{name:'person.card'}"
 															 class="graphic">
@@ -175,7 +175,7 @@
 									<span>微信公众号</span>
 								</div>
 								<div class="qrcode">
-									<img src="~$assets/images/erweima.png"
+									<img src="~$assets/images/weixin_ewm.png"
 											 alt>
 								</div>
 							</div>
@@ -293,6 +293,13 @@
 					}
 				})
 
+			},
+			toMyStore () {
+				if (this.currentUser.store != '') {
+					window.location.href = "/" + this.currentUser.store.hash_id
+				} else {
+					this.$router.push({ name: "home" })
+				}
 			}
 		},
 		mounted () {

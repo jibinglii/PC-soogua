@@ -70,7 +70,7 @@
 								<el-form-item>
 									<el-button style="widht:300px"
 														 type="primary"
-														 @click="submitForm()">确认</el-button>
+														 @click="submitForm()">提交申请资料</el-button>
 								</el-form-item>
 							</el-form>
 							<div class="tips">
