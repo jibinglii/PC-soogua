@@ -355,4 +355,13 @@
 		padding: 11px 20px;
 		font-size: 12px;
 	}
+	/deep/.el-dialog__body {
+		padding: 35px 0 70px 60px;
+	}
+	/deep/.el-button--default {
+		background: #ededed;
+		color: #909399;
+		border: 1px solid #909399;
+		//border-radius: 50%;
+	}
 </style>
