@@ -182,8 +182,14 @@
 											 v-model="isagree"
 											 checked>
 						我同意
-						<a href>《中国网络游戏服务寄售交易协议》</a>
+						<a @click="showDialog=true">《商品寄售服务协议》</a>
 					</el-checkbox>
+					<el-dialog title="商品寄售服务协议"
+										 :visible.sync="showDialog">
+						<div class="protocol"
+								 v-html="saleProtocol"></div>
+
+					</el-dialog>
 				</div>
 			</div>
 			<div class="bottom-nav">
@@ -249,6 +255,8 @@
 		},
 		data () {
 			return {
+				saleProtocol: '',
+				showDialog: false,
 				serverName: "",
 				//		mainActiveIndex: 0,
 				types: {
@@ -297,8 +305,14 @@
 
 			this.loadGame();
 			this.serverName = this.$route.query.desc;
+			this.getSaleProtocol();
 		},
 		methods: {
+			getSaleProtocol () {
+				protocol.getProtocol('transaction').then(({ data }) => {
+					this.saleProtocol = data.content
+				})
+			},
 			showAgree () {
 				this.$refs.agree.show();
 			},
@@ -628,5 +642,8 @@
 	}
 	/deep/.el-breadcrumb__separator {
 		color: #666;
+	}
+	.protocol {
+		padding: 20px;
 	}
 </style>

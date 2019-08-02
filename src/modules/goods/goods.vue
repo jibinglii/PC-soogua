@@ -31,7 +31,7 @@
 					</p>
 					<div class="btn-group">
 
-						<el-popover placement="right"
+						<!-- <el-popover placement="right"
 												width="400"
 												trigger="click">
 							<div class="ewm_order">
@@ -44,12 +44,22 @@
 												 class="buy"
 												 :class="{disabled: !canBuy, 'can-not-contact': !canContact}"
 												 slot="reference">{{canBuy?'立即购买':'暂时无货'}}</el-button>
-						</el-popover>
+						</el-popover> -->
 
-						<!-- <button type="button"
-										@click="onBuy(goodsId)"
-										class="buy"
-										:class="{disabled: !canBuy, 'can-not-contact': !canContact}">{{canBuy?'立即购买':'暂时无货'}}</button> -->
+						<el-button type="button"
+											 @click="toMobilePay"
+											 class="buy"
+											 :class="{disabled: !canBuy, 'can-not-contact': !canContact}">{{canBuy?'立即购买':'暂时无货'}}</el-button>
+						<el-dialog :visible.sync="dialogVisible"
+											 width="20%">
+							<div class="ewm_order">
+								<p>请扫描二维码完成下单付款</p>
+								<div id="qrcode"
+										 ref="qrcode"></div>
+								<el-button @click="toOrder">完成付款后点击这里</el-button>
+							</div>
+
+						</el-dialog>
 						<router-link class="graphic"
 												 v-show="canContact"
 												 :to="{name: ''}">
@@ -69,10 +79,10 @@
 						</a>
 					</div>
 				</div>
-				<div class="qrcode">
+				<!-- <div class="qrcode">
 					<img src="~$assets/images/saomaxiadan@2x.png"
 							 alt>
-				</div>
+				</div> -->
 			</div>
 			<el-container>
 				<el-main>
@@ -112,7 +122,8 @@
 						<p>4.本平台提供的数字化商品性质不支持七天无理由退货服务。</p>
 					</div>
 				</el-main>
-				<el-aside width="300px">
+				<el-aside width="300px"
+									class="el-aside">
 					<div class="aside-head">商品精选</div>
 					<!-- <div class="aside-text">
             <div class="detail" v-for="i in 3" :key="i">
@@ -142,8 +153,10 @@
 	export default {
 		data () {
 			return {
+				dialogVisible: false,
 				goodsId: "",
 				goods: { images: [], game: [], server: [], specs: [] },
+				hasQrcode: false
 			};
 		},
 		components: {
@@ -166,9 +179,8 @@
 		created () {
 			this.goodsId = this.$route.params.goods;
 			this.getDetail();
-			this.$nextTick(function () {
-				this.createdQrcode();
-			})
+			this.createdQrcode();
+
 		},
 		beforeRouteUpdate (to, from, next) {
 			// 在当前路由改变，但是该组件被复用时调用
@@ -245,6 +257,15 @@
 			},
 			toOrder () {
 				this.$router.push({ name: "buyer.order" })
+			},
+			toMobilePay () {
+				this.dialogVisible = true;
+				if (!this.hasQrcode) {
+					this.$nextTick(function () {
+						this.createdQrcode();
+					})
+					this.hasQrcode = true
+				}
 			}
 
 		},
@@ -271,7 +292,7 @@
 		color: #666;
 	}
 	.content {
-		width: 100%;
+		width: 73.5%;
 		background: #fff;
 		padding: 22px 56px;
 		margin-bottom: 16px;
@@ -448,6 +469,7 @@
 	}
 
 	.el-aside {
+		margin-top: -276px;
 		.aside-head {
 			margin-bottom: 15px;
 			font-size: 14px;
@@ -530,7 +552,8 @@
 		p {
 			font-size: 14px;
 			font-weight: bold;
-			width: 45%;
+			width: 50%;
+			text-align: center;
 			margin: 0 auto;
 		}
 
@@ -540,7 +563,7 @@
 		}
 		button {
 			margin: 0 auto;
-			width: 140px;
+			width: 160px;
 			font-size: 12px;
 			font-weight: bold;
 			text-align: center;

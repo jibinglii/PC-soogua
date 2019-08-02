@@ -132,8 +132,14 @@
 											 v-model="isagree"
 											 checked>
 						我同意
-						<a href>《中国网络游戏服务寄售交易协议》</a>
+						<a @click="showDialog=true">《商品寄售服务协议》</a>
 					</el-checkbox>
+					<el-dialog title="商品寄售服务协议"
+										 :visible.sync="showDialog">
+						<div class="protocol"
+								 v-html="saleProtocol"></div>
+
+					</el-dialog>
 				</div>
 			</div>
 			<div class="bottom-nav">
@@ -157,10 +163,13 @@
 	import Steps from "./components/steps";
 	import SparkMD5 from "spark-md5";
 	import { mapGetters } from "vuex";
+	import protocol from '$api/protocol';
 
 	export default {
 		data () {
 			return {
+				saleProtocol: '',
+				showDialog: false,
 				serverName: "...",
 				param: {
 					title: "",
@@ -208,6 +217,11 @@
 			}
 		},
 		methods: {
+			getSaleProtocol () {
+				protocol.getProtocol('transaction').then(({ data }) => {
+					this.saleProtocol = data.content
+				})
+			},
 			onNext () {
 				//this.$router.push({ name: "shop.success" });
 
@@ -346,6 +360,7 @@
 		},
 		mounted () {
 			this.initParam();
+			this.getSaleProtocol();
 		}
 	};
 </script>
@@ -516,5 +531,8 @@
 	}
 	/deep/.el-breadcrumb__separator {
 		color: #666;
+	}
+	.protocol {
+		padding: 20px;
 	}
 </style>

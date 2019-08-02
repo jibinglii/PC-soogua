@@ -24,7 +24,7 @@
 											 tag="a">帮助中心</router-link>
 					<router-link :to="{name: 'collection'}"
 											 tag="a">我的收藏</router-link>
-					<a @click="tipDown">客服中心</a>
+					<a @click="dialogVisible = true">客服中心</a>
 				</div>
 			</div>
 		</div>
@@ -44,8 +44,18 @@
 							<a href="javascript:">
 								<img src="~$assets/images/kefu-white.png"
 										 alt>
-								<span @click="tipDown">联系商家</span>
+								<span @click="dialogVisible = true">联系商家</span>
 							</a>
+
+							<el-dialog :visible.sync="dialogVisible"
+												 width="20%">
+								<div class="ewm_order">
+									<p>请下载使用搜瓜App联系！</p>
+									<img src="~$assets/images/erweima.png">
+								</div>
+
+							</el-dialog>
+
 							<!-- <a href>
                 <img src="~$assets/images/shoucang-6@2x.png" alt />
                 <span>收藏</span>
@@ -53,7 +63,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="right">
+				<!-- <div class="right">
 					<p>
 						在售商品：
 						<span>100件</span>
@@ -66,7 +76,7 @@
 						订单成交率：
 						<span>98%</span>
 					</p>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<div class="bottom">
@@ -124,6 +134,7 @@
 
 		data () {
 			return {
+				dialogVisible: false,
 				selected: "home",
 				tabs: [
 					{
@@ -397,6 +408,24 @@
 					color: #fff;
 				}
 			}
+		}
+	}
+	/deep/.ewm_order {
+		display: flex;
+		flex-direction: column;
+		padding: 30px 0;
+
+		p {
+			font-size: 14px;
+			font-weight: bold;
+			width: 45%;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+		img {
+			padding: 15px 0;
+			margin: 0 auto;
 		}
 	}
 </style>
