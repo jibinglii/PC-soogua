@@ -24,13 +24,14 @@
 					<div class="aside-head">商品精选</div>
 					<div @click="toInfo(item.uuid)"
 							 class="aside-item"
-							 v-for="(item,key) in recommend.slice(0,5)"
+							 v-for="(item,key) in recommend.slice(0,7)"
 							 :key="key">
 						<img class="icon"
 								 :src="item.logo"
 								 alt>
 						<div class="desc">
-							<h4>{{item.title}}</h4>
+
+							<h4>{{item.content|ellipsis}}</h4>
 							<h5>￥{{item.amount}}</h5>
 							<p>库存{{item.store_nums}}件</p>
 						</div>
@@ -53,6 +54,15 @@
 	import * as services from "./services";
 
 	export default {
+		filters: {
+			ellipsis (value) {
+				if (!value) return ''
+				if (value.length > 30) {
+					return value.slice(0, 30) + '...'
+				}
+				return value
+			}
+		},
 		data () {
 			return {
 				goods: [],
@@ -72,7 +82,7 @@
 				let param = {
 					params: {
 						"fields[store_goods]":
-							"id,title,amount,game_id,sale_nums,images,game_name,server_name",
+							"id,title,amount,game_id,sale_nums,images,game_name,server_name,content",
 						page: currentPage,
 						per_page: this.display
 					}

@@ -28,8 +28,8 @@
 		font-weight: 500;
 		line-height: 13px;
 		background-color: #fff;
-		padding-top: 10px;
-		padding-bottom: 20px;
+		padding-top: 20px;
+		padding-bottom: 30px;
 		.nav {
 			font-size: 12px;
 			font-weight: 500;

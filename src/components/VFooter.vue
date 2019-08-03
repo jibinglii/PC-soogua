@@ -55,8 +55,8 @@
 		font-weight: 500;
 		line-height: 13px;
 		background-color: #000;
-		padding-top: 10px;
-		padding-bottom: 20px;
+		padding-top: 20px;
+		padding-bottom: 30px;
 		margin-top: 30px;
 		.nav {
 			font-size: 12px;

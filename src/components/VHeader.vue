@@ -56,27 +56,11 @@
 
 							</el-dialog>
 
-							<!-- <a href>
-                <img src="~$assets/images/shoucang-6@2x.png" alt />
-                <span>收藏</span>
-              </a>-->
+							
 						</div>
 					</div>
 				</div>
-				<!-- <div class="right">
-					<p>
-						在售商品：
-						<span>100件</span>
-					</p>
-					<p>
-						成交单量：
-						<span>1032笔</span>
-					</p>
-					<p>
-						订单成交率：
-						<span>98%</span>
-					</p>
-				</div> -->
+				
 			</div>
 		</div>
 		<div class="bottom">
