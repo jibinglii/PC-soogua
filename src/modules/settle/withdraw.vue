@@ -36,13 +36,14 @@
 
 								<el-input title="提现金额"
 													v-model="amount"
+													@focus="showDec=true"
 													type="number"
 													placeholder="请输入提现金额"></el-input>
 								<div class="info-tips">
 									<!-- <img src="~$assets/images/gantan.png"
 											 alt /> -->
 									<span v-if="showBalance">钱包余额￥{{currentUser.wallet.amount|formatMoney}}元，<a @click="withdrawBtn">全部提现</a> 。</span>
-									<span v-if="showDec">额外扣除{{amount}}元（费率0.01） </span>
+									<span v-if="showDec">额外扣除{{amount*fee|formatMoney}}元（费率0.01） </span>
 								</div>
 
 							</el-form-item>
@@ -90,6 +91,7 @@
 				amount: "",
 				showBalance: true,
 				showDec: false,
+				fee: 0.005,
 
 
 				//: true,
@@ -109,14 +111,15 @@
 		//方法集合
 		methods: {
 			setBtnClass () {
-				if (this.bank == '' || this.amount <= 0) {
+
+				if (this.bank == '' || this.amount <= 0 || this.amount == '') {
 					this.btnClass = 'btn-flase';
 				} else {
 					this.btnClass = 'btn'
 				}
 			},
 			pay () {
-				if (this.bank == '' || this.amount <= 0) return false;
+				if (this.bank == '' || this.amount <= 0 || this.amount == '') return false;
 				this.$prompt('请输入支付密码', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
@@ -140,6 +143,7 @@
 
 					})
 				}).catch(() => {
+
 
 				});
 
