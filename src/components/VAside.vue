@@ -92,7 +92,7 @@
 						show: true,
 						contents: [
 							{ name: "我的收藏", router: "collection", show: true },
-							{ name: "我的消息", router: "message", show: true },
+							// { name: "我的消息", router: "message", show: true },
 							{ name: "操作流程", router: "flow", show: true },
 							{ name: "使用帮助", router: "help.help", show: true },
 							{ name: "意见反馈", router: "feedback", show: true }
@@ -111,7 +111,7 @@
 				} else {
 					this.curItem = router;
 				}
-				console.log("TCL: created -> curItem", this.curItem)
+				// console.log("TCL: created -> curItem", this.curItem)
 				this.$router.push({ name: this.curItem });
 			},
 			checkActive (router) {

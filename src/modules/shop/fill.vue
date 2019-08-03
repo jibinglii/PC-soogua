@@ -204,7 +204,6 @@
 			},
 			...mapGetters(["currentUser"]),
 			serviceFee () {
-				console.log(this.param.amount)
 				return this.param.amount * this.currentUser.service_fee;
 			}
 		},

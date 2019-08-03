@@ -18,7 +18,7 @@
 											style="width: 100%; text-align:center;"
 											@row-click="clickRow">
 							<el-table-column align="center"
-															 width="200px"
+															 width="420px"
 															 prop
 															 label="商品">
 								<template slot-scope="scope">
@@ -34,15 +34,10 @@
 															 label="价格"
 															 :formatter="amountFormat"></el-table-column>
 							<el-table-column align="center"
-															 prop="sale_nums"
+															 prop="store_nums"
 															 label="库存"
 															 :formatter="saleNumsFormat"></el-table-column>
-							<el-table-column align="center"
-															 prop
-															 label="保障">
-								<i></i>
-								实名认证
-							</el-table-column>
+
 							<el-table-column align="center"
 															 label="操作">
 								<template slot-scope="scope">
@@ -99,7 +94,7 @@
 		},
 		methods: {
 			saleNumsFormat (row, column) {
-				return row.sale_nums + "件";
+				return row.store_nums + "件";
 			},
 			amountFormat (row, column) {
 				return "￥" + row.amount;
@@ -124,7 +119,7 @@
 			async getList (currentPage) {
 				let param = {
 					params: {
-						"fields[store_goods]": "id,title,amount,game_id,sale_nums,images",
+						"fields[store_goods]": "id,title,amount,game_id,store_nums,images",
 						page: currentPage,
 						per_page: this.display
 					}

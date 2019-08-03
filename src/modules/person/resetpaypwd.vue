@@ -143,7 +143,7 @@
 
 				}).catch(error => {
 					loading.close();
-					console.log(error);
+					// console.log(error);
 					this.pwd.oldpassword = '';
 					this.pwd.password = '';
 					this.pwd.confirmPasswd = '';

@@ -274,7 +274,6 @@
 								this.getDetail();
 							})
 							.catch(() => {
-								console.log(123);
 								loading.close();
 							});
 					});

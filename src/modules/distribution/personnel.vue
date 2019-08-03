@@ -185,7 +185,7 @@
 				this.$router.push({ name: `distribution.${tab.name}` });
 			},
 			changeChildTab (tab, event) {
-				console.log(`TCL: handleClick -> datatab.name,event${tab.name} ${event}`);
+				// console.log(`TCL: handleClick -> datatab.name,event${tab.name} ${event}`);
 			},
 			onState (id) {
 
@@ -262,7 +262,7 @@
 						})
 					})
 					.catch(() => {
-						console.log("“cancel”");
+						// console.log("“cancel”");
 					});
 			},
 			copyGoods (uuid) {

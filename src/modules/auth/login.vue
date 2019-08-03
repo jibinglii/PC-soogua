@@ -53,7 +53,7 @@
 		},
 		data () {
 			return {
-				form: 0
+				form: 2
 			};
 		},
 		computed: {

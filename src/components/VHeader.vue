@@ -24,7 +24,7 @@
 											 tag="a">帮助中心</router-link>
 					<router-link :to="{name: 'collection'}"
 											 tag="a">我的收藏</router-link>
-					<a @click="dialogVisible = true">客服中心</a>
+					<!-- <a @click="dialogVisible = true">客服中心</a> -->
 				</div>
 			</div>
 		</div>
@@ -50,33 +50,17 @@
 							<el-dialog :visible.sync="dialogVisible"
 												 width="20%">
 								<div class="ewm_order">
-									<p>请下载使用搜瓜App联系！</p>
+									<p>使用手机扫码二维码联系！</p>
 									<img src="~$assets/images/erweima.png">
 								</div>
 
 							</el-dialog>
 
-							<!-- <a href>
-                <img src="~$assets/images/shoucang-6@2x.png" alt />
-                <span>收藏</span>
-              </a>-->
+							
 						</div>
 					</div>
 				</div>
-				<!-- <div class="right">
-					<p>
-						在售商品：
-						<span>100件</span>
-					</p>
-					<p>
-						成交单量：
-						<span>1032笔</span>
-					</p>
-					<p>
-						订单成交率：
-						<span>98%</span>
-					</p>
-				</div> -->
+				
 			</div>
 		</div>
 		<div class="bottom">

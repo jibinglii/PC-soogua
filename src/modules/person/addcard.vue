@@ -153,7 +153,7 @@ export default {
               _.assign(this.bankinfo, { bank: this.cardtype })
             )
             .then(({ data }) => {
-              console.log(data);
+              // console.log(data);
               this.saving = false;
 
               let redirect = this.$route.query["redirect"];
