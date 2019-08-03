@@ -14,7 +14,8 @@
 			<router-link :to="{name:'person.person'}">个人中心</router-link>
 		</div>
 		<p class="copyright"><img src="~$assets/images/logo_copy.png"
-					 alt>搜瓜提供店铺服务</p>
+					 alt></p>
+		<p class="copyright">搜瓜提供店铺服务</p>
 	</div>
 </template>
 
@@ -61,7 +62,7 @@
 		color: #999;
 		margin-top: 10px;
 		img {
-			height: 10px;
+			height: 30px;
 			padding-right: 10px;
 		}
 	}

@@ -21,7 +21,9 @@
 		<!-- <p class="license">【网络文化经营许可证】：陕网文许字[xxxx]xxxx-xxx号|【增值电信业务经营许可证】：陕xx-xxxxxxxx【工信部</p> -->
 
 		<p class="copyright"><img src="~$assets/images/logo_copy.png"
-					 alt>搜瓜提供店铺服务</p>
+					 alt></p>
+		<p class="copyright">
+			搜瓜提供店铺服务</p>
 
 		<!-- <div class="safe">
       <img src="~$assets/images/copyright1.png" alt />
@@ -104,7 +106,7 @@
 		color: #999;
 		margin-top: 10px;
 		img {
-			height: 10px;
+			height: 30px;
 			padding-right: 10px;
 		}
 	}

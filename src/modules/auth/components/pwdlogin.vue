@@ -5,8 +5,8 @@
 				<b @click="changeForm(2)">手机登录</b>
 				密码登录
 			</span>
-			<img @click="changeForm(0)"
-					 src="~$assets/images/qr_icon.png">
+			<!-- <img @click="changeForm(0)"
+					 src="~$assets/images/qr_icon.png"> -->
 		</div>
 		<div class="form_body">
 			<el-input class="phone"
@@ -29,13 +29,13 @@
 			</el-input>
 			<el-button @click="submit">登录</el-button>
 		</div>
-		<hr>
+		<!-- <hr>
 		<div class="third_party_login">
 			<img src="~$assets/images/qq_login.png">
 			<a href="#">QQ登录</a>
 			<img src="~$assets/images/watch_login.png">
 			<a href="#">微信登录</a>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -89,7 +89,8 @@
 	.login_form {
 		float: right;
 		width: 376px;
-		height: 428px;
+		// height: 428px;
+		height: 376px;
 		background-color: #fff;
 		.form_title {
 			display: flex;
