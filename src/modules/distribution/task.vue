@@ -46,10 +46,6 @@
 							</el-table-column>
 						</el-table>
 					</div>
-					<!-- <pagination :total="total"
-											:display="display"
-											:current-page="page"
-											@currentChange="getGoods" /> -->
 				</div>
 			</v-content>
 		</div>

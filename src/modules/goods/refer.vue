@@ -75,9 +75,9 @@
 					<el-checkbox class="cehckbox"
 											 v-model="isagree">
 						点击提交订单表示已阅读并同意
-						<!-- <a href>《搜瓜用户服务协议及规则》</a> -->
+
 						<a @click="showAgree">《担保服务购买须知》</a>
-						<!-- <a href>《交易安全险》</a> -->
+
 					</el-checkbox>
 					<agree title="担保服务协议"
 								 ref="agree"

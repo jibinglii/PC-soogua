@@ -142,7 +142,7 @@
 					this.$router.push({ name: "home" });
 				} catch (e) {
 					loading.close();
-					console.log(e);
+					// console.log(e);
 					if (e.status !== 422) {
 
 						this.$message.error("手机号或验证码错误");

@@ -79,7 +79,7 @@
 						this.total = data.data.total;
 					})
 					.catch(({ response }) => {
-						console.log("“cancel”");
+						// console.log("“cancel”");
 					});
 			},
 
@@ -106,7 +106,7 @@
 							});
 					})
 					.catch(() => {
-						console.log("“cancel”");
+						// console.log("“cancel”");
 					});
 			}
 		}

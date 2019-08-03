@@ -1,6 +1,6 @@
 <template>
 	<div class="footer">
-		<div class="nav">
+		<!-- <div class="nav">
 			<router-link :to="{name:'home'}">首页</router-link>
 			<span>|</span>
 			<router-link :to="{name:'gamecenter'}">游戏</router-link>
@@ -12,7 +12,7 @@
 			<router-link :to="{name:'goods.service'}">服务</router-link>
 			<span>|</span>
 			<router-link :to="{name:'person.person'}">个人中心</router-link>
-		</div>
+		</div> -->
 		<!-- <div class="device">
       <a href="javascript:;">触屏版</a>
       <span>|</span>
@@ -21,9 +21,7 @@
 		<!-- <p class="license">【网络文化经营许可证】：陕网文许字[xxxx]xxxx-xxx号|【增值电信业务经营许可证】：陕xx-xxxxxxxx【工信部</p> -->
 
 		<p class="copyright"><img src="~$assets/images/logo_copy.png"
-					 alt></p>
-		<p class="copyright">
-			搜瓜提供店铺服务</p>
+					 alt>提供店铺服务 </p>
 
 		<!-- <div class="safe">
       <img src="~$assets/images/copyright1.png" alt />
@@ -57,8 +55,8 @@
 		font-weight: 500;
 		line-height: 13px;
 		background-color: #000;
-		padding-top: 40px;
-		padding-bottom: 30px;
+		padding-top: 10px;
+		padding-bottom: 20px;
 		margin-top: 30px;
 		.nav {
 			font-size: 12px;
@@ -101,12 +99,15 @@
 	.copyright {
 		font-size: 12px;
 		font-weight: 500;
-		line-height: 13px;
+		line-height: 20px;
 		text-align: center;
 		color: #999;
 		margin-top: 10px;
+
 		img {
-			height: 30px;
+			position: relative;
+			top: 7px;
+			height: 20px;
 			padding-right: 10px;
 		}
 	}

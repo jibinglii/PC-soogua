@@ -293,7 +293,7 @@
 							});
 					})
 					.catch(() => {
-						console.log("“cancel”");
+						// console.log("“cancel”");
 					});
 			},
 			copy (goods) {

@@ -24,7 +24,7 @@
 											 tag="a">帮助中心</router-link>
 					<router-link :to="{name: 'collection'}"
 											 tag="a">我的收藏</router-link>
-					<a @click="dialogVisible = true">客服中心</a>
+					<!-- <a @click="dialogVisible = true">客服中心</a> -->
 				</div>
 			</div>
 		</div>
@@ -50,7 +50,7 @@
 							<el-dialog :visible.sync="dialogVisible"
 												 width="20%">
 								<div class="ewm_order">
-									<p>请下载使用搜瓜App联系！</p>
+									<p>使用手机扫码二维码联系！</p>
 									<img src="~$assets/images/erweima.png">
 								</div>
 

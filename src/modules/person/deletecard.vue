@@ -76,7 +76,6 @@
 					.get("/api/v1/bankcard/" + this.id, { loading: true })
 					.then(({ data }) => {
 						this.item = data;
-						console.log(data);
 						loading.close();
 					})
 				// .catch(error => {

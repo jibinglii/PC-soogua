@@ -164,7 +164,7 @@
 									<span>微博公众号</span>
 								</div>
 								<div class="qrcode">
-									<img src="~$assets/images/erweima.png"
+									<img src="~$assets/images/weibo_erweima.png"
 											 alt>
 								</div>
 							</div>
@@ -184,7 +184,6 @@
 					<div class="recommend-center">
 						<div class="title">
 							<span>&nbsp;</span>
-							<!-- <a href="javascript:">更多 ></!-->
 						</div>
 						<!-- <ul>
 							<li class="recommend-item"

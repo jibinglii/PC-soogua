@@ -1,6 +1,6 @@
 <template>
 	<div class="footer">
-		<div class="nav">
+		<!-- <div class="nav">
 			<router-link :to="{name:'home'}">首页</router-link>
 			<span>|</span>
 			<router-link :to="{name:'gamecenter'}">游戏</router-link>
@@ -12,10 +12,9 @@
 			<router-link :to="{name:'goods.service'}">服务</router-link>
 			<span>|</span>
 			<router-link :to="{name:'person.person'}">个人中心</router-link>
-		</div>
+		</div> -->
 		<p class="copyright"><img src="~$assets/images/logo_copy.png"
-					 alt></p>
-		<p class="copyright">搜瓜提供店铺服务</p>
+					 alt>搜瓜提供店铺服务</p>
 	</div>
 </template>
 
@@ -29,8 +28,8 @@
 		font-weight: 500;
 		line-height: 13px;
 		background-color: #fff;
-		padding-top: 40px;
-		padding-bottom: 30px;
+		padding-top: 10px;
+		padding-bottom: 20px;
 		.nav {
 			font-size: 12px;
 			font-weight: 500;
@@ -57,12 +56,15 @@
 	.copyright {
 		font-size: 12px;
 		font-weight: 500;
-		line-height: 13px;
+		line-height: 20px;
 		text-align: center;
 		color: #999;
 		margin-top: 10px;
+
 		img {
-			height: 30px;
+			position: relative;
+			top: 5px;
+			height: 20px;
 			padding-right: 10px;
 		}
 	}

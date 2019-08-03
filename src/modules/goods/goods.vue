@@ -22,7 +22,7 @@
 						<span class="price">￥{{goods.amount}}</span>
 					</p>
 					<p>
-						发布数量：
+						库存：
 						<span>{{goods.store_nums}}件</span>
 					</p>
 					<p>
@@ -60,13 +60,7 @@
 							</div>
 
 						</el-dialog>
-						<router-link class="graphic"
-												 v-show="canContact"
-												 :to="{name: ''}">
-							<img src="~$assets/images/kefu@2x.png"
-									 alt>
-							<span>联系商家</span>
-						</router-link>
+
 						<a class="graphic"
 							 @click="collect(goods)">
 							<img src="~$assets/images/collect.png"

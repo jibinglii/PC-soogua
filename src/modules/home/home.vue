@@ -88,7 +88,7 @@
 						this.goods = data.goods.data;
 					})
 					.catch(({ response }) => {
-						console.log("“cancel”");
+						// console.log("“cancel”");
 					});
 			},
 			// 商品精选
