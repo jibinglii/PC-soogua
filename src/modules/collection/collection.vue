@@ -20,6 +20,8 @@
 												:goods="item"
 												@delItem="delItem(item.uuid, index)"
 												:styles="{width:'284px', float:'left', marginLeft:'25px',marginBottom:'20px',background:'#F2F2F2'}" />
+						<p class="isEmpty"
+							 v-show="goods.length<=0">暂无收藏</p>
 					</div>
 					<pagination :total="total"
 											:display="display"
@@ -45,12 +47,15 @@
 		data () {
 			return {
 				goods: [],
+				isEmpty: true,
 				infiniteId: +new Date(),
 				total: 0, // 记录总条数
 				page: 1,// 当前的页数
-				display: 20
+				display: 20,
+
 			};
 		},
+
 		components: {
 			VHeader,
 			VFooter,
@@ -77,9 +82,9 @@
 						this.goods = data.data.data;
 						this.page = data.data.current_page;
 						this.total = data.data.total;
+
 					})
 					.catch(({ response }) => {
-						// console.log("“cancel”");
 					});
 			},
 
@@ -142,5 +147,11 @@
 	}
 	/deep/.el-breadcrumb__separator {
 		color: #666;
+	}
+	.isEmpty {
+		color: #909399;
+		line-height: 20px;
+		width: 70px;
+		margin: 0 auto;
 	}
 </style>

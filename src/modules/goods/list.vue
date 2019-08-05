@@ -25,8 +25,14 @@
 									<div class="goodsname">
 										<img :src="scope.row.logo"
 												 alt>
-										<span>{{scope.row.title}}</span>
+										<div class="gameBox">
+											<span class>{{scope.row.title|ellipsis}}</span>
+
+											<p>{{scope.row.game_name}}</p>
+											<p>{{scope.row.server_name}}</p>
+										</div>
 									</div>
+
 								</template>
 							</el-table-column>
 							<el-table-column align="center"
@@ -72,6 +78,15 @@
 
 	import * as service from "$modules/home/services";
 	export default {
+		filters: {
+			ellipsis (value) {
+				if (!value) return ''
+				if (value.length > 20) {
+					return value.slice(0, 20) + '...'
+				}
+				return value
+			}
+		},
 		data () {
 			return {
 				goods: [],
@@ -122,7 +137,7 @@
 			async getList (currentPage) {
 				let param = {
 					params: {
-						"fields[store_goods]": "id,title,amount,game_id,store_nums,images",
+						"fields[store_goods]": "id,title,amount,game_id,game_name,server_name,store_nums,images",
 						page: currentPage,
 						per_page: this.display
 					}
@@ -203,14 +218,25 @@
 			height: 88px;
 			margin-right: 17px;
 		}
-		span {
-			flex: 1;
-			text-align: left;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			display: -webkit-box;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 3;
+		.gameBox {
+			display: flex;
+			flex-direction: column;
+
+			span {
+				flex: 1;
+				text-align: left;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;
+			}
+			p {
+				text-align: left;
+				color: #999;
+				margin-top: 7px;
+				font-size: 10px;
+			}
 		}
 	}
 	.aside-head {

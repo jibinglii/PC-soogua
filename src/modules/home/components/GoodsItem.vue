@@ -6,7 +6,7 @@
 				 alt>
 		<div class="info">
 			<div class="group">
-				<span class="title">{{ goods.title }}</span>
+				<span class="title">{{ goods.title|ellipsis_title }}</span>
 				<span class="name">{{ goods.game_name }}</span>
 
 			</div>
@@ -27,6 +27,13 @@
 				if (!value) return ''
 				if (value.length > 20) {
 					return value.slice(0, 20) + '...'
+				}
+				return value
+			},
+			ellipsis_title (value) {
+				if (!value) return ''
+				if (value.length > 12) {
+					return value.slice(0, 12) + '...'
 				}
 				return value
 			}
