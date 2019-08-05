@@ -76,7 +76,7 @@
 		},
 		methods: {
 			onHome () {
-				this.$router.push({ name: "shop" });
+				this.$router.push({ name: "shop.profile" });
 			}
 		}
 	};
