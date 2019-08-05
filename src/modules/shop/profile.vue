@@ -7,7 +7,7 @@
 				<el-breadcrumb-item :to="{ name:'home'}">首页</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'person.person'}">个人中心</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ name:'shop'}">店铺管理</el-breadcrumb-item>
-				<el-breadcrumb-item>店铺设置</el-breadcrumb-item>
+				<el-breadcrumb-item>店铺管理</el-breadcrumb-item>
 			</el-breadcrumb>
 			<v-content>
 				<div slot="aside">
@@ -15,7 +15,20 @@
 				</div>
 				<div slot="main">
 					<div class="profile">
-						<div class="title">店铺设置</div>
+						<div class="title">
+							<span>店铺管理</span>
+							<a href="javascript:"
+								 @click="toPreview">
+								<i class="el-icon-shopping-cart-2"></i>&nbsp;
+								<i>预览店铺</i>
+							</a>
+							<a href="javascript:"
+								 @click="toPublish">
+								<i class="el-icon-goods"></i>&nbsp;
+								<i>发布商品</i>
+							</a>
+
+						</div>
 						<div class="content">
 							<div class="left">
 								<el-form :model="profile"
@@ -188,7 +201,14 @@
 					const end = start + chunkSize >= file.size ? file.size : start + chunkSize;
 					reader.readAsArrayBuffer(blobSlice.call(file, start, end))
 				}
-			}
+			},
+			toPublish () {
+				this.$router.push({ name: "shop.release" });
+			},
+			toPreview () {
+				this.$router.push({ name: "home" });
+			},
+
 		}
 	};
 </script>
@@ -199,12 +219,39 @@
 		background: #fff;
 		margin-bottom: 100px;
 
+		// .title {
+		// 	font-size: 14px;
+		// 	font-weight: 400;
+		// 	padding-left: 16px;
+		// 	line-height: 60px;
+		// 	border-bottom: 1px solid #ededed;
+
 		.title {
+			padding-left: 18px;
+			overflow: hidden;
 			font-size: 14px;
 			font-weight: 400;
-			padding-left: 16px;
-			line-height: 60px;
 			border-bottom: 1px solid #ededed;
+			span {
+				font-weight: bold;
+				padding-left: 16px;
+				line-height: 50px;
+				color: #000;
+			}
+			a {
+				float: right;
+				padding-right: 16px;
+			}
+			i {
+				color: #666;
+				line-height: 50px;
+			}
+			img {
+				width: 15px;
+				height: auto;
+				vertical-align: middle;
+				margin-right: 10px;
+			}
 		}
 	}
 

@@ -13,6 +13,27 @@
 					<v-aside></v-aside>
 				</div>
 				<div slot="main">
+					<div class="shop">
+						<div class="title">
+							<span>商品管理</span>
+						</div>
+						<div class="content">
+							<div class="sale">
+								<div class="left">
+									<i>累计销售</i>
+									<b>{{info.total_sale|formatMoney}}</b>
+								</div>
+								<span class="center"></span>
+								<div class="right">
+									<i>本月销售</i>
+									<b>{{ info.total_sale_month | formatMoney }}</b>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div slot="main">
 					<v-tabs :tabs="tabs"
 									activeTab="-1"
 									@changeTab="changeTab" />
@@ -192,7 +213,8 @@
 				//
 				dialogTableVisible: false,
 				dialogFormVisible: false,
-				formLabelWidth: "120px"
+				formLabelWidth: "120px",
+				info: {}
 			};
 		},
 		components: {
@@ -339,10 +361,20 @@
 			editGameInfo (id) {
 				this.$router.push({ name: "shop.editGameInfo", params: { id: id } });
 
+			},
+			toPublish () {
+				this.$router.push({ name: "shop.release" });
+			},
+			toPreview () { this.$router.push({ name: "home" }); },
+			async getInfo () {
+				await this.$http.get('api/v1/seller/total').then(({ data }) => {
+					this.info = data
+				});
 			}
 		},
 		created () {
 			this.getGoods(this.page);
+			this.getInfo()
 		}
 	};
 </script>
@@ -393,6 +425,156 @@
 		border: 1px solid #000;
 		color: #fff;
 		font-size: 12px;
+	}
+
+	.el-breadcrumb {
+		margin-top: 18px;
+		margin-bottom: 18px;
+
+		.el-breadcrumb__item {
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 30px;
+			color: #666;
+			&:last-child {
+				color: #666;
+			}
+		}
+	}
+	/deep/.el-breadcrumb__separator {
+		color: #666;
+	}
+
+	.shop {
+		background: #fff;
+		.title {
+			padding-left: 18px;
+			overflow: hidden;
+			font-size: 14px;
+			font-weight: 400;
+			border-bottom: 1px solid #ededed;
+			span {
+				font-weight: bold;
+				padding-left: 16px;
+				line-height: 50px;
+				color: #000;
+			}
+			a {
+				float: right;
+				padding-right: 16px;
+			}
+			i {
+				color: #666;
+				line-height: 50px;
+			}
+			img {
+				width: 15px;
+				height: auto;
+				vertical-align: middle;
+				margin-right: 10px;
+			}
+		}
+		.content {
+			padding: 20px 16px 20px 16px;
+			margin-bottom: 20px;
+			.sale {
+				height: 212px;
+				background: #e8e8e8;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				.left {
+					flex: 2;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					i {
+						font-size: 14px;
+						font-weight: 400;
+						color: #999;
+					}
+					b {
+						margin-top: 20px;
+						font-size: 29px;
+						font-weight: bold;
+						color: #000;
+						&::before {
+							content: "￥";
+							font-size: 14px;
+							font-weight: 400;
+						}
+					}
+				}
+				.center {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					max-width: 1px;
+					background: #dadada;
+					height: 100px;
+				}
+				.right {
+					flex: 2;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					i {
+						font-size: 14px;
+						font-weight: 400;
+						color: #666;
+					}
+					b {
+						margin-top: 20px;
+						font-size: 29px;
+						font-weight: bold;
+						color: #000;
+						&::before {
+							content: "￥";
+							font-size: 14px;
+							font-weight: 400;
+						}
+					}
+				}
+			}
+			.operation {
+				margin-top: 16px;
+				height: 162px;
+				background: #e8e8e8;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				.btn {
+					flex: 2;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					i {
+						margin-top: 5px;
+						font-size: 14px;
+						font-weight: 400;
+						color: #666;
+					}
+					img {
+						width: 60px;
+						height: 60px;
+					}
+				}
+				.center {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					max-width: 1px;
+					background: #dadada;
+					height: 100px;
+				}
+			}
+		}
 	}
 
 	.el-breadcrumb {

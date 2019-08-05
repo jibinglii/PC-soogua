@@ -51,7 +51,7 @@
 						contents: [
 							{
 								name: "店铺管理",
-								router: "shop",
+								router: "shop.profile",
 								show: this.$currentStore().user_id == this.$user().id && (_.indexOf(this.$currentStore().roles, '渠道店铺') != -1 || _.indexOf(this.$currentStore().roles, '推广店铺') != -1)
 							},
 							{
