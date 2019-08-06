@@ -79,7 +79,7 @@
 						loading.close();
 					})
 				// .catch(error => {
-				//   console.log(error);
+
 				// });
 			},
 			nextFocus (el, index) {

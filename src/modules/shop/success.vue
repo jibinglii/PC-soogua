@@ -17,14 +17,7 @@
 				<p>您的商品已提交审核，请注意查收消息或通知</p>
 				<el-button @click.native.prevent="onHome()">返回店铺</el-button>
 			</div>
-			<!-- <div class="title">
-				热门推荐
-			</div>
-			<div class="recommend">
-				<goods-item v-for="k in 5"
-										:key="k"
-										:styles="{width:'225px', float:'left', marginRight:'19px',background:'#fff'}" />
-			</div> -->
+
 		</div>
 		<v-footer />
 	</div>

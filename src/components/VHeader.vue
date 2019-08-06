@@ -24,7 +24,7 @@
 											 tag="a">帮助中心</router-link>
 					<router-link :to="{name: 'collection'}"
 											 tag="a">我的收藏</router-link>
-					<!-- <a @click="dialogVisible = true">客服中心</a> -->
+
 				</div>
 			</div>
 		</div>
@@ -56,11 +56,10 @@
 
 							</el-dialog>
 
-							
 						</div>
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 		<div class="bottom">
@@ -92,10 +91,7 @@
 								 src="~$assets/images/erweima.png">
 						<el-button>下载APP</el-button>
 					</el-tooltip>
-					<!-- <router-link :to="{name: 'person.person'}"
-											 tag="a">个人中心</router-link>
-					<router-link :to="{name: 'person.person'}"
-											 tag="a">下载APP</router-link> -->
+
 				</div>
 			</div>
 		</div>
@@ -182,7 +178,6 @@
 			});
 		},
 		created () {
-			window.document.title = this.currentStore.name;
 			if (localStorage.getItem("selectedStorage") != null) {
 				// 若缓存中没有值就设置为默认的路由
 				this.selected = localStorage.getItem("selectedStorage");
@@ -190,7 +185,9 @@
 				this.selected = "home"; //
 			}
 		},
-
+		mounted () {
+			if (this.currentStore.name != undefined) window.document.title = this.currentStore.name;
+		},
 		methods: {
 			...mapActions(["logout"]),
 			selectedFun (val) {

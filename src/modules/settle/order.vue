@@ -153,7 +153,7 @@
 				this.$router.push({ name: `settle.${tab.name}` });
 			},
 			changeChildTab (tab, event) {
-				// console.log(`TCL: handleClick -> datatab.name,event${tab.name} ${event}`);
+
 			},
 			onState () {
 				this.$router.push({
@@ -162,7 +162,7 @@
 				});
 			},
 			onManage (index) {
-				// console.log("TCL: onManage -> index", index);
+
 				this.curPerson = this.personData[index];
 				this.showPopover = true;
 			},

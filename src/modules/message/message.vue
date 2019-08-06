@@ -100,7 +100,7 @@
 
 			},
 			handleCheckAllChange (val) {
-				// console.log("TCL: handleCheckAllChange -> val", val);
+
 				let arr = [];
 				if (val) {
 					for (let i = 0, l = this.options.length;i < l;i++) {
@@ -111,7 +111,7 @@
 				this.isIndeterminate = false;
 			},
 			handleCheckedChange (value) {
-				// console.log("TCL: handleCheckedChange -> value", value);
+
 				let checkedCount = value.length;
 				this.checkAll = checkedCount === this.options.length;
 			}

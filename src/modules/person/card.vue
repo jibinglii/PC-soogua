@@ -108,7 +108,7 @@
 					text: "请稍等"
 				});
 				this.$http.get("/api/v1/bankcard", { loading: true }).then(({ data }) => {
-					// console.log(data)
+
 					loading.close();
 					this.cardList = data.bank_cards;
 				});
@@ -138,7 +138,7 @@
 							});
 					})
 					.catch(() => {
-						// console.log("“cancel”");
+
 					});
 			},
 			deleteCard (id, index) {
@@ -164,7 +164,7 @@
 							});
 					})
 					.catch(() => {
-						// console.log("“cancel”");
+
 					});
 			}
 		}

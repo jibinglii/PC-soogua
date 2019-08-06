@@ -15,13 +15,7 @@
 				<br>扫一扫登录
 			</span>
 		</div>
-		<!-- <hr>
-    <div class="third_party_login">
-      <img src="~$assets/images/qq_login.png">
-      <a href="#">QQ登录</a>
-      <img src="~$assets/images/watch_login.png">
-      <a href="#">微信登录</a>
-    </div> -->
+
 	</div>
 </template>
 

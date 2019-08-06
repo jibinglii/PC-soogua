@@ -163,7 +163,7 @@
 					})
 					.catch(() => {
 						loading.close();
-						// console.log("“cancel”");
+
 					});
 			},
 			destroy (id, index) {
@@ -193,7 +193,7 @@
 					})
 					.catch(() => {
 						loading.close();
-						// console.log("“cancel”");
+
 					});
 			},
 			changeTab (tab, event) {

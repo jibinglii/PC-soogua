@@ -16,7 +16,7 @@ export const postLogin = ({ username, password }) => {
 
 
 export const getCode = ({ ticket, randstr, username }) => {
-  // try {
+
   return http.post('api/v1/tcatpcha', {
     client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
     client_secret: process.env.VUE_APP_AUTH_CLIENT_SECRET,
@@ -24,9 +24,7 @@ export const getCode = ({ ticket, randstr, username }) => {
     randstr: randstr,
     mobile: username,
   });
-  // } catch (e) {
-  //   console.log(e)
-  // }
+
 
 };
 

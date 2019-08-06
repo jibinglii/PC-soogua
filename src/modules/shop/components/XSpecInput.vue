@@ -1,6 +1,6 @@
 <template>
 	<div class="x-spec-input">
-		<!-- <span class="x-spec-input-title">{{ data.title }}</span> -->
+
 		<label v-for="(item, index) in items"
 					 :key="index"
 					 class="x-spec-input-item"

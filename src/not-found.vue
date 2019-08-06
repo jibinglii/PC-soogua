@@ -1,7 +1,5 @@
 <template>
 	<div>
-		<!-- <x-header title="404"/> -->
-		<!-- <h4>{{ $route.query['code'] }}</h4> -->
 
 		<div class="div-404">
 			<img src="./assets/images/404.png"
