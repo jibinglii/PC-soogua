@@ -37,7 +37,7 @@
 								<ul>
 									<li>买家成交数：{{orderCount.buyer_count[3].num}}件</li>
 									<li>未结算资金：{{AccountTotal.account}}元</li>
-									<li>卖家成交数：{{orderCount.seller_count}}</li>
+									<li>卖家成交数：{{orderCount.seller_count}}件</li>
 									<li>已结算资金：{{AccountTotal.accounted}}元</li>
 								</ul>
 							</div>
@@ -61,7 +61,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="order">
+						<div class="order"
+								 @click="toOrder">
 							<div class="order-graphic">
 								<i>{{orderCount.buyer_count[0].num}}</i>
 								<span>待付款</span>
@@ -265,6 +266,7 @@
 			},
 			async getOrderCount () {
 				services.getOrderCount().then(data => {
+					console.log(data)
 					this.orderCount.seller_count = data.data.seller_count;
 
 					Object.keys(data.data.buyer_count).forEach(key => {
@@ -299,6 +301,9 @@
 				} else {
 					this.$router.push({ name: "home" })
 				}
+			},
+			toOrder () {
+				this.$router.push({ name: 'buyer.order' });
 			}
 		},
 		mounted () {

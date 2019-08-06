@@ -56,11 +56,10 @@
 
 							</el-dialog>
 
-							
 						</div>
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 		<div class="bottom">
@@ -182,7 +181,6 @@
 			});
 		},
 		created () {
-			window.document.title = this.currentStore.name;
 			if (localStorage.getItem("selectedStorage") != null) {
 				// 若缓存中没有值就设置为默认的路由
 				this.selected = localStorage.getItem("selectedStorage");
@@ -190,7 +188,9 @@
 				this.selected = "home"; //
 			}
 		},
-
+		mounted () {
+			if (this.currentStore.name != undefined) window.document.title = this.currentStore.name;
+		},
 		methods: {
 			...mapActions(["logout"]),
 			selectedFun (val) {

@@ -51,7 +51,7 @@
 										<img :src="scope.row.logo"
 												 alt>
 										<div class="text">
-											<span>{{scope.row.title}}</span>
+											<span>{{scope.row.title|ellipsis}}</span>
 											<i>{{scope.row.content|ellipsis}}</i>
 										</div>
 									</div>
@@ -70,7 +70,7 @@
 															 label="商品状态"></el-table-column>
 							<el-table-column align="center"
 															 label="操作"
-															 width="300px">
+															 width="400px">
 								<template slot-scope="scope">
 									<div v-if="!isSeller">
 										<el-button type="button"
@@ -91,6 +91,17 @@
 															 v-if="scope.row.status == 4"
 															 @click.stop="updateStatus(scope.row.uuid, 'down')"
 															 size="small">下架</el-button>
+										<el-button style="background:#fff;color:#000"
+															 type="button"
+															 v-if="scope.row.status == 4&&scope.row.recommend_at==''"
+															 @click.stop="updateStatus(scope.row.uuid, 'setRecommend')"
+															 size="small">推荐</el-button>
+
+										<el-button style="background:#fff;color:#000"
+															 type="button"
+															 v-if="scope.row.status == 4&&scope.row.recommend_at!=''"
+															 @click.stop="updateStatus(scope.row.uuid, 'dropRecommend')"
+															 size="small">取消推荐</el-button>
 										<el-button type="button"
 															 v-if="scope.row.status == 4"
 															 @click.stop="showForm(scope.row)"
@@ -293,8 +304,11 @@
 					message = "您确定要[上架]该商品吗？";
 				} else if (action == "down") {
 					message = "您确定要[下架]该商品吗？";
+				} else if (action == "setRecommend") {
+					message = "您确定要[推荐]该商品吗？";
+				} else if (action == "dropRecommend") {
+					message = "您确定要[取消推荐]该商品吗？";
 				}
-
 				this.$confirm(message, {
 					confirmButtonText: "确定",
 					cancelButtonText: "取消",
@@ -312,6 +326,8 @@
 								loading.close();
 								this.$message.success(message);
 								this.getGoods(this.page);
+							}).catch(() => {
+								loading.close()
 							});
 					})
 					.catch(() => {

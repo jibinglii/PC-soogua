@@ -1,7 +1,12 @@
 import http from '$utils/http'
 
 export const getOrderCount = () => {
-    return http.get('api/v1/user/pc-me')
+    let param = {
+        headers: {
+            "X-Store-Id": ""
+        }
+    };
+    return http.get('api/v1/user/pc-me', param)
 }
 
 export const getAccountTotal = () => {
