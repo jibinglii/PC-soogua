@@ -105,7 +105,7 @@
 		},
 		methods: {
 			changeTab (tab, event) {
-				// console.log(`TCL: handleClick -> data`, tab.name, event);
+
 			},
 			onCopyLink () { },
 			currentChange () { },
@@ -159,7 +159,7 @@
 						this.$message.success("删除成功")
 					})
 				}).catch(() => {
-					// console.log('cancel')
+
 				}
 				)
 			},

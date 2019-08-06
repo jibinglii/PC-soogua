@@ -331,7 +331,7 @@
 							});
 					})
 					.catch(() => {
-						// console.log("“cancel”");
+
 					});
 			},
 			copy (goods) {

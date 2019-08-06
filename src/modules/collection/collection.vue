@@ -111,7 +111,7 @@
 							});
 					})
 					.catch(() => {
-						// console.log("“cancel”");
+						
 					});
 			}
 		}

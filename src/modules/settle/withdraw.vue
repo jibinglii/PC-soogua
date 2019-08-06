@@ -40,8 +40,7 @@
 													type="number"
 													placeholder="请输入提现金额"></el-input>
 								<div class="info-tips">
-									<!-- <img src="~$assets/images/gantan.png"
-											 alt /> -->
+
 									<span v-if="showBalance">钱包余额￥{{currentUser.wallet.amount|formatMoney}}元，<a @click="withdrawBtn">全部提现</a> 。</span>
 									<span v-if="showDec">额外扣除{{amount*fee|formatMoney}}元（费率0.01） </span>
 								</div>

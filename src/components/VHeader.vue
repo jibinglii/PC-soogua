@@ -24,7 +24,7 @@
 											 tag="a">帮助中心</router-link>
 					<router-link :to="{name: 'collection'}"
 											 tag="a">我的收藏</router-link>
-					<!-- <a @click="dialogVisible = true">客服中心</a> -->
+
 				</div>
 			</div>
 		</div>
@@ -91,10 +91,7 @@
 								 src="~$assets/images/erweima.png">
 						<el-button>下载APP</el-button>
 					</el-tooltip>
-					<!-- <router-link :to="{name: 'person.person'}"
-											 tag="a">个人中心</router-link>
-					<router-link :to="{name: 'person.person'}"
-											 tag="a">下载APP</router-link> -->
+
 				</div>
 			</div>
 		</div>

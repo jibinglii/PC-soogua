@@ -111,7 +111,6 @@
 				} else {
 					this.curItem = router;
 				}
-				// console.log("TCL: created -> curItem", this.curItem)
 				this.$router.push({ name: this.curItem });
 			},
 			checkActive (router) {

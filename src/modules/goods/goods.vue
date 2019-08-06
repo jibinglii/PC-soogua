@@ -31,21 +31,6 @@
 					</p>
 					<div class="btn-group">
 
-						<!-- <el-popover placement="right"
-												width="400"
-												trigger="click">
-							<div class="ewm_order">
-								<p>请扫描二维码完成下单付款</p>
-								<div id="qrcode"
-										 ref="qrcode"></div>
-								<el-button @click="toOrder">完成付款</el-button>
-							</div>
-							<el-button type="button"
-												 class="buy"
-												 :class="{disabled: !canBuy, 'can-not-contact': !canContact}"
-												 slot="reference">{{canBuy?'立即购买':'暂时无货'}}</el-button>
-						</el-popover> -->
-
 						<el-button type="button"
 											 @click="toMobilePay"
 											 class="buy"
@@ -73,10 +58,7 @@
 						</a>
 					</div>
 				</div>
-				<!-- <div class="qrcode">
-					<img src="~$assets/images/saomaxiadan@2x.png"
-							 alt>
-				</div> -->
+
 			</div>
 			<el-container>
 				<el-main>
@@ -119,15 +101,7 @@
 				<el-aside width="300px"
 									class="el-aside">
 					<div class="aside-head">商品精选</div>
-					<!-- <div class="aside-text">
-            <div class="detail" v-for="i in 3" :key="i">
-              <span>账</span>
-              <div>
-                <p>至尊宝脸证全，35级冒险团连体；12套年套神选之人，剑神亿万套超3万物套，黑色天二一套；神武，纯黑色战灵天舞套，各种角色...</p>
-                <h6>￥300.00</h6>
-              </div>
-            </div>
-          </div> -->
+
 					<goods-item></goods-item>
 				</el-aside>
 			</el-container>

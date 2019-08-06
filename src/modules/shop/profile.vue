@@ -59,12 +59,7 @@
 							<div class="right">
 								<img :src="profile.logo"
 										 alt />
-								<!-- <el-upload class="up-img"
-													 action="#"
-													 :on-preview="handlePreview"
-													 :on-exceed="handleExceed"
-													 :limit="1"
-													 :on-change="update"> -->
+
 								<input id="uploaderInput"
 											 ref="filElem"
 											 class="weui-uploader__input"
@@ -75,7 +70,7 @@
 											 v-show="false">
 								<el-button @click="editIcon"
 													 type="primary">上传店铺logo</el-button>
-								<!-- </el-upload> -->
+
 							</div>
 						</div>
 					</div>

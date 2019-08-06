@@ -1,9 +1,6 @@
 <template>
 	<div class="login">
-		<!-- <div class="title">
-      <img class="logo" src="~$assets/images/sougualogo.png" />
-      <span>搜瓜</span>
-    </div>-->
+
 		<div class="header">
 			<div class="container storeInfo">
 				<div class="left">

@@ -186,23 +186,7 @@
 						<div class="title">
 							<span>&nbsp;</span>
 						</div>
-						<!-- <ul>
-							<li class="recommend-item"
-									v-for="(item,key) in dlList.slice(0,4)"
-									:key="key"
-									@click="onGoods">
-								<img class="icon"
-										 :src="item.logo"
-										 alt />
-								<div class="desc">
-									<h4>{{item.title}}</h4>
-									<p>
-										<span>{{item.amount}}</span>
-										<i>库存:{{item.store_nums}}件</i>
-									</p>
-								</div>
-							</li>
-            </ul>-->
+
 					</div>
 				</div>
 			</v-content>
@@ -266,7 +250,7 @@
 			},
 			async getOrderCount () {
 				services.getOrderCount().then(data => {
-					console.log(data)
+
 					this.orderCount.seller_count = data.data.seller_count;
 
 					Object.keys(data.data.buyer_count).forEach(key => {

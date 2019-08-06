@@ -5,8 +5,7 @@
 				手机登录
 				<b @click="changeForm(1)">密码登录</b>
 			</span>
-			<!-- <img @click="changeForm(0)"
-					 src="~$assets/images/qr_icon.png"> -->
+
 		</div>
 		<div class="form_body">
 			<el-input class="phone"
@@ -40,13 +39,7 @@
 			<el-button class="login-btn"
 								 @click="loginByCode">登录</el-button>
 		</div>
-		<!-- <hr>
-		<div class="third_party_login">
-			<img src="~$assets/images/qq_login.png">
-			<a href="#">QQ登录</a>
-			<img src="~$assets/images/watch_login.png">
-			<a href="#">微信登录</a>
-		</div> -->
+
 	</div>
 </template>
 
@@ -142,7 +135,7 @@
 					this.$router.push({ name: "home" });
 				} catch (e) {
 					loading.close();
-					// console.log(e);
+
 					if (e.status !== 422) {
 
 						this.$message.error("手机号或验证码错误");

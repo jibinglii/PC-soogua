@@ -1,18 +1,6 @@
 <template>
 	<div class="footer">
-		<!-- <div class="nav">
-			<router-link :to="{name:'home'}">首页</router-link>
-			<span>|</span>
-			<router-link :to="{name:'gamecenter'}">游戏</router-link>
-			<span>|</span>
-			<router-link :to="{name:'goods.flow'}">流量</router-link>
-			<span>|</span>
-			<router-link :to="{name:'goods.account'}">账号</router-link>
-			<span>|</span>
-			<router-link :to="{name:'goods.service'}">服务</router-link>
-			<span>|</span>
-			<router-link :to="{name:'person.person'}">个人中心</router-link>
-		</div> -->
+
 		<p class="copyright"><img src="~$assets/images/logo_copy.png"
 					 alt>搜瓜提供店铺服务</p>
 	</div>

@@ -49,29 +49,6 @@
 											 alt>
 								</div>
 							</div>
-							<!-- <div class="order-info">
-								<div class="left">
-									<div class="info-item">
-										<span>商品名称：</span>
-										<i>{{ goods.title }}</i>
-										<span></span>
-										<i>{{ goods.game_name }}</i>
-										<span></span>
-										<i>{{ goods.server_name }}</i>
-										<span>商品价格：</span>
-										<i>￥{{ goods.amount | formatMoney }}</i>
-										<span>担保无忧：</span>
-										<i>{{order.insure_name}}</i>
-										<span>担保费：</span>
-										<i>{{order.insure_fee}}</i>
-									</div>
-								</div>
-								<a href="javascript:">
-									<img src="~$assets/images/kefu@2x.png"
-											 alt>
-									<b>联系买家</b>
-								</a>
-              </div>-->
 
 							<div class="subtitle">
 								<span>订单信息</span>
@@ -95,10 +72,7 @@
 										<span>付款时间</span>
 										<i>{{order.payment_time}}</i>
 									</div>
-									<!-- <div class="order-time">
-										<span>发货时间</span>
-										<i>{{order.updated_at}}</i>
-                  </div>-->
+
 								</div>
 								<div class="right">
 									<img :src="order_status[order.status].icon"
@@ -131,13 +105,6 @@
 													 size="medium">确认发货</el-button>
 							</div>
 
-							<!-- <div class="order-info">
-								<span>发货信息</span>
-								<div class="order-time">
-									<span>发货时间</span>
-									<i>{{order.payment_time}}</i>
-								</div>
-              </div>-->
 						</div>
 					</div>
 				</div>

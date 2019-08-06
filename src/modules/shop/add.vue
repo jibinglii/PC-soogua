@@ -317,7 +317,7 @@
 				this.$refs.agree.show();
 			},
 			setServerName () {
-				// console.log(event);
+
 			},
 			loadGame () {
 				this.$http
