@@ -65,7 +65,7 @@
 								 @click="toOrder">
 							<div class="order-graphic">
 								<i>{{orderCount.buyer_count[0].num}}</i>
-								<span>待付款</span>
+								<span>待支付</span>
 							</div>
 							<div class="order-graphic">
 								<i>{{orderCount.buyer_count[1].num}}</i>
@@ -73,7 +73,7 @@
 							</div>
 							<div class="order-graphic">
 								<i>{{orderCount.buyer_count[2].num}}</i>
-								<span>待收货</span>
+								<span>已发货</span>
 							</div>
 							<div class="order-graphic">
 								<i>{{orderCount.buyer_count[3].num }}</i>
@@ -81,7 +81,7 @@
 							</div>
 							<div class="order-graphic">
 								<i>{{orderCount.buyer_count[4].num}}</i>
-								<span>退货中</span>
+								<span>退换货</span>
 							</div>
 						</div>
 					</div>
