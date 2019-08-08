@@ -17,7 +17,7 @@
     bottom: 0;
 		font-size: 12px;
 		font-weight: 500;
-		line-height: 60px;
+		line-height: 85px;
 		background-color: #fff;
 
 		.nav {
