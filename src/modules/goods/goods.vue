@@ -36,7 +36,7 @@
 											 class="buy"
 											 :class="{disabled: !canBuy, 'can-not-contact': !canContact}">{{canBuy?'立即购买':'暂时无货'}}</el-button>
 						<el-dialog :visible.sync="dialogVisible"
-											 width="20%">
+											width="390px">
 							<div class="ewm_order">
 								<p>请扫描二维码完成下单付款</p>
 								<div id="qrcode"

@@ -13,7 +13,7 @@
 					<span class="hover-msg">官方微信</span>
 					<div v-if="showQR"
 							 class="wechat-box">
-						<img src="~$assets/images/weixin_ewm.png"
+						<img src="~$assets/images/nopublic.jpg"
 								 class="center-block pop-img"
 								 alt />
 					</div>
@@ -39,7 +39,7 @@
 					<span class="hover-msg">联系客服</span>
 					<div v-if="showLX"
 							 class="wechat-box">
-						<img src="~$assets/images/erweima.png"
+						<img src="~$assets/images/nopublic.jpg"
 								 class="center-block pop-img"
 								 alt />
 					</div>

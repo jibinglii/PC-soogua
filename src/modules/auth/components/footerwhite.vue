@@ -12,12 +12,14 @@
 
 <style lang="scss" scoped>
 	.footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 		font-size: 12px;
 		font-weight: 500;
-		line-height: 13px;
+		line-height: 85px;
 		background-color: #fff;
-		padding-top: 20px;
-		padding-bottom: 30px;
+
 		.nav {
 			font-size: 12px;
 			font-weight: 500;
@@ -43,12 +45,7 @@
 	}
 	.copyright {
 		font-size: 12px;
-		font-weight: 500;
-		line-height: 20px;
 		text-align: center;
-		color: #999;
-		margin-top: 10px;
-
 		img {
 			position: relative;
 			top: 5px;

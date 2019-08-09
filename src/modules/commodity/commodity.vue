@@ -140,11 +140,11 @@
 													placeholder="请输入分销员ID或手机号"
 													autocomplete="off"></el-input>
 							</el-form-item>
-							<el-form-item label="分销佣金"
+							<el-form-item label="分润比例"
 														:label-width="formLabelWidth">
 								<el-input style="width:80%"
 													type="number"
-													placeholder="请输入分销佣金"
+													placeholder="请输入分润比例"
 													v-model="assignRate"
 													autocomplete="off"></el-input>
 							</el-form-item>
