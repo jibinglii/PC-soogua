@@ -107,13 +107,13 @@
               <div class="link-app">
                 <div class="text">扫一扫下载搜瓜</div>
                 <div class="graphic">
-                  <img class="qrcode" src="~$assets/images/erweima.png" alt>
+                  <img class="qrcode" src="~$assets/images/qrcode.png" alt>
                   <div class="btn-group">
-                    <a class="download" href="javascript:">
+                    <a class="download" href="https://dibaqu.com/N3MV">
                       <img src="~$assets/images/pingguo.png" alt>
                       <span>IOS下载</span>
                     </a>
-                    <a class="download m-top" href="javascript:">
+                    <a class="download m-top" href="https://dibaqu.com/N3MV">
                       <img src="~$assets/images/android.png" alt>
                       <span>Android下载</span>
                     </a>
@@ -127,7 +127,7 @@
                   <span>微博公众号</span>
                 </div>
                 <div class="qrcode">
-                  <img src="~$assets/images/weibo_erweima.png" alt>
+                  <img src="~$assets/images/weibo.jpg" alt>
                 </div>
               </div>
               <div class="link-item">
@@ -136,7 +136,7 @@
                   <span>微信公众号</span>
                 </div>
                 <div class="qrcode">
-                  <img src="~$assets/images/weixin_ewm.png" alt>
+                  <img src="~$assets/images/nopublic.jpg" alt>
                 </div>
               </div>
             </div>

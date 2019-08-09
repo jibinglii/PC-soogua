@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .details {
-  min-height: 500px;
+  min-height: 580px;
   background: #fff;
   padding: 0 23px;
   margin-bottom: 80px;
@@ -84,6 +84,7 @@ export default {
     font-size: 14px;
     font-weight: 400;
     color: #000;
+    line-height: 2;
   }
 }
 .el-breadcrumb {

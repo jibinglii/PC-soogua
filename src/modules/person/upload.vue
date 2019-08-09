@@ -233,7 +233,11 @@ export default {
   padding: 35px 0 30px 0;
 }
 /deep/.el-dialog__header {
-  padding: 15px 30px;
+  padding: 10px 30px;
+  border-bottom: solid 1px #f2f2f2;
+  .el-dialog__title{
+    font-size: 16px;
+  }
 }
 /deep/.el-dialog__headerbtn {
   top: 12px;

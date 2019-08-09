@@ -10,10 +10,10 @@
         <el-breadcrumb-item>帮助详情</el-breadcrumb-item>
       </el-breadcrumb>
       <el-card class="box-card" shadow="never">
-        <a v-for="(item,key) in items" :key="key" class="item" :href="'/'+ $route.params.store + '/help/details/'+ item.id+'.html'">
-          <i class="circle"></i>
+        <router-link v-for="(item,key) in items" :key="key" class="item" :to="{name:'help.details',params:{id: item.id}}">
+           <i class="circle"></i>
           <span>{{item.title}}</span>
-        </a>
+        </router-link>
         <infinite-loading @infinite="infiniteHandler" spinner="spiral">
           <div slot="no-more">没有更多数据啦...</div>
           <div slot="no-results">没有数据</div>

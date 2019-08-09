@@ -82,7 +82,7 @@
 										 width="30%">
 						<el-form>
 							<el-form-item label="分销员ID"
-														label-width="20%"
+														label-width="30%"
 														text-align="right">
 								<el-input style="width:80%"
 													type="number"
@@ -91,7 +91,7 @@
 													autocomplete="off"></el-input>
 							</el-form-item>
 							<el-form-item label="分润比例"
-														label-width="20%">
+														label-width="30%">
 								<el-input style="width:80%"
 													type="number"
 													placeholder="请输入分润比例"
